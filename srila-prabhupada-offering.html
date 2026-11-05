@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Submit Your Offering | Srila Prabhupada Tirobhava Mahotsava</title>
+  <meta name="description" content="Offer your words of gratitude to Srila Prabhupada: write, speak, send a video or a scan.">
+  <meta property="og:title" content="Your offering to Srila Prabhupada">
+  <meta property="og:description" content="Write, speak, send a video or a scan for his Tirobhava Mahotsava, 13 November 2026.">
+  <meta property="og:image" content="https://damodar-2026.vercel.app/prabhupada/share.jpg">
+  <link rel="icon" href="/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Cormorant+Garamond:ital,wght@1,500&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/prabhupada/prabhupada.css">
+</head>
+<body>
+  <header class="page-head">
+    <img class="bg" src="/prabhupada/hero-throne.webp" alt="" aria-hidden="true">
+    <a href="/srila-prabhupada"><img class="brand-logo white-logo" src="/prabhupada/iskcon-logo-gold.png" alt="ISKCON Coimbatore" width="1030" height="334"></a>
+    <a class="back" href="/srila-prabhupada">← Festival page</a>
+    <div class="container">
+      <p class="eyebrow">Tirobhava Mahotsava · 13 November 2026</p>
+      <h1>Your offering to Srila Prabhupada</h1>
+      <p class="sub">A few heartfelt words, in your own way and in your own language.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="band band-warm" style="padding-top:44px">
+      <div class="container">
+        <h2>Why offer your words?</h2>
+        <p class="lead">On this day disciples and followers offer their gratitude to Srila Prabhupada. You don't need to be a writer, or to have met him. If his books, his temples, the holy name or his devotees have touched your life, you have something to offer.</p>
+        <ul class="offer-why">
+          <li><div><strong>It is an act of devotion</strong><span>Remembering him and glorifying him is itself a service to him.</span></div></li>
+          <li><div><strong>It deepens your gratitude</strong><span>Putting his gifts into words helps you see how much he has given you.</span></div></li>
+          <li><div><strong>It inspires others</strong><span>Your story may help another devotee or seeker come closer to Krishna.</span></div></li>
+        </ul>
+
+        <div class="wizard" id="wizard">
+          <ol class="stepper" id="stepper" aria-label="Progress">
+            <li data-mark="1"><span class="step-dot">1</span>Choose</li>
+            <li data-mark="2"><span class="step-dot">2</span>Offering</li>
+            <li data-mark="3"><span class="step-dot">3</span>Your details</li>
+          </ol>
+
+          <div class="wizard-body" id="wizardBody">
+            <form id="offeringForm" novalidate>
+              <!-- Step 1 -->
+              <div data-step="1" class="form-step">
+                <h3 class="step-title" tabindex="-1">How would you like to offer?</h3>
+                <p class="step-sub">Choose whatever feels most natural to you.</p>
+                <div class="tiles">
+                  <label class="tile"><input type="radio" name="type" value="text" checked><span class="tile-body" data-choose><span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z"/><path d="M14.5 6.5l3 3"/></svg></span><span class="tile-title">Write</span><span class="tile-text">Type in English, Tamil or any language</span></span></label>
+                  <label class="tile"><input type="radio" name="type" value="audio"><span class="tile-body" data-choose><span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span class="tile-title">Speak</span><span class="tile-text">Record your voice, or upload a recording</span></span></label>
+                  <label class="tile"><input type="radio" name="type" value="video"><span class="tile-body" data-choose><span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 11l5-3v8l-5-3"/></svg></span><span class="tile-title">Video</span><span class="tile-text">Choose from your gallery, or record now</span></span></label>
+                  <label class="tile"><input type="radio" name="type" value="scan"><span class="tile-body" data-choose><span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg></span><span class="tile-title">Scan or photo</span><span class="tile-text">A handwritten letter, card or artwork</span></span></label>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div data-step="2" class="form-step" hidden>
+                <h3 class="step-title" tabindex="-1" id="step2Title">Write your offering</h3>
+
+                <div data-panel="text" style="display:grid;gap:8px">
+                  <p class="step-sub" style="margin:0">Share how you first met his books or devotees, what he means to you, or simply thank him.</p>
+                  <label class="field"><span class="label">Your offering</span><textarea class="input" name="offering" maxlength="5000" placeholder="Dear Srila Prabhupada, please accept my humble obeisances…"></textarea></label>
+                  <p class="note" style="text-align:right"><span id="charCount">0</span> / 5,000</p>
+                </div>
+
+                <div data-panel="audio" style="display:grid;gap:12px" hidden>
+                  <div class="recorder-box" id="recorder" hidden>
+                    <span class="rec-time" id="recTime">0:00</span>
+                    <button class="rec-button" type="button" id="recButton" aria-label="Start recording"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+                    <span class="rec-hint" id="recHint">Tap to start recording</span>
+                  </div>
+                  <div class="picks">
+                    <label class="pick"><input type="file" data-file="audio" accept="audio/*" aria-label="Upload a recording"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><span>Upload a recording<small>From your phone or computer, up to 50 MB</small></span></label>
+                  </div>
+                </div>
+
+                <div data-panel="video" style="display:grid;gap:12px" hidden>
+                  <div class="picks">
+                    <label class="pick main"><input type="file" data-file="video" accept="video/*" aria-label="Choose a video from your gallery"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 15l5-4 4 3 3-2 6 4"/></svg><span>Choose from gallery</span></label>
+                    <label class="pick pick-camera"><input type="file" data-file="video" accept="video/*" capture="environment" aria-label="Record a video now"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 11l5-3v8l-5-3"/></svg><span>Record a video now</span></label>
+                  </div>
+                  <p class="limit-note" id="videoLimit">Up to 50 MB, about a minute of phone video.</p>
+                  <details class="alt-way" id="linkBox">
+                    <summary>Longer video? Share a link instead</summary>
+                    <label class="field"><span class="label">Google Drive or YouTube link</span><input class="input" name="link" type="url" inputmode="url" placeholder="https://"></label>
+                  </details>
+                </div>
+
+                <div data-panel="scan" style="display:grid;gap:12px" hidden>
+                  <div class="picks">
+                    <label class="pick main"><input type="file" data-file="scan" accept="image/*" aria-label="Choose a photo from your gallery"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.5"/><path d="M3 16l5-4 4 3 3-2 6 4"/></svg><span>Choose from gallery</span></label>
+                    <label class="pick pick-camera"><input type="file" data-file="scan" accept="image/*" capture="environment" aria-label="Take a photo now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Take a photo now</span></label>
+                    <label class="pick"><input type="file" data-file="scan" accept="application/pdf" aria-label="Choose a PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span>Choose a PDF</span></label>
+                  </div>
+                  <p class="limit-note">One file, up to 25 MB. For several pages, please combine them into one PDF.</p>
+                </div>
+
+                <div class="chosen" id="chosen" hidden>
+                  <div id="chosenPreview"></div>
+                  <div class="chosen-row">
+                    <span class="chosen-name" id="chosenName"></span>
+                    <button class="link-btn" type="button" id="removeFile">Remove</button>
+                  </div>
+                </div>
+
+                <div class="big-file" id="bigFile" hidden>
+                  <span id="bigFileText"></span>
+                  <a class="btn btn-wa" id="bigFileWa" target="_blank" rel="noopener noreferrer">Send on WhatsApp instead</a>
+                </div>
+
+                <p class="error" id="step2Error" role="alert"></p>
+                <div class="wizard-actions">
+                  <button class="back-link" type="button" data-back>← Back</button>
+                  <button class="btn btn-main" type="button" data-next>Continue</button>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div data-step="3" class="form-step" hidden>
+                <h3 class="step-title" tabindex="-1">Your details</h3>
+                <div class="summary">
+                  <span class="summary-text" id="summary"></span>
+                  <button class="link-btn" type="button" data-back>Change</button>
+                </div>
+                <div class="row">
+                  <label class="field"><span class="label">Your name</span><input class="input" name="name" required maxlength="120" autocomplete="name"></label>
+                  <label class="field"><span class="label">Mobile</span><input class="input" name="phone" type="tel" required autocomplete="tel"></label>
+                </div>
+                <div class="row">
+                  <label class="field"><span class="label">Email <span class="optional">(optional)</span></span><input class="input" name="email" type="email" autocomplete="email"></label>
+                  <label class="field"><span class="label">City or temple <span class="optional">(optional)</span></span><input class="input" name="place" maxlength="120" placeholder="e.g. Coimbatore"></label>
+                </div>
+                <label class="toggle"><input type="checkbox" name="mayShare"><span class="toggle-track"></span><span>The temple may read out or share my offering with my name.</span></label>
+                <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <div class="upload-state" id="uploading" hidden><span class="note" id="uploadText"></span><progress id="uploadBar" max="100" value="0"></progress><span class="note">Please keep this page open. If your connection drops, it will continue from where it stopped.</span></div>
+                <p class="error" id="step3Error" role="alert"></p>
+                <div class="wizard-actions">
+                  <button class="back-link" type="button" data-back>← Back</button>
+                  <button class="btn btn-main" type="submit" id="sendButton">Send my offering</button>
+                </div>
+              </div>
+            </form>
+
+            <div class="done-panel" id="done" role="status" tabindex="-1" hidden>
+              <span class="done-mark" aria-hidden="true">✓</span>
+              <h3>Hare Krishna! Your offering is received.</h3>
+              <p>Thank you for glorifying Srila Prabhupada with us. If you wish, you can also help make the festival grand.</p>
+              <div class="done-actions">
+                <a class="btn btn-main" href="/srila-prabhupada/donate">See the sevas</a>
+                <a class="btn btn-plain" href="/srila-prabhupada">Festival page</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding-bottom:32px">
+    <div class="container">
+      <p>ISKCON Coimbatore · Sri Jagannath Mandir, Coimbatore</p>
+      <p>Call / WhatsApp: <a href="https://wa.me/919042216108" target="_blank" rel="noopener noreferrer">+91 90422 16108</a></p>
+    </div>
+  </footer>
+
+  <script src="/prabhupada/tus.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      let MAX_MB = { audio: 50, video: 50, scan: 25 };
+      fetch('/api/prabhupada?limits=1').then((r) => r.json()).then((limits) => {
+        MAX_MB = limits;
+        document.getElementById('videoLimit').textContent = limits.video > 50
+          ? 'Up to ' + limits.video + ' MB, about ' + Math.round(limits.video / 100) + ' minutes of phone video.'
+          : 'Up to ' + limits.video + ' MB, about a minute of phone video.';
+      }).catch(() => {}); // the safe defaults above still apply
+      const WHATSAPP = '919042216108';
+      const TITLES = { text: 'Write your offering', audio: 'Speak your offering', video: 'Share your video', scan: 'Share your scan or photo' };
+      const LABELS = { text: 'Written offering', audio: 'Voice offering', video: 'Video offering', scan: 'Scan or photo' };
+
+      const openedAt = performance.now();
+      const form = document.getElementById('offeringForm');
+      const wizard = document.getElementById('wizard');
+      const steps = [...form.querySelectorAll('[data-step]')];
+      const marks = [...document.querySelectorAll('[data-mark]')];
+      const panels = [...form.querySelectorAll('[data-panel]')];
+      const chosenBox = document.getElementById('chosen');
+      const chosenPreview = document.getElementById('chosenPreview');
+      const chosenName = document.getElementById('chosenName');
+      const bigFile = document.getElementById('bigFile');
+      const step2Error = document.getElementById('step2Error');
+      const step3Error = document.getElementById('step3Error');
+      const sendButton = document.getElementById('sendButton');
+      const uploading = document.getElementById('uploading');
+      const uploadBar = document.getElementById('uploadBar');
+
+      let current = 1;
+      let previewUrl = null;
+      const chosen = {}; // type → the File or recording chosen for it
+      let uploaded = null; // { file, path } so a retry after a failed save does not upload again
+
+      const type = () => form.elements.type.value;
+      const sizeOf = (f) => (f.size / 1048576).toFixed(1) + ' MB';
+
+      function show(n, focus = true) {
+        current = n;
+        steps.forEach((s) => { s.hidden = Number(s.dataset.step) !== n; });
+        marks.forEach((m) => m.classList.toggle('reached', Number(m.dataset.mark) <= n));
+        if (n === 2) preparePanel();
+        if (n === 3) prepareSummary();
+        if (focus) {
+          wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+          steps[n - 1].querySelector('.step-title').focus({ preventScroll: true });
+        }
+      }
+
+      function preparePanel() {
+        const t = type();
+        document.getElementById('step2Title').textContent = TITLES[t];
+        panels.forEach((p) => { p.hidden = p.dataset.panel !== t; });
+        step2Error.textContent = '';
+        bigFile.hidden = true;
+        showChosen();
+      }
+
+      function prepareSummary() {
+        const t = type();
+        const f = chosen[t];
+        const link = form.elements.link.value.trim();
+        const detail = t === 'text'
+          ? form.elements.offering.value.trim().split(/\s+/).length + ' words'
+          : t === 'video' && link ? link : f ? f.name + ' · ' + sizeOf(f) : '';
+        const box = document.getElementById('summary');
+        const title = document.createElement('strong');
+        title.textContent = LABELS[t];
+        box.replaceChildren(title, document.createTextNode(detail));
+      }
+
+      // Shows what was chosen, so people can check it is the right file
+      function showChosen() {
+        const f = type() === 'text' ? null : chosen[type()];
+        if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+        chosenPreview.replaceChildren();
+        chosenBox.hidden = !f;
+        if (!f) return;
+        chosenName.textContent = f.name + ' · ' + sizeOf(f);
+        const kind = f.type.split('/')[0];
+        if (['video', 'audio', 'image'].includes(kind)) {
+          previewUrl = URL.createObjectURL(f);
+          const media = document.createElement(kind === 'image' ? 'img' : kind);
+          media.src = previewUrl;
+          if (kind === 'image') {
+            media.alt = 'Your chosen photo';
+          } else {
+            media.controls = true;
+            media.playsInline = true;
+            media.preload = 'metadata';
+            media.style.width = '100%';
+          }
+          chosenPreview.append(media);
+        }
+      }
+
+      function tooBig(t, f) {
+        const box = document.getElementById('bigFileText');
+        box.textContent = 'This file is ' + sizeOf(f) + ', and the limit is ' + MAX_MB[t] + ' MB. Please trim it in your gallery, '
+          + (t === 'video' ? 'share a link below, ' : '') + 'or send it to us on WhatsApp.';
+        document.getElementById('bigFileWa').href = 'https://wa.me/' + WHATSAPP + '?text='
+          + encodeURIComponent("Hare Krishna! I would like to send my offering for Srila Prabhupada's Tirobhava Mahotsava.");
+        bigFile.hidden = false;
+        if (t === 'video') document.getElementById('linkBox').open = true;
+      }
+
+      function checkStep2() {
+        const t = type();
+        if (t === 'text') return form.elements.offering.value.trim() ? '' : 'Please write your offering.';
+        const link = t === 'video' ? form.elements.link.value.trim() : '';
+        if (chosen[t]) return '';
+        if (link) return /^https:\/\/\S+$/.test(link) ? '' : 'Please check the link. It should start with https://';
+        return t === 'audio' ? 'Please record or upload your offering.' : t === 'video' ? 'Please choose a video or share a link.' : 'Please choose a photo or PDF.';
+      }
+
+      // Tapping a way to offer goes straight to the next step
+      form.querySelectorAll('[data-choose]').forEach((tile) => {
+        tile.addEventListener('click', () => {
+          tile.previousElementSibling.checked = true;
+          show(2);
+        });
+      });
+      form.addEventListener('click', (e) => {
+        if (e.target.closest('[data-back]')) show(current - 1);
+        if (e.target.closest('[data-next]')) {
+          const problem = checkStep2();
+          step2Error.textContent = problem;
+          if (!problem) show(3);
+        }
+      });
+      form.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' || current === 3 || e.target.tagName !== 'INPUT') return;
+        e.preventDefault(); // Enter must not send the form from an earlier step
+        if (current === 1) show(2);
+      });
+
+      const offeringBox = form.elements.offering;
+      offeringBox.addEventListener('input', () => { document.getElementById('charCount').textContent = offeringBox.value.length.toLocaleString('en-IN'); });
+
+      form.querySelectorAll('[data-file]').forEach((input) => {
+        input.addEventListener('change', () => {
+          const t = input.dataset.file;
+          const f = input.files[0];
+          input.value = ''; // so choosing the same file again still registers
+          if (!f) return;
+          step2Error.textContent = '';
+          bigFile.hidden = true;
+          if (f.size > MAX_MB[t] * 1048576) {
+            delete chosen[t];
+            tooBig(t, f);
+          } else {
+            chosen[t] = f;
+          }
+          showChosen();
+        });
+      });
+      document.getElementById('removeFile').addEventListener('click', () => {
+        delete chosen[type()];
+        bigFile.hidden = true;
+        showChosen();
+      });
+
+      // Voice recording, where the browser supports it
+      const recButton = document.getElementById('recButton');
+      const recTime = document.getElementById('recTime');
+      const recHint = document.getElementById('recHint');
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
+        document.getElementById('recorder').hidden = false;
+        let recorder = null;
+        let ticker = null;
+        const MAX_SECONDS = 15 * 60;
+        recButton.addEventListener('click', async () => {
+          if (recorder) { recorder.stop(); return; }
+          let stream;
+          try {
+            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          } catch {
+            step2Error.textContent = 'We could not use your microphone. Please allow it, or upload a recording instead.';
+            return;
+          }
+          step2Error.textContent = '';
+          const mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find((m) => MediaRecorder.isTypeSupported(m)) || '';
+          const parts = [];
+          recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+          recorder.ondataavailable = (e) => { if (e.data.size) parts.push(e.data); };
+          recorder.onstop = () => {
+            stream.getTracks().forEach((track) => track.stop());
+            clearInterval(ticker);
+            const blobType = (recorder.mimeType || mime || 'audio/webm').split(';')[0];
+            chosen.audio = new File(parts, 'voice-offering.' + (blobType.includes('mp4') ? 'm4a' : 'webm'), { type: blobType });
+            recorder = null;
+            recButton.classList.remove('rec-on');
+            recButton.setAttribute('aria-label', 'Record again');
+            recHint.textContent = 'Saved. Tap to record again';
+            showChosen();
+          };
+          recorder.start();
+          const started = Date.now();
+          recTime.textContent = '0:00';
+          recButton.classList.add('rec-on');
+          recButton.setAttribute('aria-label', 'Stop recording');
+          recHint.textContent = 'Recording. Tap to stop';
+          ticker = setInterval(() => {
+            const s = Math.floor((Date.now() - started) / 1000);
+            recTime.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+            if (s >= MAX_SECONDS && recorder) recorder.stop();
+          }, 500);
+        });
+      }
+
+      async function post(body) {
+        const res = await fetch('/api/prabhupada', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        return data;
+      }
+
+      // Resumable upload. Remembering the slot lets someone who reloads the page, chooses the same
+      // file and tries again carry on rather than start over. Supabase's slots last 2 hours.
+      const SLOT_MS = 110 * 60 * 1000;
+      const slotKey = (file) => 'pp-upload:' + [file.name, file.size, file.lastModified].join(':');
+      function readSlot(file) {
+        try {
+          const saved = JSON.parse(localStorage.getItem(slotKey(file)));
+          return saved && Date.now() - saved.at < SLOT_MS ? saved : null;
+        } catch { return null; }
+      }
+      function saveSlot(file, slot) {
+        try { localStorage.setItem(slotKey(file), JSON.stringify({ ...slot, at: Date.now() })); } catch {}
+      }
+      function clearSlot(file) {
+        try { localStorage.removeItem(slotKey(file)); } catch {}
+      }
+      const warnLeaving = (e) => { e.preventDefault(); e.returnValue = ''; };
+
+      function send(file, slot) {
+        const mb = (n) => (n / 1048576).toFixed(n < 10485760 ? 1 : 0);
+        return new Promise((resolve, reject) => {
+          const upload = new tus.Upload(file, {
+            endpoint: slot.endpoint,
+            headers: slot.headers,
+            chunkSize: 6 * 1024 * 1024, // Supabase requires exactly this size
+            retryDelays: [0, 3000, 5000, 10000, 20000, 30000, 60000],
+            removeFingerprintOnSuccess: true,
+            metadata: {
+              bucketName: slot.bucket,
+              objectName: slot.path,
+              contentType: file.type || 'application/octet-stream',
+              cacheControl: '3600',
+            },
+            onProgress(sent, total) {
+              uploadBar.value = (sent / total) * 100;
+              document.getElementById('uploadText').textContent = 'Sending your file: ' + mb(sent) + ' of ' + mb(total) + ' MB';
+            },
+            onSuccess: () => resolve(),
+            onError: () => reject(new Error('Upload failed')),
+          });
+          upload.findPreviousUploads().then((previous) => {
+            if (previous.length) upload.resumeFromPreviousUpload(previous[0]);
+            upload.start();
+          }).catch(() => upload.start());
+        });
+      }
+
+      async function uploadFile(file, t, elapsed, website) {
+        if (uploaded && uploaded.file === file) return uploaded.path;
+        let slot = readSlot(file);
+        if (!slot) {
+          slot = await post({ kind: 'upload', type: t, name: file.name, contentType: file.type, size: file.size, elapsed, website });
+          if (!slot.endpoint) return ''; // a bot that filled the hidden field gets nothing to upload to
+          saveSlot(file, slot);
+        }
+        uploading.hidden = false;
+        uploadBar.value = 0;
+        document.getElementById('uploadText').textContent = 'Starting your upload…';
+        addEventListener('beforeunload', warnLeaving);
+        try {
+          await send(file, slot);
+        } finally {
+          removeEventListener('beforeunload', warnLeaving);
+        }
+        clearSlot(file);
+        uploaded = { file, path: slot.path };
+        return slot.path;
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        step3Error.textContent = '';
+        const t = type();
+        const body = {
+          kind: 'offering',
+          type: t,
+          name: form.elements.name.value,
+          phone: form.elements.phone.value,
+          email: form.elements.email.value,
+          place: form.elements.place.value,
+          mayShare: form.elements.mayShare.checked,
+          website: form.elements.website.value,
+          elapsed: Math.round(performance.now() - openedAt),
+        };
+        if (t === 'text') body.offering = form.elements.offering.value;
+
+        sendButton.disabled = true;
+        sendButton.textContent = 'Sending…';
+        try {
+          if (!form.elements.name.value.trim()) throw new Error('Please enter your name.');
+          if (!/^[0-9+\-\s]{10,15}$/.test(form.elements.phone.value.trim())) throw new Error('Please enter a valid mobile number.');
+          if (t !== 'text') {
+            if (chosen[t]) {
+              body.filePath = await uploadFile(chosen[t], t, body.elapsed, body.website);
+              body.fileName = chosen[t].name;
+            } else {
+              body.link = form.elements.link.value.trim();
+            }
+          }
+          await post(body);
+          form.hidden = true;
+          document.getElementById('stepper').hidden = true;
+          const done = document.getElementById('done');
+          done.hidden = false;
+          wizard.scrollIntoView({ block: 'center', behavior: 'instant' });
+          done.focus({ preventScroll: true });
+        } catch (err) {
+          step3Error.textContent = err.message === 'Upload failed'
+            ? 'Your file could not be sent. Please check your connection and try again.'
+            : err.message || 'Please check your connection and try again.';
+        } finally {
+          sendButton.disabled = false;
+          sendButton.textContent = 'Send my offering';
+          uploading.hidden = true;
+        }
+      });
+
+      show(1, false);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Prabhupada Festival Records | ISKCON Coimbatore</title>
+  <style>
+    :root { --primary: #6B0818; --gold: #F59E0B; --text: #0F172A; --muted: #64748B; --border: #E2E8F0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #F8FAFC; color: var(--text); line-height: 1.5; }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { font-size: 1.35rem; color: var(--primary); }
+    h2 { margin: 32px 0 12px; font-size: 1.1rem; color: var(--primary); }
+    form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    input { flex: 1; min-width: 200px; max-width: 320px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font: inherit; }
+    button { padding: 10px 16px; border: 0; border-radius: 8px; background: var(--primary); color: #fff; font: 600 0.9rem inherit; cursor: pointer; }
+    .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+    .error { margin-top: 12px; color: #DC2626; font-weight: 600; }
+    .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+    table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 0.88rem; text-align: left; }
+    th, td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #F8FAFC; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .text { min-width: 320px; white-space: pre-wrap; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Srila Prabhupada Tirobhava Mahotsava: records</h1>
+
+    <form id="login">
+      <input type="password" id="key" placeholder="Staff key" required autocomplete="current-password" aria-label="Staff key">
+      <button type="submit">Open records</button>
+    </form>
+    <p class="error" id="error" role="alert"></p>
+
+    <div id="records" hidden>
+      <div class="head"><h2 id="offeringsTitle">Offerings</h2><button type="button" id="exportOfferings">Download CSV</button></div>
+      <div class="scroll"><table id="offerings"></table></div>
+      <div class="head"><h2 id="donationsTitle">Donations</h2><button type="button" id="exportDonations">Download CSV</button></div>
+      <p style="margin-bottom:12px;color:var(--muted);font-size:0.9rem">These are donations people said they would make. Check each reference against the bank or UPI statement.</p>
+      <div class="scroll"><table id="donations"></table></div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const when = (d) => new Date(d).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
+      const OFFERING_COLUMNS = [
+        ['Name', (r) => r.name], ['Mobile', (r) => r.phone], ['Email', (r) => r.email], ['City or temple', (r) => r.place],
+        ['Type', (r) => r.offering_type], ['Offering', (r) => r.offering, 'text'],
+        ['File or link', (r) => r.file_url || r.link, 'link'],
+        ['May share', (r) => (r.may_share ? 'Yes' : 'No')], ['Received', (r) => when(r.created_at)],
+      ];
+      const DONATION_COLUMNS = [
+        ['Reference', (r) => r.reference], ['Seva', (r) => r.seva], ['Name', (r) => r.name], ['Mobile', (r) => r.phone], ['Email', (r) => r.email],
+        ['Amount (₹)', (r) => r.amount], ['Received', (r) => when(r.created_at)],
+      ];
+
+      // textContent throughout: visitors wrote these values, so they are never treated as HTML
+      function render(table, columns, rows) {
+        const head = table.createTHead().insertRow();
+        columns.forEach(([title]) => { const th = document.createElement('th'); th.textContent = title; head.append(th); });
+        const body = table.createTBody();
+        rows.forEach((r) => {
+          const tr = body.insertRow();
+          columns.forEach(([, get, cls]) => {
+            const td = tr.insertCell();
+            const value = get(r) ?? '';
+            // Only ordinary web links become clickable, as a visitor can type a link themselves
+            if (cls === 'link' && /^(https:\/\/|\/prabhupada_local_uploads\/)/.test(value)) {
+              const a = document.createElement('a');
+              a.href = value;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              a.textContent = 'Open';
+              td.append(a);
+              return;
+            }
+            td.textContent = value;
+            if (cls) td.className = cls;
+          });
+        });
+      }
+
+      function download(name, columns, rows) {
+        // A leading quote stops spreadsheets running a visitor's text as a formula
+        const cell = (v) => {
+          let s = String(v ?? '');
+          if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+          return '"' + s.replace(/"/g, '""') + '"';
+        };
+        const lines = [columns.map(([t]) => cell(t)).join(','), ...rows.map((r) => columns.map(([, get]) => cell(get(r))).join(','))];
+        const url = URL.createObjectURL(new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' }));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      document.getElementById('login').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const error = document.getElementById('error');
+        error.textContent = '';
+        try {
+          const res = await fetch('/api/prabhupada', { headers: { 'x-admin-key': document.getElementById('key').value } });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+          document.getElementById('login').hidden = true;
+          document.getElementById('records').hidden = false;
+          document.getElementById('offeringsTitle').textContent = 'Offerings (' + data.offerings.length + ')';
+          document.getElementById('donationsTitle').textContent = 'Donations (' + data.donations.length + ')';
+          render(document.getElementById('offerings'), OFFERING_COLUMNS, data.offerings);
+          render(document.getElementById('donations'), DONATION_COLUMNS, data.donations);
+          document.getElementById('exportOfferings').onclick = () => download('prabhupada-offerings.csv', OFFERING_COLUMNS, data.offerings);
+          document.getElementById('exportDonations').onclick = () => download('prabhupada-donations.csv', DONATION_COLUMNS, data.donations);
+        } catch (err) {
+          error.textContent = err.message || 'Could not load the records.';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

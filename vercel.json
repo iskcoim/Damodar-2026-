@@ -7,6 +7,22 @@
       "destination": "/admin.html"
     },
     {
+      "source": "/srila-prabhupada",
+      "destination": "/srila-prabhupada.html"
+    },
+    {
+      "source": "/srila-prabhupada/offering",
+      "destination": "/srila-prabhupada-offering.html"
+    },
+    {
+      "source": "/srila-prabhupada/donate",
+      "destination": "/srila-prabhupada-donate.html"
+    },
+    {
+      "source": "/prabhupada-admin",
+      "destination": "/prabhupada-admin.html"
+    },
+    {
       "source": "/api/registrations",
       "destination": "/api/register"
     },

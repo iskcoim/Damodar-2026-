@@ -2,3 +2,7 @@ server.js
 registrations_local.json
 node_modules
 .env
+
+prabhupada_local.json
+supabase-prabhupada.sql
+prabhupada_local_uploads

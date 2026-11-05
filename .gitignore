@@ -1,3 +1,5 @@
 node_modules/
 .DS_Store
 .env
+prabhupada_local.json
+prabhupada_local_uploads/

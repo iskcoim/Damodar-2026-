@@ -104,6 +104,54 @@ app.get('/api/registrations', async (req, res) => {
   res.json(localRows);
 });
 
+// Srila Prabhupada Disappearance Day page. Saves to a local file when Supabase is not set up.
+process.env.PRABHUPADA_LOCAL_FILE = path.join(__dirname, 'prabhupada_local.json');
+process.env.ADMIN_KEY = process.env.ADMIN_KEY || 'local-test';
+process.env.PRABHUPADA_MAX_VIDEO_MB = process.env.PRABHUPADA_MAX_VIDEO_MB || '500';
+app.all('/api/prabhupada', require('./api/prabhupada'));
+// A small stand-in for Supabase's resumable uploads when testing locally
+const LOCAL_UPLOADS = path.join(__dirname, 'prabhupada_local_uploads');
+const localFilePath = (name) => (/^[a-f0-9]{24}\.[a-z0-9]{2,5}$/.test(name) ? path.join(LOCAL_UPLOADS, name) : null);
+const tusBody = express.raw({ type: () => true, limit: '8mb' });
+const tusAppend = (file, req) => {
+  if (Buffer.isBuffer(req.body) && req.body.length) fs.appendFileSync(file, req.body);
+  return fs.statSync(file).size;
+};
+app.post('/api/prabhupada-tus', tusBody, (req, res) => {
+  const pairs = String(req.headers['upload-metadata'] || '').split(',').map((p) => p.trim().split(' '));
+  const encoded = (pairs.find(([k]) => k === 'objectName') || [])[1] || '';
+  const name = path.basename(Buffer.from(encoded, 'base64').toString());
+  const file = localFilePath(name);
+  if (!file) return res.status(400).end();
+  fs.mkdirSync(LOCAL_UPLOADS, { recursive: true });
+  fs.writeFileSync(file, '');
+  fs.writeFileSync(`${file}.length`, String(req.headers['upload-length'] || 0));
+  res.set({ 'Tus-Resumable': '1.0.0', Location: `/api/prabhupada-tus/${name}`, 'Upload-Offset': String(tusAppend(file, req)) }).status(201).end();
+});
+app.head('/api/prabhupada-tus/:file', (req, res) => {
+  const file = localFilePath(req.params.file);
+  if (!file || !fs.existsSync(file)) return res.status(404).end();
+  res.set({ 'Tus-Resumable': '1.0.0', 'Cache-Control': 'no-store', 'Upload-Offset': String(fs.statSync(file).size), 'Upload-Length': fs.readFileSync(`${file}.length`, 'utf8') }).status(200).end();
+});
+app.patch('/api/prabhupada-tus/:file', tusBody, (req, res) => {
+  const file = localFilePath(req.params.file);
+  if (!file || !fs.existsSync(file)) return res.status(404).end();
+  if (Number(req.headers['upload-offset']) !== fs.statSync(file).size) return res.status(409).end();
+  res.set({ 'Tus-Resumable': '1.0.0', 'Upload-Offset': String(tusAppend(file, req)) }).status(204).end();
+});
+app.get('/srila-prabhupada', (req, res) => {
+  res.sendFile(path.join(__dirname, 'srila-prabhupada.html'));
+});
+app.get('/srila-prabhupada/offering', (req, res) => {
+  res.sendFile(path.join(__dirname, 'srila-prabhupada-offering.html'));
+});
+app.get('/srila-prabhupada/donate', (req, res) => {
+  res.sendFile(path.join(__dirname, 'srila-prabhupada-donate.html'));
+});
+app.get('/prabhupada-admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'prabhupada-admin.html'));
+});
+
 // Serve /admin console
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
