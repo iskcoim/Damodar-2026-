@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>Thank You | Srila Prabhupada Tirobhava Mahotsava</title>
+  <link rel="icon" href="/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Cormorant+Garamond:ital,wght@1,500&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/prabhupada/prabhupada.css">
+</head>
+<body>
+  <header class="page-head">
+    <img class="bg" src="/prabhupada/prabhupada-hero.webp" alt="" aria-hidden="true">
+    <a href="/srila-prabhupada"><img class="brand-logo white-logo" src="/prabhupada/iskcon-logo-gold.png" alt="ISKCON Coimbatore" width="1030" height="334"></a>
+    <a class="back" href="/srila-prabhupada">← Festival page</a>
+    <div class="container">
+      <p class="eyebrow">Tirobhava Mahotsava · 13 November 2026</p>
+      <h1>Your seva</h1>
+    </div>
+  </header>
+
+  <main>
+    <section class="band band-warm" style="padding-top:44px">
+      <div class="container">
+        <div class="wizard" style="margin-top:0">
+          <div class="done-panel" role="status" aria-live="polite">
+            <span class="done-mark" id="mark" aria-hidden="true">…</span>
+            <h3 id="title">Confirming your payment…</h3>
+            <p id="message">This takes a few seconds. The page updates by itself.</p>
+            <dl class="status-rows" id="rows" hidden>
+              <div><dt>Seva</dt><dd id="seva"></dd></div>
+              <div><dt>Amount</dt><dd id="amount"></dd></div>
+              <div><dt>Reference</dt><dd id="reference"></dd></div>
+              <div id="receiptRow" hidden><dt>Receipt no.</dt><dd id="receipt"></dd></div>
+            </dl>
+            <div class="done-actions">
+              <a class="btn btn-main" id="again" href="/srila-prabhupada/donate" hidden>Offer seva again</a>
+              <a class="btn btn-plain" href="/srila-prabhupada/offering">Submit your offering</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding-bottom:32px">
+    <div class="container">
+      <p>ISKCON Coimbatore · Sri Jagannath Mandir, Coimbatore</p>
+      <p>Call / WhatsApp: <a href="https://wa.me/919042216108" target="_blank" rel="noopener noreferrer">+91 90422 16108</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      // What the address says is only a hint: this page always asks the server, which asks the gateway.
+      const COPY = {
+        paid: ['✓', 'Hare Krishna! Your seva is received', 'Thank you for honouring Srila Prabhupada. Your receipt is sent on WhatsApp and email.'],
+        created: ['…', 'Confirming your payment…', 'This takes a few seconds. The page updates by itself.'],
+        failed: ['!', 'Payment did not go through', 'No money was taken, or your bank will refund it. Please try again.'],
+        expired: ['!', 'Payment time ran out', 'Please start the seva again to pay.'],
+      };
+      const $ = (id) => document.getElementById(id);
+      const ref = new URLSearchParams(location.search).get('ref') || '';
+      const started = Date.now();
+
+      function show(copy) {
+        $('mark').textContent = copy[0];
+        $('title').textContent = copy[1];
+        $('message').textContent = copy[2];
+      }
+
+      async function check() {
+        try {
+          const res = await fetch('/api/prabhupada?ref=' + encodeURIComponent(ref));
+          if (res.status === 404) {
+            show(['!', 'We could not find this seva', 'If you were charged, please call or WhatsApp the temple with your mobile number.']);
+            return;
+          }
+          const d = await res.json();
+          if (!res.ok) throw new Error(d.error);
+          show(COPY[d.status] || COPY.created);
+          $('rows').hidden = false;
+          $('seva').textContent = d.seva;
+          $('amount').textContent = '₹' + Number(d.amount).toLocaleString('en-IN');
+          $('reference').textContent = d.reference;
+          $('receiptRow').hidden = !d.receipt_id;
+          $('receipt').textContent = d.receipt_id || '';
+          $('again').hidden = d.status !== 'failed' && d.status !== 'expired';
+          if (d.status !== 'created') return;
+        } catch {
+          // Keep trying: a brief connection problem must not look like a failed payment
+        }
+        if (Date.now() - started < 120000) {
+          setTimeout(check, 4000);
+        } else {
+          show(['…', "We'll confirm shortly", 'Your payment is still being confirmed. If you paid, your receipt will reach you on WhatsApp and email. Please keep your reference.']);
+        }
+      }
+      check();
+    })();
+  </script>
+</body>
+</html>

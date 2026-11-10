@@ -108,6 +108,34 @@ app.get('/api/registrations', async (req, res) => {
 process.env.PRABHUPADA_LOCAL_FILE = path.join(__dirname, 'prabhupada_local.json');
 process.env.ADMIN_KEY = process.env.ADMIN_KEY || 'local-test';
 process.env.PRABHUPADA_MAX_VIDEO_MB = process.env.PRABHUPADA_MAX_VIDEO_MB || '500';
+// A simulated payment gateway, so local testing never touches the real one
+if (!process.env.KCM_PAYMENT_GATEWAY_SECRET) {
+  process.env.KCM_PAYMENT_GATEWAY_SECRET = 'local-test';
+  process.env.KCM_PAYMENT_GATEWAY_URL = `http://localhost:${PORT}/local-kcm`;
+  const CATALOG = { '3-72': 25001, '3-73': 5001, '3-74': 1501, '3-75': 1008, '3-76': 0 };
+  const sessions = new Map();
+  app.post('/local-kcm/contacts/resolve', (req, res) => res.json({ success: true, contacts: [{ contact_id: 'KCM-LOCAL', first_Name: req.body.first_Name, mobileNo: req.body.mobileNo }] }));
+  app.post('/local-kcm/checkout/sessions', (req, res) => {
+    const [item] = req.body.items;
+    const unit = CATALOG[item.scheme_id];
+    if (unit === undefined) return res.status(422).json({ success: false, error: 'unknown_scheme' });
+    if (unit > 0 && item.amount_rupees) return res.status(422).json({ success: false, error: 'amount_forbidden' });
+    if (unit === 0 && !item.amount_rupees) return res.status(422).json({ success: false, error: 'amount_required' });
+    const rupees = process.env.LOCAL_KCM_PRICE_OFF ? unit + 1 : unit || item.amount_rupees;
+    const id = `kpg_local${Date.now()}`;
+    sessions.set(id, { status: 'created', amount: rupees });
+    res.json({ success: true, session_id: id, order: { id: `order_${id}`, amount: rupees * 100 }, checkout: { key_id: 'rzp_test_local', amount: rupees * 100, currency: 'INR', order_id: `order_${id}`, callback_url: req.body.return_url } });
+  });
+  app.get('/local-kcm/checkout/sessions/:id', (req, res) => {
+    const s = sessions.get(req.params.id);
+    if (!s) return res.status(404).json({ success: false, error: 'not_found' });
+    res.json({ success: true, session_id: req.params.id, ...s });
+  });
+  app.post('/local-kcm/simulate-paid/:id', (req, res) => {
+    Object.assign(sessions.get(req.params.id) || {}, { status: 'paid', receipt_id: 'R-LOCAL-1', payment_id: 'pay_local', paid_at: new Date().toISOString() });
+    res.json({ ok: true });
+  });
+}
 app.all('/api/prabhupada', require('./api/prabhupada'));
 // A small stand-in for Supabase's resumable uploads when testing locally
 const LOCAL_UPLOADS = path.join(__dirname, 'prabhupada_local_uploads');
@@ -144,6 +172,9 @@ app.get('/srila-prabhupada', (req, res) => {
 });
 app.get('/srila-prabhupada/offering', (req, res) => {
   res.sendFile(path.join(__dirname, 'srila-prabhupada-offering.html'));
+});
+app.get('/srila-prabhupada/thank-you', (req, res) => {
+  res.sendFile(path.join(__dirname, 'srila-prabhupada-thank-you.html'));
 });
 app.get('/srila-prabhupada/donate', (req, res) => {
   res.sendFile(path.join(__dirname, 'srila-prabhupada-donate.html'));

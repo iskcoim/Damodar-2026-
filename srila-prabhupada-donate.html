@@ -7,7 +7,7 @@
   <meta name="description" content="Together let us make Srila Prabhupada's Tirobhava Mahotsava grand. Choose a seva and offer what you can.">
   <meta property="og:title" content="Let us make Srila Prabhupada's festival grand">
   <meta property="og:description" content="Choose a seva for his Tirobhava Mahotsava, 13 November 2026, ISKCON Coimbatore.">
-  <meta property="og:image" content="https://damodar-2026.vercel.app/prabhupada/share.jpg">
+  <meta property="og:image" content="https://events.iskconcoimbatore.com/prabhupada/share.jpg">
   <link rel="icon" href="/logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,36 +35,39 @@
 
         <div class="card">
           <form id="donationForm" novalidate>
-            <h3 class="step-title">1. Choose a seva</h3>
-            <div class="choices" id="sevaList">
-              <label class="choice"><input type="radio" name="seva" value="Grand feast sponsorship" data-amount="25001"><span class="choice-body"><span class="choice-main"><span class="choice-title">Grand feast sponsorship</span><span class="choice-text">The festival feast for all devotees and guests</span></span><span class="choice-price">₹25,001</span></span></label>
-              <label class="choice"><input type="radio" name="seva" value="Prasadam, 25 plates" data-amount="2501"><span class="choice-body"><span class="choice-main"><span class="choice-title">Prasadam for 25 devotees</span><span class="choice-text">Feed devotees and guests on this day</span></span><span class="choice-price">₹2,501</span></span></label>
-              <label class="choice"><input type="radio" name="seva" value="Flower decoration" data-amount="5001"><span class="choice-body"><span class="choice-main"><span class="choice-title">Flower decoration</span><span class="choice-text">Garlands and flowers for Srila Prabhupada's altar</span></span><span class="choice-price">₹5,001</span></span></label>
-              <label class="choice"><input type="radio" name="seva" value="Bhoga offering" data-amount="1501"><span class="choice-body"><span class="choice-main"><span class="choice-title">Bhoga offering</span><span class="choice-text">Preparations offered with love to Srila Prabhupada</span></span><span class="choice-price">₹1,501</span></span></label>
-              <label class="choice"><input type="radio" name="seva" value="Book distribution" data-amount="1008"><span class="choice-body"><span class="choice-main"><span class="choice-title">Book distribution</span><span class="choice-text">Share his books, the work closest to his heart</span></span><span class="choice-price">₹1,008</span></span></label>
-              <label class="choice"><input type="radio" name="seva" value="Festival expenses" data-amount="501" checked><span class="choice-body"><span class="choice-main"><span class="choice-title">Any amount</span><span class="choice-text">Support the festival wherever it is most needed</span></span><span class="choice-price">You choose</span></span></label>
+            <h3 class="step-title">Choose a seva</h3>
+            <div class="seva-grid">
+              <label class="seva-card"><input type="radio" name="seva" value="feast" data-price="25001"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M20 3c-3 0-4 3-4 7 0 2 1 3 4 3V3zM20 13v8"/></svg></span><span class="seva-title">Feast Sponsorship</span><span class="seva-text">The festival feast for all devotees and guests</span><span class="seva-price">₹25,001</span></span></label>
+              <label class="seva-card"><input type="radio" name="seva" value="flower" data-price="5001"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="2.500"/><path d="M12 7.500C10 3.500 14 3.500 12 7.500zM14.400 9.200c3.500-2.700 4.700 1 1 1.500-1 .1-1.700-.6-1-1.500zM13.500 12c2 3.800-1.700 4.800-2.600 1.300M10.500 12c-2 3.800-1.800 0-4.300 .2M9.600 9.200c-3.500-2.700-4.700 1-1 1.500M12 12.500V21M12 18c2-2 4-2 5-2-.5 2-2.500 3-5 2z"/></svg></span><span class="seva-title">Flower Decoration</span><span class="seva-text">Garlands and flowers for Srila Prabhupada's altar</span><span class="seva-price">₹5,001</span></span></label>
+              <label class="seva-card"><input type="radio" name="seva" value="bhoga" data-price="1501"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0zM8 21h8M9 8c0-2 2-2 2-4M14 8c0-2 2-2 2-4"/></svg></span><span class="seva-title">Bhoga Offering</span><span class="seva-text">Preparations offered with love to Srila Prabhupada</span><span class="seva-price">₹1,501</span></span></label>
+              <label class="seva-card"><input type="radio" name="seva" value="book" data-price="1008"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.500-5-2-8-2v15c3 0 6 .5 8 2 2-1.500 5-2 8-2V4c-3 0-6 .5-8 2zM12 6v15"/></svg></span><span class="seva-title">Book Distribution</span><span class="seva-text">Share his books, the work closest to his heart</span><span class="seva-price">₹1,008</span></span></label>
+              <label class="seva-card wide-card"><input type="radio" name="seva" value="general"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c2 2.600 3 4.400 3 6a3 3 0 0 1-6 0c0-1.600 1-3.400 3-6zM3 13h18c-.6 4.400-4 7-9 7s-8.400-2.600-9-7z"/></svg></span><span class="seva-title">Custom amount</span><span class="seva-text">General Donation: offer any amount, wherever it is most needed</span><span class="seva-price open">Choose your amount</span></span></label>
             </div>
 
-            <h3 class="step-title" style="margin-top:8px">2. How much would you like to offer?</h3>
-            <div class="chips" id="chips">
-              <button class="chip" type="button" data-amount="501" aria-pressed="true">₹501</button>
-              <button class="chip" type="button" data-amount="1001" aria-pressed="false">₹1,001</button>
-              <button class="chip" type="button" data-amount="2501" aria-pressed="false">₹2,501</button>
-              <button class="chip" type="button" data-amount="5001" aria-pressed="false">₹5,001</button>
+            <div id="amountBox" style="display:grid;gap:12px" hidden>
+              <h3 class="step-title" style="margin-top:6px">How much would you like to offer?</h3>
+              <div class="chips">
+                <button class="chip" type="button" data-amount="501" aria-pressed="true">₹501</button>
+                <button class="chip" type="button" data-amount="1001" aria-pressed="false">₹1,001</button>
+                <button class="chip" type="button" data-amount="2501" aria-pressed="false">₹2,501</button>
+                <button class="chip" type="button" data-amount="5001" aria-pressed="false">₹5,001</button>
+              </div>
+              <label class="field"><span class="label">Amount in rupees</span><input class="input" name="amount" type="number" min="1" step="1" inputmode="numeric" value="501"></label>
             </div>
-            <label class="field"><span class="label">Amount in rupees</span><input class="input" name="amount" type="number" min="1" step="1" inputmode="numeric" required value="501"></label>
 
-            <h3 class="step-title" style="margin-top:8px">3. Your details</h3>
+            <h3 class="step-title" style="margin-top:6px">Your details</h3>
             <div class="row">
-              <label class="field"><span class="label">Your name</span><input class="input" name="name" required maxlength="120" autocomplete="name"></label>
+              <label class="field"><span class="label">Your full name</span><input class="input" name="name" required maxlength="120" autocomplete="name"></label>
               <label class="field"><span class="label">Mobile</span><input class="input" name="phone" type="tel" required autocomplete="tel"></label>
             </div>
             <label class="field"><span class="label">Email <span class="optional">(optional)</span></span><input class="input" name="email" type="email" autocomplete="email"></label>
             <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="pay-summary" id="paySummary" hidden><span id="summaryName"></span><strong id="summaryAmount"></strong></div>
             <p class="error" role="alert"></p>
-            <div><button class="btn btn-main" type="submit">Offer this seva</button></div>
+            <button class="btn btn-main donate-submit" type="submit">Choose a seva above</button>
+            <p class="secure-note">Secure payment by Razorpay. Your receipt is sent on WhatsApp and email.</p>
           </form>
-          <div class="success" id="done" role="status" tabindex="-1" hidden></div>
+          <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
         </div>
       </div>
     </section>
@@ -77,27 +80,40 @@
     </div>
   </footer>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script>
     (function () {
       'use strict';
-
-      // Until the payment gateway is added: fill these in to show UPI and bank details.
-      const PAY = { upiId: '', bankDetails: '' };
       const WHATSAPP = '919042216108';
-
       const inr = (n) => '₹' + Number(n).toLocaleString('en-IN');
       const openedAt = performance.now();
       const form = document.getElementById('donationForm');
       const done = document.getElementById('done');
       const error = form.querySelector('.error');
       const button = form.querySelector('button[type="submit"]');
+      const amountBox = document.getElementById('amountBox');
       const amountInput = form.elements.amount;
       const chips = form.querySelectorAll('.chip');
+      const LABEL = 'Pay securely';
 
-      const markChips = () => chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.amount === amountInput.value)));
-      chips.forEach((c) => c.addEventListener('click', () => { amountInput.value = c.dataset.amount; markChips(); }));
-      amountInput.addEventListener('input', markChips);
-      form.querySelectorAll('input[name="seva"]').forEach((r) => r.addEventListener('change', () => { amountInput.value = r.dataset.amount; markChips(); }));
+      const chosen = () => form.querySelector('input[name="seva"]:checked');
+      const payable = () => (chosen() ? chosen().dataset.price || amountInput.value : '');
+
+      // The amount choices appear only for the custom amount card; the others have a set price
+      function refresh() {
+        const seva = chosen();
+        amountBox.hidden = !seva || Boolean(seva.dataset.price);
+        document.getElementById('paySummary').hidden = !seva;
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.amount === amountInput.value)));
+        if (!seva) { button.textContent = 'Choose a seva above'; return; }
+        document.getElementById('summaryName').textContent = seva.closest('label').querySelector('.seva-title').textContent;
+        document.getElementById('summaryAmount').textContent = Number(payable()) >= 1 ? inr(payable()) : '';
+        button.textContent = Number(payable()) >= 1 ? 'Pay ' + inr(payable()) + ' securely' : LABEL;
+      }
+      chips.forEach((c) => c.addEventListener('click', () => { amountInput.value = c.dataset.amount; refresh(); }));
+      amountInput.addEventListener('input', refresh);
+      form.querySelectorAll('input[name="seva"]').forEach((r) => r.addEventListener('change', refresh));
+      refresh();
 
       // Built with DOM nodes so nothing a visitor typed is treated as HTML
       function el(tag, className, text) {
@@ -106,51 +122,58 @@
         if (text) node.textContent = text;
         return node;
       }
-      function payBox(label, value) {
-        const box = el('div', 'pay-box');
-        box.append(el('p', 'pay-label', label), el('p', 'pay-value', value));
-        return box;
-      }
-
-      function thank(name, amount, seva, reference) {
-        done.replaceChildren(
-          el('h3', '', 'Thank you, ' + name + '!'),
-          el('p', '', 'Your offering of ' + inr(amount) + ' for ' + seva + ' is noted. Reference: ' + reference + '.'),
-        );
-        if (PAY.upiId) done.append(payBox('Pay by UPI', PAY.upiId));
-        if (PAY.bankDetails) done.append(payBox('Bank transfer', PAY.bankDetails));
-        if (!PAY.upiId && !PAY.bankDetails) done.append(el('p', '', 'Our seva team will call you shortly with the payment details.'));
-        if (PAY.upiId) {
-          const upi = el('a', 'btn btn-main', 'Pay ' + inr(amount) + ' by UPI app');
-          upi.href = 'upi://pay?pa=' + encodeURIComponent(PAY.upiId) + '&pn=' + encodeURIComponent('ISKCON Coimbatore') + '&am=' + amount + '&cu=INR&tn=' + encodeURIComponent('Prabhupada festival ' + reference);
-          done.append(upi);
-        }
-        const wa = el('a', 'btn btn-wa', 'Confirm on WhatsApp');
-        wa.href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hare Krishna! I have offered ' + inr(amount) + ' for ' + seva + ' for Srila Prabhupada\'s Tirobhava Mahotsava. Reference: ' + reference + '. Name: ' + name + '.');
-        wa.target = '_blank';
-        wa.rel = 'noopener noreferrer';
-        done.append(wa);
+      function panel(title, message, ...actions) {
+        const row = el('div', 'done-actions');
+        row.append(...actions);
+        done.replaceChildren(el('h3', '', title), el('p', '', message), row);
         form.hidden = true;
         done.hidden = false;
         done.scrollIntoView({ block: 'center', behavior: 'instant' });
         done.focus({ preventScroll: true });
       }
+      function whatsapp(amount, seva, reference, name) {
+        const wa = el('a', 'btn btn-wa', 'Message us on WhatsApp');
+        wa.href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hare Krishna! I would like to offer ' + inr(amount) + ' for ' + seva + " for Srila Prabhupada's Tirobhava Mahotsava. Reference: " + reference + '. Name: ' + name + '.');
+        wa.target = '_blank';
+        wa.rel = 'noopener noreferrer';
+        return wa;
+      }
+
+      // Exactly the gateway's checkout object, as it asks. Never change amount, order or callback.
+      function openCheckout(data, name) {
+        const { key_id, ...rest } = data.checkout;
+        const rzp = new window.Razorpay({
+          ...rest,
+          key: key_id,
+          modal: {
+            ondismiss() {
+              const again = el('button', 'btn btn-main', 'Pay ' + inr(data.amount) + ' now');
+              again.type = 'button';
+              again.addEventListener('click', () => openCheckout(data, name));
+              panel('Payment not completed', 'Your seva of ' + inr(data.amount) + ' for ' + data.seva + ' is waiting. Reference: ' + data.reference + '.', again, whatsapp(data.amount, data.seva, data.reference, name));
+            },
+          },
+        });
+        rzp.open();
+      }
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         error.textContent = '';
+        if (!chosen()) { error.textContent = 'Please choose a seva.'; return; }
+        if (!(Number(payable()) >= 1)) { error.textContent = 'Please enter an amount.'; return; }
         button.disabled = true;
-        button.textContent = 'Sending…';
-        const seva = form.elements.seva.value;
+        button.textContent = 'Please wait…';
+        const name = form.elements.name.value.trim();
         try {
           const res = await fetch('/api/prabhupada', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               kind: 'donation',
-              seva,
+              seva: chosen().value,
               amount: amountInput.value,
-              name: form.elements.name.value,
+              name,
               phone: form.elements.phone.value,
               email: form.elements.email.value,
               website: form.elements.website.value,
@@ -159,12 +182,16 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error);
-          thank(form.elements.name.value.trim(), data.amount || amountInput.value, seva, data.reference || '');
+          if (data.checkout && window.Razorpay) {
+            openCheckout(data, name);
+          } else {
+            panel('Thank you, ' + name + '!', 'Online payment is not available just now. Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted, and our seva team will call you with the payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''), whatsapp(data.amount || payable(), data.seva || 'the festival', data.reference || '', name));
+          }
         } catch (err) {
           error.textContent = err.message || 'Please check your connection and try again.';
         } finally {
           button.disabled = false;
-          button.textContent = 'Offer this seva';
+          refresh();
         }
       });
     })();

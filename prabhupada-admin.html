@@ -39,7 +39,7 @@
       <div class="head"><h2 id="offeringsTitle">Offerings</h2><button type="button" id="exportOfferings">Download CSV</button></div>
       <div class="scroll"><table id="offerings"></table></div>
       <div class="head"><h2 id="donationsTitle">Donations</h2><button type="button" id="exportDonations">Download CSV</button></div>
-      <p style="margin-bottom:12px;color:var(--muted);font-size:0.9rem">These are donations people said they would make. Check each reference against the bank or UPI statement.</p>
+      <p style="margin-bottom:12px;color:var(--muted);font-size:0.9rem">A donation is complete only when its status is paid and it has a receipt. "created" means payment was started but not finished.</p>
       <div class="scroll"><table id="donations"></table></div>
     </div>
   </main>
@@ -57,7 +57,8 @@
       ];
       const DONATION_COLUMNS = [
         ['Reference', (r) => r.reference], ['Seva', (r) => r.seva], ['Name', (r) => r.name], ['Mobile', (r) => r.phone], ['Email', (r) => r.email],
-        ['Amount (₹)', (r) => r.amount], ['Received', (r) => when(r.created_at)],
+        ['Amount (₹)', (r) => r.amount], ['Status', (r) => r.status || 'created'], ['Receipt', (r) => r.receipt_id],
+        ['Problem', (r) => r.failure_reason], ['Received', (r) => when(r.created_at)],
       ];
 
       // textContent throughout: visitors wrote these values, so they are never treated as HTML

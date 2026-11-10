@@ -23,6 +23,18 @@ const EXT_BY_TYPE = {
   'audio/mpeg': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/webm': 'webm', 'audio/amr': 'amr',
   'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic', 'image/heif': 'heif', 'application/pdf': 'pdf',
 };
+// Fixed-price schemes: the gateway charges its own catalog price, so `price` must match it.
+// A mismatch is refused rather than charging a donor something other than what the card showed.
+const SEVAS = {
+  feast: { scheme: '3-72', title: 'Feast Sponsorship', price: 25001 },
+  flower: { scheme: '3-73', title: 'Flower Decoration', price: 5001 },
+  bhoga: { scheme: '3-74', title: 'Bhoga Offering', price: 1501 },
+  book: { scheme: '3-75', title: 'Book Distribution', price: 1008 },
+  general: { scheme: '3-76', title: 'General Donation', price: null },
+};
+const MAX_ATTEMPTS_PER_HOUR = 10; // each attempt creates a real order at the gateway
+const GATEWAY_URL = (process.env.KCM_PAYMENT_GATEWAY_URL || 'https://iskconcoimbatore.com/api/kcm-payment-gateway').replace(/\/$/, '');
+const siteUrl = () => (process.env.SITE_URL || 'https://events.iskconcoimbatore.com').replace(/\/$/, '');
 const FILE_PATH = /^offerings\/[a-f0-9]{24}\.[a-z0-9]{2,5}$/;
 
 const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY
@@ -60,6 +72,108 @@ async function list(table) {
   }
   if (!localFile) throw new Error('No database configured');
   return readLocal()[table];
+}
+
+async function updateDonation(reference, fields) {
+  if (supabase) {
+    const { error } = await supabase.from(TABLES.donation).update(fields).eq('reference', reference);
+    if (error) throw new Error(error.message);
+    return;
+  }
+  const data = readLocal();
+  const row = data[TABLES.donation].find((d) => d.reference === reference);
+  if (row) Object.assign(row, fields);
+  fs.writeFileSync(localFile, JSON.stringify(data, null, 2));
+}
+
+async function findDonation(reference) {
+  if (supabase) {
+    const { data, error } = await supabase.from(TABLES.donation).select('*').eq('reference', reference).limit(1);
+    if (error) throw new Error(error.message);
+    return data[0] || null;
+  }
+  return readLocal()[TABLES.donation].find((d) => d.reference === reference) || null;
+}
+
+async function recentAttempts(phone) {
+  const since = new Date(Date.now() - 3600000).toISOString();
+  if (supabase) {
+    const { count, error } = await supabase.from(TABLES.donation).select('id', { count: 'exact', head: true }).eq('phone', phone).gte('created_at', since);
+    if (error) throw new Error(error.message);
+    return count || 0;
+  }
+  return readLocal()[TABLES.donation].filter((d) => d.phone === phone && d.created_at >= since).length;
+}
+
+/** One call to the KCM gateway. The secret never leaves this server. */
+async function gateway(method, route, body, idempotencyKey) {
+  const send = () => fetch(`${GATEWAY_URL}${route}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${process.env.KCM_PAYMENT_GATEWAY_SECRET}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(12000),
+  });
+  let res;
+  try {
+    res = await send();
+  } catch {
+    res = await send(); // after a network failure the gateway asks for the same key and body again
+  }
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok || json.success === false) throw new Error(`${res.status} ${json.error || 'gateway_error'}: ${json.message || ''}`);
+  return json;
+}
+
+/** The contact whose name best matches what the donor typed, else the first (a family may share a mobile). */
+function pickContact(contacts, name) {
+  const n = name.trim().toLowerCase();
+  const full = (c) => `${c.first_Name} ${c.last_Name || ''}`.trim().toLowerCase();
+  return contacts.find((c) => full(c) === n)
+    || contacts.find((c) => c.first_Name.trim().toLowerCase() === n.split(/\s+/)[0])
+    || contacts[0];
+}
+
+/** Opens a checkout session for a saved donation. Returns what the browser needs to pay. */
+async function startPayment(row, seva) {
+  const mobileNo = row.phone.replace(/\D/g, '').slice(-10);
+  const { contacts } = await gateway('POST', '/contacts/resolve', { mobileNo, first_Name: row.name, email: row.email || '' }, `contact-${row.reference}`);
+  const contact = pickContact(contacts, row.name);
+  const session = await gateway('POST', '/checkout/sessions', {
+    contact_id: contact.contact_id,
+    mobileNo,
+    first_Name: row.name,
+    email: row.email || '',
+    return_url: `${siteUrl()}/srila-prabhupada/thank-you?ref=${row.reference}`,
+    items: [seva.price === null
+      ? { scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount }
+      : { scheme_id: seva.scheme, quantity: 1 }],
+    remarks: `${row.reference} | Tirobhava Mahotsava | ${seva.title}`,
+  }, `checkout-${row.reference}`);
+  const charged = Math.round(session.order.amount / 100);
+  await updateDonation(row.reference, { session_id: session.session_id, contact_id: contact.contact_id });
+  if (charged !== row.amount) throw new Error(`price mismatch: card ${row.amount}, gateway ${charged}`);
+  return session.checkout;
+}
+
+/** Asks the gateway, the only source of truth, about a donation still awaiting payment. */
+async function syncDonation(row) {
+  if (row.status !== 'created' || !row.session_id || !process.env.KCM_PAYMENT_GATEWAY_SECRET) return row;
+  try {
+    const s = await gateway('GET', `/checkout/sessions/${encodeURIComponent(row.session_id)}`);
+    // Paid only counts once the receipt exists
+    const status = s.status === 'paid' && !s.receipt_id ? 'created' : s.status;
+    if (status === row.status && !s.payment_id) return row;
+    const fields = { status, receipt_id: s.receipt_id || null, payment_id: s.payment_id || null, paid_at: s.paid_at || null, failure_reason: s.failure_reason || null };
+    await updateDonation(row.reference, fields);
+    return { ...row, ...fields };
+  } catch (err) {
+    console.error(`Gateway status check for ${row.reference} failed:`, err.message);
+    return row;
+  }
 }
 
 /** Adds a short-lived link to each offering's file, for staff. */
@@ -156,13 +270,19 @@ function validate(body) {
   }
 
   if (body.kind === 'donation') {
-    const amount = Math.round(Number(body.amount));
-    if (!Number.isFinite(amount) || amount < 1 || amount > 10000000) return { error: 'Please choose or enter an amount.' };
-    const reference = `PSD-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    const seva = Object.prototype.hasOwnProperty.call(SEVAS, body.seva) ? SEVAS[body.seva] : null;
+    if (!seva) return { error: 'Please choose a seva.' };
+    // Fixed-price sevas ignore whatever amount the browser sends
+    const amount = seva.price === null ? Math.round(Number(body.amount)) : seva.price;
+    if (!Number.isFinite(amount) || amount < 1 || amount > 10000000) return { error: 'Please enter an amount.' };
+    if (name.length < 3) return { error: 'Please enter your full name, as it will appear on your receipt.' };
+    if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, '').slice(-10))) return { error: 'Please enter a valid Indian mobile number.' };
+    const reference = `PSD-${crypto.randomBytes(5).toString('hex').toUpperCase()}`;
     return {
       table: TABLES.donation,
-      row: { festival: FESTIVAL, seva: clean(body.seva, 80) || 'Festival expenses', name, phone, email: email || null, amount, reference },
-      reply: { reference, amount },
+      seva,
+      row: { festival: FESTIVAL, seva: seva.title, scheme_id: seva.scheme, name, phone, email: email || null, amount, reference, status: 'created' },
+      reply: { reference, amount, seva: seva.title },
     };
   }
 
@@ -192,17 +312,42 @@ module.exports = async function handler(req, res) {
       }
       const checked = validate(body);
       if (checked.error) return res.status(400).json({ error: checked.error });
+      if (checked.seva && (await recentAttempts(checked.row.phone)) >= MAX_ATTEMPTS_PER_HOUR) {
+        return res.status(429).json({ error: 'Too many attempts from this number. Please try again in an hour, or WhatsApp us on +91 90422 16108.' });
+      }
       await insert(checked.table, checked.row);
-      return res.status(200).json({ ok: true, ...checked.reply });
+      if (!checked.seva) return res.status(200).json({ ok: true, ...checked.reply });
+
+      // The pledge is saved either way, so a gateway problem never loses a donor
+      let checkout = null;
+      if (process.env.KCM_PAYMENT_GATEWAY_SECRET) {
+        try {
+          checkout = await startPayment(checked.row, checked.seva);
+        } catch (err) {
+          console.error(`Gateway: ${checked.row.reference} could not start payment:`, err.message);
+          await updateDonation(checked.row.reference, { failure_reason: String(err.message).slice(0, 300) }).catch(() => {});
+        }
+      }
+      return res.status(200).json({ ok: true, ...checked.reply, checkout });
     }
 
     if (req.method === 'GET') {
       if (req.query && req.query.limits) {
         return res.status(200).json({ audio: UPLOADS.audio.maxBytes / MB, video: UPLOADS.video.maxBytes / MB, scan: UPLOADS.scan.maxBytes / MB });
       }
+      if (req.query && req.query.ref) {
+        const ref = String(req.query.ref);
+        const found = /^PSD-[A-F0-9]{10}$/.test(ref) ? await findDonation(ref) : null;
+        if (!found) return res.status(404).json({ error: 'We could not find this seva.' });
+        const row = await syncDonation(found);
+        // Only what the thank-you page shows, never the donor's contact details
+        return res.status(200).json({ reference: row.reference, status: row.status, amount: row.amount, seva: row.seva, receipt_id: row.receipt_id || null, online: Boolean(row.session_id) });
+      }
       if (!keyMatches(req.headers['x-admin-key'])) return res.status(401).json({ error: 'Incorrect staff key.' });
       const [offerings, donations] = await Promise.all([list(TABLES.offering), list(TABLES.donation)]);
-      return res.status(200).json({ offerings: await withFileUrls(offerings), donations });
+      // Donors who close the page after paying still show correctly here
+      const synced = await Promise.all(donations.map((d, i) => (i < 30 ? syncDonation(d) : d)));
+      return res.status(200).json({ offerings: await withFileUrls(offerings), donations: synced });
     }
 
     return res.status(405).json({ error: 'Method not allowed.' });

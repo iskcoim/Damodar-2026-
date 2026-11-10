@@ -29,6 +29,17 @@ create table if not exists public.prabhupada_donations (
   created_at timestamptz not null default now()
 );
 
+-- Online payment through the KCM gateway
+alter table public.prabhupada_donations
+  add column if not exists scheme_id text,
+  add column if not exists status text not null default 'created',
+  add column if not exists contact_id text,
+  add column if not exists session_id text,
+  add column if not exists receipt_id text,
+  add column if not exists payment_id text,
+  add column if not exists paid_at timestamptz,
+  add column if not exists failure_reason text;
+
 alter table public.prabhupada_offerings enable row level security;
 alter table public.prabhupada_donations enable row level security;
 

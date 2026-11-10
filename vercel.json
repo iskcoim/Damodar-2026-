@@ -15,6 +15,10 @@
       "destination": "/srila-prabhupada-offering.html"
     },
     {
+      "source": "/srila-prabhupada/thank-you",
+      "destination": "/srila-prabhupada-thank-you.html"
+    },
+    {
       "source": "/srila-prabhupada/donate",
       "destination": "/srila-prabhupada-donate.html"
     },
@@ -34,6 +38,9 @@
   "functions": {
     "api/register.js": {
       "maxDuration": 10
+    },
+    "api/prabhupada.js": {
+      "maxDuration": 30
     }
   }
 }
