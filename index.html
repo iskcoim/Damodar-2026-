@@ -1579,20 +1579,22 @@
             return;
           }
           const pw = prompt('Admin Password:');
-          if (pw === '8899') {
+          if (pw) {
+            adminKey = pw.trim();
             adminDrawer.style.display = 'block';
             adminDrawer.scrollIntoView({ behavior: 'smooth' });
             fetchAdmin();
-          } else if (pw !== null) {
-            alert('Incorrect password.');
           }
         });
       }
 
+      // The password is checked by the server (the ADMIN_KEY setting in Vercel)
+      let adminKey = '';
       async function fetchAdmin() {
         adminTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:18px;">Loading...</td></tr>';
         try {
-          const res = await fetch('/api/registrations');
+          const res = await fetch('/api/registrations', { headers: { 'x-admin-key': adminKey } });
+          if (res.status === 401) { adminDrawer.style.display = 'none'; alert('Incorrect password.'); return; }
           if (!res.ok) throw new Error('Fetch failed');
           cachedRows = await res.json();
           renderAdmin(cachedRows);

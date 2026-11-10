@@ -92,6 +92,7 @@ app.post('/api/register', async (req, res) => {
 
 // GET /api/registrations (admin)
 app.get('/api/registrations', async (req, res) => {
+  if (req.headers['x-admin-key'] !== (process.env.ADMIN_KEY || 'local-test')) return res.status(401).json({ error: 'Incorrect password.' });
   if (supabase) {
     const { data, error } = await supabase
       .from('damodara_registrations')

@@ -1,5 +1,14 @@
 // Vercel serverless function — handles both POST (register) and GET (admin list)
+const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
+
+// The registrations list holds names, phones and addresses: only staff with ADMIN_KEY may read it
+function keyMatches(given) {
+  const expected = process.env.ADMIN_KEY;
+  if (!expected || !given) return false;
+  const hash = (s) => crypto.createHash('sha256').update(String(s)).digest();
+  return crypto.timingSafeEqual(hash(given), hash(expected));
+}
 
 let supabase = null;
 if (process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY) {
@@ -48,6 +57,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
+      if (!keyMatches(req.headers['x-admin-key'])) return res.status(401).json({ error: 'Incorrect password.' });
       if (!supabase) return res.status(200).json([]);
       const { data, error } = await supabase
         .from('damodara_registrations')

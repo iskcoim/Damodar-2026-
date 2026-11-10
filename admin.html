@@ -479,8 +479,10 @@
     (function() {
       'use strict';
 
-      const AUTH_KEY = 'iskcon_admin_auth_v1';
-      const PASSWORD = '8899';
+      // The password is checked by the server (the ADMIN_KEY setting in Vercel), never written in this page
+      const AUTH_KEY = 'iskcon_admin_key_v2';
+      const savedKey = () => { try { return sessionStorage.getItem(AUTH_KEY) || ''; } catch (_) { return ''; } };
+      const saveKey = (k) => { try { k ? sessionStorage.setItem(AUTH_KEY, k) : sessionStorage.removeItem(AUTH_KEY); } catch (_) {} };
 
       const loginOverlay = document.getElementById('loginOverlay');
       const loginForm = document.getElementById('loginForm');
@@ -498,30 +500,34 @@
 
       let allRegistrations = [];
 
+      function showLogin(message) {
+        saveKey('');
+        loginOverlay.style.display = 'flex';
+        loginError.textContent = message || '';
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+
       // Check session
-      if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+      if (savedKey()) {
         loginOverlay.style.display = 'none';
         fetchRegistrations();
       }
 
-      // Login handler
+      // Login handler: the server says whether the password is right
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (passwordInput.value.trim() === PASSWORD) {
-          sessionStorage.setItem(AUTH_KEY, 'true');
-          loginOverlay.style.display = 'none';
-          loginError.textContent = '';
-          fetchRegistrations();
-        } else {
-          loginError.textContent = 'Incorrect password. Please try again.';
-          passwordInput.value = '';
-          passwordInput.focus();
-        }
+        const key = passwordInput.value.trim();
+        if (!key) return;
+        saveKey(key);
+        loginOverlay.style.display = 'none';
+        loginError.textContent = '';
+        fetchRegistrations();
       });
 
       // Logout handler
       logoutBtn.addEventListener('click', function() {
-        sessionStorage.removeItem(AUTH_KEY);
+        saveKey('');
         loginOverlay.style.display = 'flex';
         passwordInput.value = '';
         passwordInput.focus();
@@ -531,7 +537,8 @@
       async function fetchRegistrations() {
         tableBody.innerHTML = '<tr><td colspan="6" class="empty-state">Fetching latest records...</td></tr>';
         try {
-          const res = await fetch('/api/registrations');
+          const res = await fetch('/api/registrations', { headers: { 'x-admin-key': savedKey() } });
+          if (res.status === 401) { showLogin('Incorrect password. Please try again.'); return; }
           if (!res.ok) throw new Error('Failed to fetch records');
           allRegistrations = await res.json();
           renderDashboard(allRegistrations);
