@@ -188,28 +188,17 @@ async function startPayment(row, seva) {
   const mobileNo = row.phone.replace(/\D/g, '').slice(-10);
   const { contacts } = await gateway('POST', '/contacts/resolve', { mobileNo, first_Name: row.name, email: row.email || '' }, `contact-${row.reference}`);
   const contact = pickContact(contacts, row.name);
-  const open = { scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount };
-  const fixed = { scheme_id: seva.scheme, quantity: 1 };
-  const request = (item, key) => gateway('POST', '/checkout/sessions', {
+  const session = await gateway('POST', '/checkout/sessions', {
     contact_id: contact.contact_id,
     mobileNo,
     first_Name: row.name,
     email: row.email || '',
     return_url: `${siteUrl()}/srila-prabhupada/thank-you?ref=${row.reference}`,
-    items: [item],
+    items: [seva.price === null
+      ? { scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount }
+      : { scheme_id: seva.scheme, quantity: 1 }],
     remarks: `${row.reference} | Tirobhava Mahotsava | ${seva.title}`,
-  }, key);
-  // The gateway's catalog decides whether a scheme takes an amount. If our guess is wrong, it says
-  // so without creating anything, and we ask once more the other way (the price check below still applies).
-  let session;
-  const first = seva.price === null ? open : fixed;
-  try {
-    session = await request(first, `checkout-${row.reference}`);
-  } catch (err) {
-    if (first === fixed && /amount_rupees is required/i.test(err.message)) session = await request(open, `checkout-${row.reference}-open`);
-    else if (first === open && /amount_rupees.*(forbidden|not allowed|must not)/i.test(err.message)) session = await request(fixed, `checkout-${row.reference}-fixed`);
-    else throw err;
-  }
+  }, `checkout-${row.reference}`);
   const charged = Math.round(session.order.amount / 100);
   await updateDonation(row.reference, { session_id: session.session_id, contact_id: contact.contact_id });
   if (charged !== row.amount) throw new Error(`price mismatch: card ${row.amount}, gateway ${charged}`);
