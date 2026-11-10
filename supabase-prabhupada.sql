@@ -40,6 +40,15 @@ alter table public.prabhupada_donations
   add column if not exists paid_at timestamptz,
   add column if not exists failure_reason text;
 
+-- Counts mobile-number name lookups, so they cannot be used to collect names
+create table if not exists public.prabhupada_lookups (
+  id bigint generated always as identity primary key,
+  ip text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists prabhupada_lookups_ip_time on public.prabhupada_lookups (ip, created_at);
+alter table public.prabhupada_lookups enable row level security;
+
 alter table public.prabhupada_offerings enable row level security;
 alter table public.prabhupada_donations enable row level security;
 

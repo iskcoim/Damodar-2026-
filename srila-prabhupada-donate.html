@@ -33,9 +33,16 @@
         <p class="lead">Srila Prabhupada crossed the ocean at sixty-nine with almost nothing, so that Krishna could reach us. Every temple, every book and every plate of prasadam we receive today comes from his sacrifice.</p>
         <p class="lead">His Tirobhava Mahotsava is our chance to show our gratitude. It is we devotees who come together and make this day grand: the flowers, the feast, the books. Whatever you offer, small or large, is a way of honouring him.</p>
 
-        <div class="card">
-          <form id="donationForm" novalidate>
-            <h3 class="step-title">Choose a seva</h3>
+        <div class="wizard" id="wizard">
+          <ol class="stepper" aria-label="Progress">
+            <li data-mark="1" class="reached"><span class="step-dot">1</span>Choose seva</li>
+            <li data-mark="2"><span class="step-dot">2</span>Your details</li>
+            <li data-mark="3"><span class="step-dot">3</span>Pay</li>
+          </ol>
+          <div class="wizard-body">
+            <form id="donationForm" novalidate>
+              <div class="form-step" data-step="1">
+                <h3 class="step-title" tabindex="-1">Choose a seva</h3>
             <div class="seva-grid">
               <label class="seva-card"><input type="radio" name="seva" value="feast" data-price="25001"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M20 3c-3 0-4 3-4 7 0 2 1 3 4 3V3zM20 13v8"/></svg></span><span class="seva-title">Feast Sponsorship</span><span class="seva-text">The festival feast for all devotees and guests</span><span class="seva-price">₹25,001</span></span></label>
               <label class="seva-card"><input type="radio" name="seva" value="flower" data-price="5001"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="2.500"/><path d="M12 7.500C10 3.500 14 3.500 12 7.500zM14.400 9.200c3.500-2.700 4.700 1 1 1.500-1 .1-1.700-.6-1-1.500zM13.500 12c2 3.800-1.700 4.800-2.600 1.300M10.500 12c-2 3.800-1.800 0-4.300 .2M9.600 9.200c-3.500-2.700-4.700 1-1 1.500M12 12.500V21M12 18c2-2 4-2 5-2-.5 2-2.500 3-5 2z"/></svg></span><span class="seva-title">Flower Decoration</span><span class="seva-text">Garlands and flowers for Srila Prabhupada's altar</span><span class="seva-price">₹5,001</span></span></label>
@@ -44,30 +51,48 @@
               <label class="seva-card wide-card"><input type="radio" name="seva" value="general"><span class="seva-body"><span class="seva-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c2 2.600 3 4.400 3 6a3 3 0 0 1-6 0c0-1.600 1-3.400 3-6zM3 13h18c-.6 4.400-4 7-9 7s-8.400-2.600-9-7z"/></svg></span><span class="seva-title">Custom amount</span><span class="seva-text">General Donation: offer any amount, wherever it is most needed</span><span class="seva-price open">Choose your amount</span></span></label>
             </div>
 
-            <div id="amountBox" style="display:grid;gap:12px" hidden>
-              <h3 class="step-title" style="margin-top:6px">How much would you like to offer?</h3>
-              <div class="chips">
-                <button class="chip" type="button" data-amount="501" aria-pressed="true">₹501</button>
-                <button class="chip" type="button" data-amount="1001" aria-pressed="false">₹1,001</button>
-                <button class="chip" type="button" data-amount="2501" aria-pressed="false">₹2,501</button>
-                <button class="chip" type="button" data-amount="5001" aria-pressed="false">₹5,001</button>
+                <div id="amountBox" class="amount-box" hidden>
+                  <span class="label">How much would you like to offer?</span>
+                  <div class="chips">
+                    <button class="chip" type="button" data-amount="501" aria-pressed="false">₹501</button>
+                    <button class="chip" type="button" data-amount="1001" aria-pressed="false">₹1,001</button>
+                    <button class="chip" type="button" data-amount="2501" aria-pressed="false">₹2,501</button>
+                    <button class="chip" type="button" data-amount="5001" aria-pressed="false">₹5,001</button>
+                  </div>
+                  <label class="money-field"><span aria-hidden="true">₹</span><input class="input" name="amount" type="number" min="1" step="1" inputmode="numeric" placeholder="Or type an amount" aria-label="Amount in rupees"></label>
+                </div>
+                <p class="error" id="step1Error" role="alert"></p>
+                <div class="wizard-actions"><button class="btn btn-main" type="button" id="toDetails">Continue</button></div>
               </div>
-              <label class="field"><span class="label">Amount in rupees</span><input class="input" name="amount" type="number" min="1" step="1" inputmode="numeric" value="501"></label>
-            </div>
 
-            <h3 class="step-title" style="margin-top:6px">Your details</h3>
-            <div class="row">
-              <label class="field"><span class="label">Your full name</span><input class="input" name="name" required maxlength="120" autocomplete="name"></label>
-              <label class="field"><span class="label">Mobile</span><input class="input" name="phone" type="tel" required autocomplete="tel"></label>
-            </div>
-            <label class="field"><span class="label">Email <span class="optional">(optional)</span></span><input class="input" name="email" type="email" autocomplete="email"></label>
-            <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <div class="pay-summary" id="paySummary" hidden><span id="summaryName"></span><strong id="summaryAmount"></strong></div>
-            <p class="error" role="alert"></p>
-            <button class="btn btn-main donate-submit" type="submit">Choose a seva above</button>
-            <p class="secure-note">Secure payment by Razorpay. Your receipt is sent on WhatsApp and email.</p>
-          </form>
-          <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
+              <div class="form-step" data-step="2" hidden>
+                <div class="summary">
+                  <span class="summary-text"><strong id="sevaName"></strong><span id="sevaAmount"></span></span>
+                  <button class="link-btn" type="button" data-back>Change</button>
+                </div>
+                <h3 class="step-title" tabindex="-1">Your mobile number</h3>
+                <p class="step-sub">Your receipt is sent here on WhatsApp.</p>
+                <label class="phone-field"><span aria-hidden="true">+91</span><input class="input" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="98765 43210" aria-label="Mobile number"></label>
+                <div class="lookup-state" id="lookupState" role="status" aria-live="polite"></div>
+                <div id="who" class="who" hidden>
+                  <span class="label">Who is offering this seva?</span>
+                  <div class="chips" id="whoChips"></div>
+                </div>
+                <div id="nameBox" style="display:grid;gap:16px" hidden>
+                  <label class="field"><span class="label">Full name, as on your receipt</span><input class="input" name="name" maxlength="120" autocomplete="name"></label>
+                  <label class="field"><span class="label">Email <span class="optional">(optional)</span></span><input class="input" name="email" type="email" autocomplete="email"></label>
+                </div>
+                <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <p class="error" id="step2Error" role="alert"></p>
+                <div class="wizard-actions">
+                  <button class="back-link" type="button" data-back>← Back</button>
+                  <button class="btn btn-main" type="submit" id="payButton">Continue</button>
+                </div>
+                <p class="secure-note">Secure payment by Razorpay · receipt on WhatsApp and email</p>
+              </div>
+            </form>
+            <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
+          </div>
         </div>
       </div>
     </section>
@@ -87,33 +112,125 @@
       const WHATSAPP = '919042216108';
       const inr = (n) => '₹' + Number(n).toLocaleString('en-IN');
       const openedAt = performance.now();
-      const form = document.getElementById('donationForm');
-      const done = document.getElementById('done');
-      const error = form.querySelector('.error');
-      const button = form.querySelector('button[type="submit"]');
-      const amountBox = document.getElementById('amountBox');
+      const $ = (id) => document.getElementById(id);
+      const form = $('donationForm');
+      const wizard = $('wizard');
+      const steps = [...form.querySelectorAll('[data-step]')];
+      const marks = [...wizard.querySelectorAll('[data-mark]')];
+      const amountBox = $('amountBox');
       const amountInput = form.elements.amount;
-      const chips = form.querySelectorAll('.chip');
-      const LABEL = 'Pay securely';
+      const phoneInput = form.elements.phone;
+      const nameInput = form.elements.name;
+      const payButton = $('payButton');
+      const chips = amountBox.querySelectorAll('.chip');
+      let current = 1;
+      let lookedUp = '';
+      let lookupTimer = null;
+      let autofilled = false; // so a name filled for one number never carries over to another
 
       const chosen = () => form.querySelector('input[name="seva"]:checked');
-      const payable = () => (chosen() ? chosen().dataset.price || amountInput.value : '');
+      const payable = () => (chosen() ? Number(chosen().dataset.price || amountInput.value) : 0);
+      const digits = () => phoneInput.value.replace(/\D/g, '').slice(-10);
+      const validPhone = () => /^[6-9]\d{9}$/.test(digits());
 
-      // The amount choices appear only for the custom amount card; the others have a set price
-      function refresh() {
+      // Each step fits on the screen, so the visitor never has to hunt for the next button
+      function show(n) {
+        current = n;
+        steps.forEach((s) => { s.hidden = Number(s.dataset.step) !== n; });
+        marks.forEach((m) => m.classList.toggle('reached', Number(m.dataset.mark) <= n));
+        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+        steps[n - 1].querySelector('.step-title').focus({ preventScroll: true });
+        if (n === 2) {
+          $('sevaName').textContent = chosen().closest('label').querySelector('.seva-title').textContent;
+          $('sevaAmount').textContent = inr(payable());
+          refreshPay();
+          if (!validPhone()) setTimeout(() => phoneInput.focus(), 60);
+        }
+      }
+
+      function refreshAmount() {
         const seva = chosen();
         amountBox.hidden = !seva || Boolean(seva.dataset.price);
-        document.getElementById('paySummary').hidden = !seva;
         chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.amount === amountInput.value)));
-        if (!seva) { button.textContent = 'Choose a seva above'; return; }
-        document.getElementById('summaryName').textContent = seva.closest('label').querySelector('.seva-title').textContent;
-        document.getElementById('summaryAmount').textContent = Number(payable()) >= 1 ? inr(payable()) : '';
-        button.textContent = Number(payable()) >= 1 ? 'Pay ' + inr(payable()) + ' securely' : LABEL;
+        $('toDetails').textContent = seva && payable() >= 1 ? 'Continue · ' + inr(payable()) : 'Continue';
       }
-      chips.forEach((c) => c.addEventListener('click', () => { amountInput.value = c.dataset.amount; refresh(); }));
-      amountInput.addEventListener('input', refresh);
-      form.querySelectorAll('input[name="seva"]').forEach((r) => r.addEventListener('change', refresh));
-      refresh();
+      chips.forEach((c) => c.addEventListener('click', () => { amountInput.value = c.dataset.amount; refreshAmount(); }));
+      amountInput.addEventListener('input', refreshAmount);
+      form.querySelectorAll('input[name="seva"]').forEach((r) => r.addEventListener('change', () => {
+        $('step1Error').textContent = '';
+        refreshAmount();
+        if (r.value === 'general') setTimeout(() => amountBox.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 50);
+      }));
+      $('toDetails').addEventListener('click', () => {
+        if (!chosen()) { $('step1Error').textContent = 'Please choose a seva.'; return; }
+        if (!(payable() >= 1)) { $('step1Error').textContent = 'Please choose or type an amount.'; amountInput.focus(); return; }
+        show(2);
+      });
+      form.addEventListener('click', (e) => { if (e.target.closest('[data-back]')) show(1); });
+
+      function refreshPay() {
+        const ready = validPhone() && !$('nameBox').hidden;
+        payButton.textContent = ready ? 'Pay ' + inr(payable()) + ' securely' : 'Continue';
+      }
+
+      // Mobile number first: names already on the temple's records fill in by themselves
+      async function lookup() {
+        const mobile = digits();
+        if (!validPhone() || mobile === lookedUp) return;
+        lookedUp = mobile;
+        const state = $('lookupState');
+        state.className = 'lookup-state busy';
+        state.textContent = 'Checking our records…';
+        let names = [];
+        try {
+          const res = await fetch('/api/prabhupada', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'lookup', phone: mobile, elapsed: Math.round(performance.now() - openedAt) }) });
+          names = (await res.json()).names || [];
+        } catch {}
+        if (digits() !== mobile) return; // the number changed while we were asking
+        $('nameBox').hidden = false;
+        const who = $('whoChips');
+        who.replaceChildren();
+        if (autofilled) nameInput.value = '';
+        autofilled = names.length > 0;
+        if (names.length === 1) {
+          nameInput.value = names[0];
+          state.className = 'lookup-state found';
+          state.textContent = 'Hare Krishna, ' + names[0].split(' ')[0] + '! Welcome back.';
+          $('who').hidden = true;
+        } else if (names.length > 1) {
+          state.className = 'lookup-state found';
+          state.textContent = 'Hare Krishna! We found your family on our records.';
+          names.concat(['Someone else']).forEach((n, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'chip';
+            b.textContent = n;
+            b.setAttribute('aria-pressed', String(i === 0));
+            b.addEventListener('click', () => {
+              who.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+              nameInput.value = i < names.length ? n : '';
+              if (i === names.length) nameInput.focus();
+            });
+            who.append(b);
+          });
+          nameInput.value = names[0];
+          $('who').hidden = false;
+        } else {
+          state.className = 'lookup-state';
+          state.textContent = '';
+          $('who').hidden = true;
+          if (!nameInput.value) setTimeout(() => nameInput.focus(), 60);
+        }
+        refreshPay();
+      }
+      nameInput.addEventListener('input', () => { autofilled = false; });
+      phoneInput.addEventListener('input', () => {
+        $('step2Error').textContent = '';
+        clearTimeout(lookupTimer);
+        if (validPhone()) lookupTimer = setTimeout(lookup, 250);
+        else if (digits().length < 10) refreshPay();
+      });
+      phoneInput.addEventListener('blur', lookup);
 
       // Built with DOM nodes so nothing a visitor typed is treated as HTML
       function el(tag, className, text) {
@@ -122,14 +239,15 @@
         if (text) node.textContent = text;
         return node;
       }
-      function panel(title, message, ...actions) {
+      function panel(mark, title, message, ...actions) {
         const row = el('div', 'done-actions');
         row.append(...actions);
-        done.replaceChildren(el('h3', '', title), el('p', '', message), row);
+        $('done').replaceChildren(el('span', 'done-mark', mark), el('h3', '', title), el('p', '', message), row);
         form.hidden = true;
-        done.hidden = false;
-        done.scrollIntoView({ block: 'center', behavior: 'instant' });
-        done.focus({ preventScroll: true });
+        wizard.querySelector('.stepper').hidden = true;
+        $('done').hidden = false;
+        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+        $('done').focus({ preventScroll: true });
       }
       function whatsapp(amount, seva, reference, name) {
         const wa = el('a', 'btn btn-wa', 'Message us on WhatsApp');
@@ -138,11 +256,11 @@
         wa.rel = 'noopener noreferrer';
         return wa;
       }
-
       // Exactly the gateway's checkout object, as it asks. Never change amount, order or callback.
       function openCheckout(data, name) {
         const { key_id, ...rest } = data.checkout;
-        const rzp = new window.Razorpay({
+        marks.forEach((m) => m.classList.add('reached'));
+        new window.Razorpay({
           ...rest,
           key: key_id,
           modal: {
@@ -150,21 +268,22 @@
               const again = el('button', 'btn btn-main', 'Pay ' + inr(data.amount) + ' now');
               again.type = 'button';
               again.addEventListener('click', () => openCheckout(data, name));
-              panel('Payment not completed', 'Your seva of ' + inr(data.amount) + ' for ' + data.seva + ' is waiting. Reference: ' + data.reference + '.', again, whatsapp(data.amount, data.seva, data.reference, name));
+              panel('!', 'Payment not completed', 'Your seva of ' + inr(data.amount) + ' for ' + data.seva + ' is waiting. Reference: ' + data.reference + '.', again, whatsapp(data.amount, data.seva, data.reference, name));
             },
           },
-        });
-        rzp.open();
+        }).open();
       }
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const error = $('step2Error');
         error.textContent = '';
-        if (!chosen()) { error.textContent = 'Please choose a seva.'; return; }
-        if (!(Number(payable()) >= 1)) { error.textContent = 'Please enter an amount.'; return; }
-        button.disabled = true;
-        button.textContent = 'Please wait…';
-        const name = form.elements.name.value.trim();
+        if (!validPhone()) { error.textContent = 'Please enter a valid 10-digit mobile number.'; phoneInput.focus(); return; }
+        if ($('nameBox').hidden) { await lookup(); return; }
+        const name = nameInput.value.trim();
+        if (name.length < 3) { error.textContent = 'Please enter your full name, as it will appear on your receipt.'; nameInput.focus(); return; }
+        payButton.disabled = true;
+        payButton.textContent = 'Opening secure payment…';
         try {
           const res = await fetch('/api/prabhupada', {
             method: 'POST',
@@ -174,7 +293,7 @@
               seva: chosen().value,
               amount: amountInput.value,
               name,
-              phone: form.elements.phone.value,
+              phone: digits(),
               email: form.elements.email.value,
               website: form.elements.website.value,
               elapsed: Math.round(performance.now() - openedAt),
@@ -185,15 +304,17 @@
           if (data.checkout && window.Razorpay) {
             openCheckout(data, name);
           } else {
-            panel('Thank you, ' + name + '!', 'Online payment is not available just now. Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted, and our seva team will call you with the payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''), whatsapp(data.amount || payable(), data.seva || 'the festival', data.reference || '', name));
+            panel('✓', 'Thank you, ' + name + '!', 'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now, so our seva team will call you with the payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''), whatsapp(data.amount || payable(), data.seva || 'the festival', data.reference || '', name));
           }
         } catch (err) {
           error.textContent = err.message || 'Please check your connection and try again.';
         } finally {
-          button.disabled = false;
-          refresh();
+          payButton.disabled = false;
+          refreshPay();
         }
       });
+
+      refreshAmount();
     })();
   </script>
 </body>

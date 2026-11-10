@@ -48,7 +48,7 @@ function readLocal() {
   try {
     return JSON.parse(fs.readFileSync(localFile, 'utf8'));
   } catch {
-    return { prabhupada_offerings: [], prabhupada_donations: [] };
+    return { prabhupada_offerings: [], prabhupada_donations: [], prabhupada_lookups: [] };
   }
 }
 
@@ -135,6 +135,52 @@ function pickContact(contacts, name) {
   return contacts.find((c) => full(c) === n)
     || contacts.find((c) => c.first_Name.trim().toLowerCase() === n.split(/\s+/)[0])
     || contacts[0];
+}
+
+const MAX_LOOKUPS_PER_HOUR = 20; // per visitor, so nobody can run through numbers collecting names
+const visitorId = (req) => crypto.createHash('sha256')
+  .update(`${process.env.ADMIN_KEY || ''}|${String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim()}`)
+  .digest('hex').slice(0, 24);
+
+/** Counts a lookup and says whether it is allowed. If the counter itself fails, the lookup is allowed. */
+async function allowLookup(req) {
+  const ip = visitorId(req);
+  const since = new Date(Date.now() - 3600000).toISOString();
+  try {
+    if (supabase) {
+      const { count, error } = await supabase.from('prabhupada_lookups').select('id', { count: 'exact', head: true }).eq('ip', ip).gte('created_at', since);
+      if (error) throw new Error(error.message);
+      if ((count || 0) >= MAX_LOOKUPS_PER_HOUR) return false;
+      await supabase.from('prabhupada_lookups').insert([{ ip }]);
+      return true;
+    }
+    const data = readLocal();
+    data.prabhupada_lookups = (data.prabhupada_lookups || []).filter((l) => l.created_at >= since);
+    if (data.prabhupada_lookups.filter((l) => l.ip === ip).length >= MAX_LOOKUPS_PER_HOUR) return false;
+    data.prabhupada_lookups.push({ ip, created_at: new Date().toISOString() });
+    fs.writeFileSync(localFile, JSON.stringify(data, null, 2));
+    return true;
+  } catch (err) {
+    console.error('Lookup counter failed, allowing it:', err.message);
+    return true;
+  }
+}
+
+/**
+ * Names already on the temple's records for this mobile, so the donor need not type theirs.
+ * A pure lookup: with no name sent, the gateway never creates a contact.
+ */
+async function lookupNames(mobile) {
+  const mobileNo = mobile.replace(/\D/g, '').slice(-10);
+  const day = new Date().toISOString().slice(0, 10);
+  try {
+    const res = await gateway('POST', '/contacts/resolve', { mobileNo }, `lookup-${mobileNo}-${day}`);
+    const names = (res.contacts || []).map((c) => `${c.first_Name || ''} ${c.last_Name || ''}`.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    return [...new Set(names)].slice(0, 6);
+  } catch (err) {
+    if (/contact_name_required|422/.test(err.message)) return []; // a new donor
+    throw err;
+  }
 }
 
 /** Opens a checkout session for a saved donation. Returns what the browser needs to pay. */
@@ -305,6 +351,18 @@ module.exports = async function handler(req, res) {
       const elapsed = Number(body.elapsed);
       if (Number.isFinite(elapsed) && elapsed > 0 && elapsed < 1500) {
         return res.status(400).json({ error: 'Please take a moment to check your details, then send again.' });
+      }
+      if (body.kind === 'lookup') {
+        const phone = clean(body.phone, 20);
+        if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, '').slice(-10))) return res.status(400).json({ error: 'Please enter a valid 10-digit mobile number.' });
+        if (!process.env.KCM_PAYMENT_GATEWAY_SECRET) return res.status(200).json({ names: [] });
+        if (!(await allowLookup(req))) return res.status(200).json({ names: [] });
+        try {
+          return res.status(200).json({ names: await lookupNames(phone) });
+        } catch (err) {
+          console.error('Name lookup failed:', err.message);
+          return res.status(200).json({ names: [] }); // the donor simply types their name
+        }
       }
       if (body.kind === 'upload') {
         const slot = await uploadSlot(body);

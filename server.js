@@ -114,7 +114,14 @@ if (!process.env.KCM_PAYMENT_GATEWAY_SECRET) {
   process.env.KCM_PAYMENT_GATEWAY_URL = `http://localhost:${PORT}/local-kcm`;
   const CATALOG = { '3-72': 25001, '3-73': 5001, '3-74': 1501, '3-75': 1008, '3-76': 0 };
   const sessions = new Map();
-  app.post('/local-kcm/contacts/resolve', (req, res) => res.json({ success: true, contacts: [{ contact_id: 'KCM-LOCAL', first_Name: req.body.first_Name, mobileNo: req.body.mobileNo }] }));
+  // Sample donors: 9876543210 has one name on record, 9876500000 a family of two, others none
+  const KNOWN = { '9876543210': [['Radha', 'Devi Dasi']], '9876500000': [['Krishna', 'Das'], ['Lalita', 'Devi']] };
+  app.post('/local-kcm/contacts/resolve', (req, res) => {
+    const known = KNOWN[req.body.mobileNo];
+    if (known) return res.json({ success: true, contacts: known.map(([f, l], i) => ({ contact_id: `KCM-${i}`, first_Name: f, last_Name: l, mobileNo: req.body.mobileNo })) });
+    if (!req.body.first_Name) return res.status(422).json({ success: false, error: 'contact_name_required' });
+    res.json({ success: true, contacts: [{ contact_id: 'KCM-NEW', first_Name: req.body.first_Name, last_Name: '', mobileNo: req.body.mobileNo }] });
+  });
   app.post('/local-kcm/checkout/sessions', (req, res) => {
     const [item] = req.body.items;
     const unit = CATALOG[item.scheme_id];
