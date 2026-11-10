@@ -112,7 +112,8 @@ process.env.PRABHUPADA_MAX_VIDEO_MB = process.env.PRABHUPADA_MAX_VIDEO_MB || '50
 if (!process.env.KCM_PAYMENT_GATEWAY_SECRET) {
   process.env.KCM_PAYMENT_GATEWAY_SECRET = 'local-test';
   process.env.KCM_PAYMENT_GATEWAY_URL = `http://localhost:${PORT}/local-kcm`;
-  const CATALOG = { '3-72': 25001, '3-73': 5001, '3-74': 1501, '3-75': 1008, '3-76': 0 };
+  // As on the live gateway, Book Distribution (3-75) takes an amount
+  const CATALOG = { '3-72': 25001, '3-73': 5001, '3-74': 1501, '3-75': 0, '3-76': 0 };
   const sessions = new Map();
   // Sample donors: 9876543210 has one name on record, 9876500000 a family of two, others none
   const KNOWN = { '9876543210': [['Radha', 'Devi Dasi']], '9876500000': [['Krishna', 'Das'], ['Lalita', 'Devi']] };
@@ -127,7 +128,7 @@ if (!process.env.KCM_PAYMENT_GATEWAY_SECRET) {
     const unit = CATALOG[item.scheme_id];
     if (unit === undefined) return res.status(422).json({ success: false, error: 'unknown_scheme' });
     if (unit > 0 && item.amount_rupees) return res.status(422).json({ success: false, error: 'amount_forbidden' });
-    if (unit === 0 && !item.amount_rupees) return res.status(422).json({ success: false, error: 'amount_required' });
+    if (unit === 0 && !item.amount_rupees) return res.status(422).json({ success: false, error: 'invalid_schemes', message: `amount_rupees is required for open-amount scheme ${item.scheme_id}` });
     const rupees = process.env.LOCAL_KCM_PRICE_OFF ? unit + 1 : unit || item.amount_rupees;
     const id = `kpg_local${Date.now()}`;
     sessions.set(id, { status: 'created', amount: rupees });
