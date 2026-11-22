@@ -45,6 +45,9 @@
     },
     "api/prabhupada.js": {
       "maxDuration": 30
+    },
+    "api/sharadpurnima.js": {
+      "maxDuration": 30
     }
   }
 }

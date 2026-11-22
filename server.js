@@ -196,6 +196,8 @@ app.get('/sharadpurnima', (req, res) => {
   res.sendFile(path.join(__dirname, 'sharadpurnima.html'));
 });
 
+app.all('/api/sharadpurnima', require('./api/sharadpurnima'));
+
 // Serve /admin console
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
