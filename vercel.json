@@ -3,6 +3,10 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/sharadpurnima",
+      "destination": "/sharadpurnima.html"
+    },
+    {
       "source": "/admin",
       "destination": "/admin.html"
     },

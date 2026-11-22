@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sharad Purnima | ISKCON Coimbatore</title>
+  <meta name="description" content="Celebrate Sharad Purnima — the night of Krishna's Rasa Lila under the full Kartik moon — at ISKCON Coimbatore. Offer seva, receive moonlit kheer prasadam.">
+  <meta property="og:title" content="Śārad Pūrṇimā — The Night of the Rasa Lila | ISKCON Coimbatore">
+  <meta property="og:description" content="The most radiant full moon of the year. The night Krishna danced with the gopis in Vrindavan. Celebrate with us and offer seva.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500;1,600&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/prabhupada/prabhupada.css">
+  <style>
+    /* ── Sharad Purnima overrides ── */
+    :root {
+      --moon-blue-deep: #04091F;
+      --moon-blue-mid:  #0A1540;
+      --moon-indigo:    #131C52;
+      --moon-glow:      rgba(220, 230, 255, 0.18);
+      --silver:         #D6E4FF;
+      --silver-bright:  #EDF3FF;
+      --moon-gold:      #F5D87E;
+      --moon-gold-soft: #FFF3CC;
+    }
+
+    body { background: var(--moon-blue-deep); }
+
+    /* ── Hero: moonlit night ── */
+    .hero {
+      background: radial-gradient(ellipse 130% 70% at 50% 0%, #1A245C 0%, #0D1438 40%, #04091F 80%);
+      min-height: 100svh;
+    }
+
+    /* Full-moon glow behind title */
+    .moon-orb {
+      position: absolute;
+      z-index: -1;
+      top: 6svh;
+      left: 50%;
+      width: min(55vw, 320px);
+      aspect-ratio: 1;
+      translate: -50% 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FDFBF4 0%, #FFF6CD 18%, #F5D87E 42%, rgba(245, 158, 11, 0.22) 60%, transparent 72%);
+      box-shadow: 0 0 60px 20px rgba(245, 216, 126, 0.25), 0 0 120px 60px rgba(220, 230, 255, 0.08);
+      animation: moonpulse 8s ease-in-out infinite;
+    }
+    @keyframes moonpulse { 50% { opacity: 0.82; box-shadow: 0 0 90px 40px rgba(245, 216, 126, 0.32), 0 0 180px 80px rgba(220, 230, 255, 0.11); } }
+
+    /* Lunar petals — white/silver shimmer */
+    .petal {
+      position: absolute;
+      top: -20px;
+      left: var(--x, 50%);
+      width: var(--s, 10px);
+      height: calc(var(--s, 10px) * 1.6);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      background: radial-gradient(ellipse at 40% 30%, #fff 0%, var(--c, #D6E4FF) 55%, transparent 90%);
+      opacity: 0;
+      animation: fall var(--d, 20s) var(--w, 0s) linear infinite;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg) scale(1); }
+      5%   { opacity: 0.7; }
+      90%  { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(102svh) rotate(380deg) scale(0.6); }
+    }
+
+    /* Hero text position — give room for the orb */
+    .hero-text { padding-top: 28svh; padding-bottom: 100px; }
+
+    /* Gold gradient title */
+    .hero h1 {
+      font-size: clamp(2.8rem, 13vw, 6rem);
+      background: linear-gradient(180deg, #FDFBF4 0%, #F5D87E 50%, #C8921A 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 2px 24px rgba(245, 216, 126, 0.42));
+    }
+
+    /* Hero dusk — moonlit shimmer at bottom */
+    .hero-dusk {
+      background: linear-gradient(to top, rgba(10, 21, 64, 0.8), rgba(20, 30, 80, 0.3) 55%, transparent);
+    }
+    .hero-dusk svg g:first-child { fill: #04091F; }
+    .hero-dusk svg g:last-child path { fill: rgba(214, 228, 255, 0.18); }
+
+    /* ── Info sections ── */
+    .sp-band { padding: 72px 0; background: linear-gradient(180deg, #04091F 0%, #07112E 100%); color: #EDF3FF; }
+    .sp-band .container, .sp-band .wide { max-width: 820px; }
+    .sp-eyebrow { font-family: var(--font-heading); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--moon-gold); margin-bottom: 8px; }
+    .sp-h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 5.5vw, 2.3rem); font-weight: 800; line-height: 1.18; color: var(--silver-bright); margin-bottom: 20px; }
+    .sp-lead { font-size: 1.08rem; color: rgba(214, 228, 255, 0.82); line-height: 1.72; margin-bottom: 14px; }
+    .sp-quote { margin: 28px 0; padding: 20px 24px; border-left: 3px solid var(--moon-gold); background: rgba(245, 216, 126, 0.07); border-radius: 0 10px 10px 0; font-family: var(--font-quote); font-size: 1.25rem; font-style: italic; color: var(--moon-gold-soft); line-height: 1.55; }
+
+    .lotus-divider { display: flex; align-items: center; gap: 10px; margin: 48px auto; max-width: 340px; }
+    .lotus-divider::before, .lotus-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(245, 216, 126, 0.5)); }
+    .lotus-divider::after { background: linear-gradient(90deg, rgba(245, 216, 126, 0.5), transparent); }
+    .lotus-divider svg { flex: none; width: 34px; height: 21px; fill: var(--moon-gold); }
+
+    /* Moonlit facts row */
+    .moon-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px; background: rgba(245, 216, 126, 0.12); border: 1px solid rgba(245, 216, 126, 0.12); border-radius: 12px; overflow: hidden; margin: 36px 0; }
+    .moon-fact { padding: 24px 20px; background: rgba(10, 21, 64, 0.9); text-align: center; }
+    .moon-fact-num { display: block; font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--moon-gold); }
+    .moon-fact-label { display: block; margin-top: 4px; font-size: 0.84rem; color: rgba(214, 228, 255, 0.65); }
+
+    /* Kheer section */
+    .kheer-section { background: linear-gradient(180deg, #07112E 0%, #0A1540 100%); }
+    .kheer-grid { display: grid; gap: 32px; align-items: center; }
+    @media (min-width: 700px) { .kheer-grid { grid-template-columns: 1fr 1fr; } }
+    .kheer-icon { font-size: 5rem; text-align: center; line-height: 1; }
+    .kheer-steps { list-style: none; counter-reset: steps; margin-top: 18px; }
+    .kheer-steps li { counter-increment: steps; display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(245, 216, 126, 0.1); font-size: 0.98rem; color: rgba(214, 228, 255, 0.78); }
+    .kheer-steps li:last-child { border-bottom: none; }
+    .kheer-steps li::before { content: counter(steps); flex: none; width: 26px; height: 26px; border-radius: 50%; background: rgba(245, 216, 126, 0.15); border: 1px solid rgba(245, 216, 126, 0.3); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 0.78rem; font-weight: 700; color: var(--moon-gold); margin-top: 1px; }
+
+    /* ── Seva / Donation section ── */
+    .seva-section { background: linear-gradient(180deg, #0A1540 0%, #04091F 100%); padding: 80px 0; }
+    .seva-section .sp-h2 { text-align: center; }
+    .seva-section .sp-eyebrow { text-align: center; display: block; }
+    .seva-lead { text-align: center; max-width: 600px; margin: 0 auto 40px; color: rgba(214, 228, 255, 0.72); font-size: 1.05rem; }
+
+    /* Seva cards grid */
+    .seva-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .seva-card { position: relative; border: 1.5px solid rgba(245, 216, 126, 0.18); border-radius: 14px; padding: 22px 18px; background: rgba(10, 21, 64, 0.7); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .seva-card:hover { border-color: rgba(245, 216, 126, 0.5); background: rgba(20, 35, 90, 0.9); }
+    .seva-card.selected { border-color: var(--moon-gold); background: rgba(30, 48, 110, 0.95); }
+    .seva-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 12px; font-size: 0.8rem; color: var(--moon-gold); }
+    .seva-card-icon { font-size: 2rem; margin-bottom: 10px; }
+    .seva-card-name { font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; color: var(--silver-bright); margin-bottom: 4px; }
+    .seva-card-desc { font-size: 0.82rem; color: rgba(214, 228, 255, 0.55); line-height: 1.5; margin-bottom: 12px; }
+    .seva-card-amount { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: var(--moon-gold); }
+    .seva-card-amount span { font-size: 0.75rem; font-family: var(--font-body); color: rgba(245, 216, 126, 0.65); }
+
+    /* Custom amount */
+    .custom-row { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+    .custom-label { font-family: var(--font-heading); font-size: 0.85rem; color: rgba(214, 228, 255, 0.65); white-space: nowrap; }
+    .custom-input { flex: 1; background: rgba(10, 21, 64, 0.7); border: 1.5px solid rgba(245, 216, 126, 0.25); border-radius: 10px; padding: 12px 16px; font-family: var(--font-heading); font-size: 1rem; color: var(--silver-bright); outline: none; }
+    .custom-input:focus { border-color: var(--moon-gold); }
+    .custom-input::placeholder { color: rgba(214, 228, 255, 0.3); }
+
+    /* Donor form */
+    .donor-form { background: rgba(10, 21, 64, 0.5); border: 1px solid rgba(245, 216, 126, 0.12); border-radius: 16px; padding: 32px 24px; }
+    .donor-form h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--silver-bright); margin-bottom: 24px; }
+    .form-row { display: grid; gap: 14px; margin-bottom: 14px; }
+    @media (min-width: 560px) { .form-row.two { grid-template-columns: 1fr 1fr; } }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field label { font-size: 0.8rem; font-weight: 600; color: rgba(214, 228, 255, 0.55); letter-spacing: 0.08em; text-transform: uppercase; }
+    .form-field input { background: rgba(4, 9, 31, 0.6); border: 1.5px solid rgba(245, 216, 126, 0.2); border-radius: 10px; padding: 12px 16px; font-family: var(--font-body); font-size: 0.98rem; color: var(--silver-bright); outline: none; }
+    .form-field input:focus { border-color: rgba(245, 216, 126, 0.65); }
+    .form-field input::placeholder { color: rgba(214, 228, 255, 0.28); }
+    .selected-seva-preview { background: rgba(245, 216, 126, 0.08); border: 1px solid rgba(245, 216, 126, 0.22); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.92rem; color: rgba(214, 228, 255, 0.75); }
+    .selected-seva-preview strong { color: var(--moon-gold); font-family: var(--font-heading); }
+
+    .btn-donate {
+      width: 100%;
+      min-height: 54px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #1E3A8A 100%);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+    .btn-donate:hover { opacity: 0.88; }
+    .btn-donate:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #15803D 0%, #166534 100%);
+    }
+
+    .form-note { margin-top: 14px; text-align: center; font-size: 0.8rem; color: rgba(214, 228, 255, 0.4); }
+
+    /* Success state */
+    .form-success { display: none; text-align: center; padding: 32px 16px; }
+    .form-success .success-icon { font-size: 3rem; margin-bottom: 12px; }
+    .form-success h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--moon-gold); margin-bottom: 8px; }
+    .form-success p { color: rgba(214, 228, 255, 0.72); }
+
+    /* ── Footer ── */
+    .sp-footer { padding: 32px 16px; text-align: center; background: #04091F; border-top: 1px solid rgba(245, 216, 126, 0.08); font-size: 0.84rem; color: rgba(214, 228, 255, 0.35); }
+    .sp-footer a { color: rgba(245, 216, 126, 0.5); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main>
+
+    <!-- ══════════ HERO ══════════ -->
+    <section class="hero" id="hero">
+      <div class="moon-orb" aria-hidden="true"></div>
+
+      <!-- Moonflower petals -->
+      <span class="petal" aria-hidden="true" style="--x:5%;--s:9px;--c:#D6E4FF;--d:22s;--w:-4s"></span>
+      <span class="petal" aria-hidden="true" style="--x:14%;--s:12px;--c:#EDF3FF;--d:18s;--w:-12s"></span>
+      <span class="petal" aria-hidden="true" style="--x:26%;--s:8px;--c:#F5D87E;--d:25s;--w:-7s"></span>
+      <span class="petal" aria-hidden="true" style="--x:38%;--s:11px;--c:#D6E4FF;--d:20s;--w:-2s"></span>
+      <span class="petal" aria-hidden="true" style="--x:50%;--s:9px;--c:#EDF3FF;--d:28s;--w:-17s"></span>
+      <span class="petal" aria-hidden="true" style="--x:62%;--s:13px;--c:#F5D87E;--d:19s;--w:-9s"></span>
+      <span class="petal" aria-hidden="true" style="--x:74%;--s:8px;--c:#D6E4FF;--d:23s;--w:-5s"></span>
+      <span class="petal" aria-hidden="true" style="--x:86%;--s:11px;--c:#EDF3FF;--d:21s;--w:-14s"></span>
+      <span class="petal" aria-hidden="true" style="--x:93%;--s:9px;--c:#F5D87E;--d:26s;--w:-1s"></span>
+
+      <div class="hero-dusk" aria-hidden="true">
+        <svg viewBox="0 0 800 180" preserveAspectRatio="xMidYMax meet">
+          <g fill="#04091F">
+            <rect x="130" y="130" width="150" height="50"/><rect x="520" y="130" width="150" height="50"/>
+            <path d="M180 130c2-20 40-20 42 0zM578 130c2-20 40-20 42 0z"/>
+            <rect x="199" y="98" width="4" height="16"/><rect x="597" y="98" width="4" height="16"/>
+            <rect x="274" y="108" width="66" height="72"/><rect x="460" y="108" width="66" height="72"/>
+            <path d="M274 108c3-34 63-34 66 0zM460 108c3-34 63-34 66 0z"/>
+            <rect x="305" y="62" width="4" height="22"/><rect x="491" y="62" width="4" height="22"/>
+            <rect x="338" y="92" width="124" height="88"/>
+            <path d="M338 92c4-62 120-62 124 0z"/>
+            <rect x="398" y="16" width="4" height="30"/><circle cx="400" cy="14" r="5"/>
+          </g>
+          <g>
+            <path d="M152 180v-24a8 8 0 0 1 16 0v24zM188 180v-24a8 8 0 0 1 16 0v24zM224 180v-24a8 8 0 0 1 16 0v24zM560 180v-24a8 8 0 0 1 16 0v24zM596 180v-24a8 8 0 0 1 16 0v24zM632 180v-24a8 8 0 0 1 16 0v24z" fill="rgba(214,228,255,0.15)"/>
+            <path d="M298 180v-34a9 9 0 0 1 18 0v34zM484 180v-34a9 9 0 0 1 18 0v34zM362 180v-46a10 10 0 0 1 20 0v46zM418 180v-46a10 10 0 0 1 20 0v46z" fill="rgba(245,216,126,0.18)"/>
+          </g>
+        </svg>
+      </div>
+
+      <img class="brand-logo white-logo" src="/prabhupada/iskcon-logo-gold.png" alt="ISKCON Coimbatore" width="1030" height="334">
+
+      <div class="hero-text">
+        <p class="hero-eyebrow">ISKCON Coimbatore Presents</p>
+        <h1>Śārad Pūrṇimā</h1>
+        <svg class="swash" viewBox="0 0 320 16" aria-hidden="true"><path d="M4 12C90 2 230 2 316 9 230 6 92 7 4 12z"/></svg>
+        <p class="hero-band">The Night of the Rāsa Līlā —<br>when Krishna danced under the full Kārtik&nbsp;moon</p>
+        <div class="lotus-rule" aria-hidden="true">
+          <svg viewBox="0 0 40 24"><path d="M20 2c-4 5-4 11 0 18 4-7 4-13 0-18zM11 6c-1 6 1 11 8 14-1-6-3-11-8-14zM29 6c1 6-1 11-8 14 1-6 3-11 8-14zM3 12c2 5 7 8 14 8-3-4-8-7-14-8zM37 12c-2 5-7 8-14 8 3-4 8-7 14-8z"/></svg>
+        </div>
+        <p class="hero-pill">Full Moon of Kārtik · October 2026</p>
+        <p class="hero-date">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg>
+          <span>Wednesday, 21 October 2026</span>
+          <span class="hero-count" id="countdown" hidden></span>
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-main" href="#seva" onclick="document.getElementById('seva').scrollIntoView({behavior:'smooth'});return false;">
+            <svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Offer Seva
+          </a>
+          <a class="btn btn-ghost" href="#significance">
+            <svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Learn More
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SIGNIFICANCE ══════════ -->
+    <section class="sp-band" id="significance">
+      <div class="container">
+        <p class="sp-eyebrow">The Night of All Nights</p>
+        <h2 class="sp-h2">The Full Moon of Kārtik</h2>
+        <p class="sp-lead">Of all the full moons in the year, the full moon of the month of Kārtik — called Śārad Pūrṇimā, the full moon of Autumn — shines with a special brilliance. The air is clear after the monsoons have passed, and the moon rises larger and brighter than on any other night.</p>
+        <p class="sp-lead">In the Vedic tradition, this full moon is not simply an astronomical event. The Srimad Bhagavatam describes how Lord Krishna, hearing this very moon rise over Vrindavan, lifted His flute to His lips and played a song that only the gopis could hear in their hearts — a call that drew them through forests and across fields to the banks of the Yamuna.</p>
+
+        <div class="sp-quote">
+          "On that autumn night, the moon rose, cooling the forest with its rays like the face of Lakshmidevi. The lotuses bloomed as if smiling. The Lord, seeing the forest lit by the moon's glory, chose to perform His most intimate pastime — the Rāsa dance."
+          <br><br>— Śrīmad Bhāgavatam 10.29.1–3
+        </div>
+
+        <div class="moon-facts">
+          <div class="moon-fact">
+            <span class="moon-fact-num">🌕</span>
+            <span class="moon-fact-label">Brightest full moon of the year</span>
+          </div>
+          <div class="moon-fact">
+            <span class="moon-fact-num">16,108</span>
+            <span class="moon-fact-label">Gopis who danced with Krishna that night</span>
+          </div>
+          <div class="moon-fact">
+            <span class="moon-fact-num">1 night</span>
+            <span class="moon-fact-label">That Brahma stretched to a Brahma-kalpa for the gopis</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ RASA LILA ══════════ -->
+    <section class="sp-band" style="background: linear-gradient(180deg, #07112E 0%, #0A1540 100%);">
+      <div class="container">
+        <p class="sp-eyebrow">The Supreme Pastime</p>
+        <h2 class="sp-h2">The Rāsa Līlā of Vrindavan</h2>
+        <p class="sp-lead">When Krishna played His flute on the night of Sharad Purnima, the gopis of Vrindavan experienced a longing unlike any worldly desire. They left everything — their homes, their families, their duties — and ran through the moonlit forest toward the Yamuna.</p>
+        <p class="sp-lead">Krishna, to test the purity of their love, first sent them back. He told them their duties lay at home. But the gopis replied with a wisdom born of pure devotion: "Our only duty is to You. All dharma finds its fulfilment at Your lotus feet."</p>
+        <p class="sp-lead">Then the dance began. Krishna expanded Himself so that each gopi danced with Him alone — feeling His hand in hers, His glance meant only for her. The dance lasted through the entire night, yet when it ended, the gopis felt it had passed in a single breath.</p>
+
+        <div class="sp-quote">
+          "The Supreme Lord, who removes the distress of those who surrender to Him, danced with the gopis in the same way a child plays with his reflection in a mirror."
+          <br><br>— Śrīmad Bhāgavatam 10.33.3
+        </div>
+
+        <p class="sp-lead">The Rāsa Līlā is not a romantic story in the worldly sense. It is the supreme teaching on selfless love — bhakti in its most complete form. The gopis represent the soul longing for union with God, and their dance is the soul's highest fulfillment.</p>
+
+        <div class="lotus-divider" aria-hidden="true">
+          <svg viewBox="0 0 40 24"><path d="M20 2c-4 5-4 11 0 18 4-7 4-13 0-18zM11 6c-1 6 1 11 8 14-1-6-3-11-8-14zM29 6c1 6-1 11-8 14 1-6 3-11 8-14zM3 12c2 5 7 8 14 8-3-4-8-7-14-8zM37 12c-2 5-7 8-14 8 3-4 8-7 14-8z"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ KHEER SECTION ══════════ -->
+    <section class="sp-band kheer-section">
+      <div class="container">
+        <div class="kheer-grid">
+          <div>
+            <p class="sp-eyebrow">The Sacred Tradition</p>
+            <h2 class="sp-h2">Moonlit Kheer — Amrita from the Sky</h2>
+            <p class="sp-lead">On the night of Sharad Purnima, the moon is said to pour amrita — divine nectar — along with its rays. The ancient tradition is to prepare kheer (rice pudding cooked in milk and sugar) and place it outdoors under the open sky for the entire night, so the moonlight can infuse it with this nectar.</p>
+            <p class="sp-lead">In the morning, this kheer is offered to Krishna and distributed as prasadam to all devotees. Many believe it carries healing properties and spiritual merit for those who receive it with faith.</p>
+
+            <ul class="kheer-steps">
+              <li>Kheer is prepared fresh on the day of Purnima with milk, rice, sugar, and saffron</li>
+              <li>Offered to the Lord at sunset with prayers and kirtan</li>
+              <li>Placed under the open sky through the night, bathed in moonlight</li>
+              <li>Distributed as prasadam to all in the morning after the morning program</li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+            <div style="font-size:6rem;line-height:1;text-align:center;">🍚</div>
+            <p style="text-align:center;font-family:var(--font-quote);font-size:1.1rem;font-style:italic;color:rgba(214,228,255,0.65);max-width:280px;">
+              "He who eats the kheer kept in moonlight on this night is freed from ill health for the entire year."
+            </p>
+            <p style="text-align:center;font-size:0.8rem;color:rgba(214,228,255,0.35);">— Traditional belief recorded in Ayurvedic texts</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CELEBRATION ══════════ -->
+    <section class="sp-band" style="background: linear-gradient(180deg, #0A1540 0%, #07112E 100%);">
+      <div class="container">
+        <p class="sp-eyebrow">At ISKCON Coimbatore</p>
+        <h2 class="sp-h2">How We Celebrate</h2>
+        <p class="sp-lead">At Sri Jagannath Mandir, Coimbatore, Sharad Purnima is celebrated across the full day and into the moonlit night. Everyone is welcome.</p>
+
+        <div style="margin-top:28px;display:grid;gap:14px;">
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:18px;background:rgba(10,21,64,0.5);border:1px solid rgba(245,216,126,0.12);border-radius:12px;">
+            <span style="font-size:1.6rem;flex:none;">🌅</span>
+            <div>
+              <p style="font-family:var(--font-heading);font-weight:700;color:var(--silver-bright);margin-bottom:4px;">Morning — Mangala Arati & Special Abhishek</p>
+              <p style="font-size:0.9rem;color:rgba(214,228,255,0.6);">Special deity bath (abhishek) with panchamrita, flowers and milk. The morning program begins before dawn.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:18px;background:rgba(10,21,64,0.5);border:1px solid rgba(245,216,126,0.12);border-radius:12px;">
+            <span style="font-size:1.6rem;flex:none;">📖</span>
+            <div>
+              <p style="font-family:var(--font-heading);font-weight:700;color:var(--silver-bright);margin-bottom:4px;">Afternoon — Bhagavatam Class on the Rāsa Līlā</p>
+              <p style="font-size:0.9rem;color:rgba(214,228,255,0.6);">A deep class on the 10th Canto of Srimad Bhagavatam — the chapters describing Krishna's most confidential pastime.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:18px;background:rgba(10,21,64,0.5);border:1px solid rgba(245,216,126,0.12);border-radius:12px;">
+            <span style="font-size:1.6rem;flex:none;">🪔</span>
+            <div>
+              <p style="font-family:var(--font-heading);font-weight:700;color:var(--silver-bright);margin-bottom:4px;">Evening — Grand Moonrise Kirtan</p>
+              <p style="font-size:0.9rem;color:rgba(214,228,255,0.6);">As the full moon rises, devotees sing in continuous kirtan through the night. Lamps are lit and the temple is decorated with white flowers.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:18px;background:rgba(10,21,64,0.5);border:1px solid rgba(245,216,126,0.12);border-radius:12px;">
+            <span style="font-size:1.6rem;flex:none;">🍚</span>
+            <div>
+              <p style="font-family:var(--font-heading);font-weight:700;color:var(--silver-bright);margin-bottom:4px;">Night — Moonlit Kheer & Prasadam Feast</p>
+              <p style="font-size:0.9rem;color:rgba(214,228,255,0.6);">The kheer offered to the Lord is kept under the open sky all night. A full feast prasadam is distributed to all present.</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:24px;font-size:0.95rem;color:rgba(214,228,255,0.6);text-align:center;">
+          At Sri Jagannath Mandir, Coimbatore · All are welcome, entry is free
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════ SEVA / DONATION ══════════ -->
+    <section class="seva-section" id="seva">
+      <div class="container">
+        <span class="sp-eyebrow">Participate</span>
+        <h2 class="sp-h2">Offer Seva for Śārad Pūrṇimā</h2>
+        <p class="seva-lead">Your offering helps make this festival a beautiful experience for every devotee who attends. Choose a seva below and become a part of this sacred night.</p>
+
+        <!-- Seva cards -->
+        <div class="seva-grid" id="sevaGrid">
+          <div class="seva-card" data-name="Moonlit Kheer Distribution" data-amount="1008">
+            <div class="seva-card-icon">🍚</div>
+            <div class="seva-card-name">Moonlit Kheer Distribution</div>
+            <div class="seva-card-desc">Sponsor kheer for 100+ devotees — prepared, offered, and kept under the full moon</div>
+            <div class="seva-card-amount">₹1,008 <span>/ sponsorship</span></div>
+          </div>
+          <div class="seva-card" data-name="White Flower Decoration" data-amount="2108">
+            <div class="seva-card-icon">🌸</div>
+            <div class="seva-card-name">White Flower Decoration</div>
+            <div class="seva-card-desc">Decorate the temple with white jasmine, tuberose, and moonflowers for the festival night</div>
+            <div class="seva-card-amount">₹2,108 <span>/ decoration</span></div>
+          </div>
+          <div class="seva-card" data-name="Special Abhishek" data-amount="5116">
+            <div class="seva-card-icon">🪔</div>
+            <div class="seva-card-name">Special Abhishek Seva</div>
+            <div class="seva-card-desc">Sponsor the special deity abhishek with panchamrita, milk, and fragrant items</div>
+            <div class="seva-card-amount">₹5,116 <span>/ seva</span></div>
+          </div>
+          <div class="seva-card" data-name="Prasadam Feast" data-amount="10116">
+            <div class="seva-card-icon">🍛</div>
+            <div class="seva-card-name">Grand Prasadam Feast</div>
+            <div class="seva-card-desc">Sponsor the full Sharad Purnima feast prasadam for all devotees attending</div>
+            <div class="seva-card-amount">₹10,116 <span>/ full feast</span></div>
+          </div>
+          <div class="seva-card" data-name="Ghee Lamp Offering" data-amount="501">
+            <div class="seva-card-icon">🕯️</div>
+            <div class="seva-card-name">Ghee Lamp Offering</div>
+            <div class="seva-card-desc">Offer a ghee lamp to the Lord on the night of the Rasa Lila moon</div>
+            <div class="seva-card-amount">₹501 <span>/ lamp</span></div>
+          </div>
+          <div class="seva-card" data-name="Custom Offering" data-amount="0" id="customCard">
+            <div class="seva-card-icon">✨</div>
+            <div class="seva-card-name">Your Offering</div>
+            <div class="seva-card-desc">Offer any amount you choose with love and devotion</div>
+            <div class="seva-card-amount" id="customAmountDisplay">Enter amount below</div>
+          </div>
+        </div>
+
+        <!-- Custom amount -->
+        <div class="custom-row" id="customRow" style="display:none">
+          <span class="custom-label">₹</span>
+          <input type="number" class="custom-input" id="customAmountInput" placeholder="Enter amount" min="1">
+        </div>
+
+        <!-- Donor form -->
+        <div class="donor-form" id="donorForm">
+          <h3>Your Details</h3>
+
+          <div class="selected-seva-preview" id="sevaPreview" style="display:none">
+            Seva: <strong id="sevaPreviewName">—</strong> &nbsp;·&nbsp; Amount: <strong id="sevaPreviewAmount">—</strong>
+          </div>
+
+          <div class="form-row two">
+            <div class="form-field">
+              <label for="donorName">Full Name *</label>
+              <input type="text" id="donorName" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="form-field">
+              <label for="donorPhone">Mobile Number *</label>
+              <input type="tel" id="donorPhone" placeholder="10-digit mobile" autocomplete="tel" maxlength="15">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="donorEmail">Email (optional)</label>
+              <input type="email" id="donorEmail" placeholder="For receipt" autocomplete="email">
+            </div>
+          </div>
+
+          <button class="btn-donate btn-whatsapp" id="donateBtn" disabled>
+            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Confirm via WhatsApp
+          </button>
+          <p class="form-note">After clicking, you'll be redirected to WhatsApp to confirm your seva with our team. Payment details will be shared there.</p>
+        </div>
+
+        <!-- Success -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">🌕</div>
+          <h3>Hare Krishna!</h3>
+          <p>Your seva has been received. May Lord Krishna bless you on this auspicious night.</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="sp-footer">
+    <p>Sri Jagannath Mandir, Coimbatore · <a href="https://iskconcoimbatore.com" target="_blank" rel="noopener">iskconcoimbatore.com</a></p>
+    <p style="margin-top:6px;">Hare Krishna Hare Krishna Krishna Krishna Hare Hare · Hare Rama Hare Rama Rama Rama Hare Hare</p>
+  </footer>
+
+  <script>
+    // Countdown
+    (function() {
+      const target = new Date('2026-10-21T00:00:00+05:30');
+      const el = document.getElementById('countdown');
+      function update() {
+        const diff = target - Date.now();
+        if (diff <= 0) { el.textContent = 'Tonight!'; el.removeAttribute('hidden'); return; }
+        const d = Math.floor(diff / 86400000);
+        if (d > 0) { el.textContent = d + (d === 1 ? ' day away' : ' days away'); el.removeAttribute('hidden'); }
+      }
+      update();
+      setInterval(update, 60000);
+    })();
+
+    // Scroll reveal
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Seva selection
+    let selectedSeva = null;
+    const grid = document.getElementById('sevaGrid');
+    const preview = document.getElementById('sevaPreview');
+    const previewName = document.getElementById('sevaPreviewName');
+    const previewAmount = document.getElementById('sevaPreviewAmount');
+    const customCard = document.getElementById('customCard');
+    const customRow = document.getElementById('customRow');
+    const customInput = document.getElementById('customAmountInput');
+    const customDisplay = document.getElementById('customAmountDisplay');
+    const donateBtn = document.getElementById('donateBtn');
+    const nameInput = document.getElementById('donorName');
+    const phoneInput = document.getElementById('donorPhone');
+
+    function fmt(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+
+    function validate() {
+      const hasName = nameInput.value.trim().length >= 2;
+      const hasPhone = /^\+?[0-9]{10,13}$/.test(phoneInput.value.replace(/\s/g, ''));
+      const hasSeva = selectedSeva && selectedSeva.amount > 0;
+      donateBtn.disabled = !(hasName && hasPhone && hasSeva);
+    }
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.seva-card');
+      if (!card) return;
+      grid.querySelectorAll('.seva-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const isCustom = card === customCard;
+      customRow.style.display = isCustom ? 'flex' : 'none';
+      const amount = isCustom ? (parseInt(customInput.value) || 0) : parseInt(card.dataset.amount);
+      selectedSeva = { name: card.dataset.name, amount };
+      preview.style.display = 'flex';
+      previewName.textContent = selectedSeva.name;
+      previewAmount.textContent = amount > 0 ? fmt(amount) : 'Enter amount below';
+      validate();
+    });
+
+    customInput.addEventListener('input', () => {
+      const val = parseInt(customInput.value) || 0;
+      if (selectedSeva) selectedSeva.amount = val;
+      customDisplay.textContent = val > 0 ? fmt(val) : 'Enter amount below';
+      previewAmount.textContent = val > 0 ? fmt(val) : 'Enter amount below';
+      validate();
+    });
+
+    nameInput.addEventListener('input', validate);
+    phoneInput.addEventListener('input', validate);
+
+    donateBtn.addEventListener('click', () => {
+      if (!selectedSeva || selectedSeva.amount <= 0) return;
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const email = document.getElementById('donorEmail').value.trim();
+      const msg = encodeURIComponent(
+        `🌕 *Sharad Purnima Seva* 🌕\n\n*Name:* ${name}\n*Mobile:* ${phone}${email ? '\n*Email:* ' + email : ''}\n*Seva:* ${selectedSeva.name}\n*Amount:* ${fmt(selectedSeva.amount)}\n\nHare Krishna! Kindly share payment details to complete the offering.`
+      );
+      window.open('https://wa.me/919791002556?text=' + msg, '_blank');
+    });
+  </script>
+</body>
+</html>

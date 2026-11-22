@@ -192,6 +192,10 @@ app.get('/prabhupada-admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'prabhupada-admin.html'));
 });
 
+app.get('/sharadpurnima', (req, res) => {
+  res.sendFile(path.join(__dirname, 'sharadpurnima.html'));
+});
+
 // Serve /admin console
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
