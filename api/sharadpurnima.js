@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const fs     = require('fs');
 const { createClient } = require('@supabase/supabase-js');
 
-const FESTIVAL = 'Sharad Purnima 2026';
+const FESTIVAL = 'Karthik Purnima Festival';
 const TABLE    = 'sharadpurnima_donations';
 const SAVE_FAILED = 'Sorry, we could not save this. Please try again, or WhatsApp us on +91 97910 02556.';
 
@@ -119,7 +119,7 @@ async function startPayment(row, seva) {
     email: row.email || '',
     return_url: `${siteUrl()}/sharadpurnima?ref=${row.reference}`,
     items: [{ scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount }],
-    remarks: `${row.reference} | Sharad Purnima 2026 | ${seva.title}`,
+    remarks: `${row.reference} | ${FESTIVAL} | ${seva.title}`,
   }, `sp-checkout-${row.reference}`);
   const charged = Math.round(session.order.amount / 100);
   await updateDonation(row.reference, { session_id: session.session_id, contact_id: contact.contact_id });
