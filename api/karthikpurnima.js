@@ -43,6 +43,7 @@ const MAX_LOOKUPS_PER_HOUR = 20;
 const GATEWAY_URL = (process.env.KCM_PAYMENT_GATEWAY_URL || 'https://iskconcoimbatore.com/api/kcm-payment-gateway').replace(/\/$/, '');
 const siteUrl = () => (process.env.SITE_URL || 'https://events.iskconcoimbatore.com').replace(/\/$/, '');
 const REF = /^KP-[A-F0-9]{10}$/;
+const SESSION = /^kpg_[A-Za-z0-9_-]{16,100}$/;
 
 const sql = process.env.NEON_DATABASE_URL ? neon(process.env.NEON_DATABASE_URL) : null;
 const NEON_TABLE = 'sharadpurnima_donations';
@@ -112,17 +113,18 @@ async function updateDonation(reference, fields) {
   writeLocal(data);
 }
 
-async function findDonation(reference) {
+/** One donation, by our reference or by the gateway's session id. */
+async function findDonation(value, column = 'reference') {
   if (sql) {
-    const rows = await sql.query(`select * from ${NEON_TABLE} where reference = $1 limit 1`, [reference]);
+    const rows = await sql.query(`select * from ${NEON_TABLE} where ${column === 'session_id' ? 'session_id' : 'reference'} = $1 limit 1`, [value]);
     return rows[0] || null;
   }
   if (supabase) {
-    const { data, error } = await supabase.from(TABLE).select('*').eq('reference', reference).eq('festival', FESTIVAL).limit(1);
+    const { data, error } = await supabase.from(TABLE).select('*').eq(column, value).eq('festival', FESTIVAL).limit(1);
     if (error) throw new Error(error.message);
     return data[0] || null;
   }
-  return readLocal()[TABLE].find((d) => d.reference === reference && d.festival === FESTIVAL) || null;
+  return readLocal()[TABLE].find((d) => d[column] === value && d.festival === FESTIVAL) || null;
 }
 
 async function recentAttempts(phone) {
@@ -226,7 +228,8 @@ async function startPayment(row, seva) {
     mobileNo,
     first_Name: row.name,
     email: row.email || '',
-    return_url: `${siteUrl()}/karthikpurnima/thank-you?ref=${row.reference}`,
+    // Exactly the address IT allowlisted (no query); the page finds the donation itself
+    return_url: `${siteUrl()}/karthikpurnima/thank-you`,
     items: [item],
     remarks: `${row.reference} | Karthik Purnima | ${seva.title}`,
   }, key);
@@ -271,7 +274,9 @@ module.exports = async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const ref = String((req.query && req.query.ref) || '');
-      const found = REF.test(ref) ? await findDonation(ref) : null;
+      const session = String((req.query && req.query.session) || '');
+      const found = REF.test(ref) ? await findDonation(ref)
+        : SESSION.test(session) ? await findDonation(session, 'session_id') : null;
       if (!found) return res.status(404).json({ error: 'We could not find this seva.' });
       const row = await syncDonation(found);
       // Only what the thank-you page shows, never the donor's contact details

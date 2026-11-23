@@ -860,6 +860,22 @@
       upd(); setInterval(upd, 60000);
     })();
 
+    /* Back from the payment page: show the thank-you status */
+    (function(){
+      const q = new URLSearchParams(location.search);
+      const session = q.get('session_id') || q.get('session') || '';
+      if(/^kpg_[A-Za-z0-9_-]{16,100}$/.test(session)){ location.replace('/karthikpurnima/thank-you?session=' + encodeURIComponent(session)); return; }
+      let pending = null;
+      try { pending = JSON.parse(localStorage.getItem('kpPending') || 'null'); } catch {}
+      if(!pending || !/^KP-[A-F0-9]{10}$/.test(pending.ref) || Date.now() - pending.t > 3 * 3600000) return;
+      const thanks = () => location.replace('/karthikpurnima/thank-you?ref=' + pending.ref);
+      if(location.search) { thanks(); return; }
+      // No marker in the address: go only if the payment has moved on from "created"
+      fetch('/api/karthikpurnima?ref=' + pending.ref).then(r => r.ok ? r.json() : null).then(d => {
+        if(d && d.status && d.status !== 'created') thanks();
+      }).catch(() => {});
+    })();
+
     /* Seva checkout pop-up: seva → option → details → pay */
     (function(){
       'use strict';
@@ -1099,6 +1115,7 @@
 
       /* Exactly the gateway's checkout object, as it asks; after paying it returns to the thank-you page */
       function openCheckout(data, name){
+        try { localStorage.setItem('kpPending', JSON.stringify({ ref: data.reference, t: Date.now() })); } catch {}
         const { key_id, ...rest } = data.checkout;
         new window.Razorpay({
           ...rest,

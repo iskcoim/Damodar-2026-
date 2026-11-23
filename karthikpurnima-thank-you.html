@@ -64,7 +64,13 @@
         expired: ['!', 'Payment time ran out', 'Please start the seva again to pay.'],
       };
       const $ = (id) => document.getElementById(id);
-      const ref = new URLSearchParams(location.search).get('ref') || '';
+      const q = new URLSearchParams(location.search);
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem('kpPending') || 'null'); } catch {}
+      // The address carries nothing, so use the gateway's session id if it adds one, else this browser's note
+      const session = q.get('session') || q.get('session_id') || '';
+      const ref = q.get('ref') || (!/^kpg_/.test(session) && saved && saved.ref) || '';
+      const lookup = ref ? 'ref=' + encodeURIComponent(ref) : 'session=' + encodeURIComponent(session);
       const started = Date.now();
 
       function show(copy) {
@@ -75,7 +81,7 @@
 
       async function check() {
         try {
-          const res = await fetch('/api/karthikpurnima?ref=' + encodeURIComponent(ref));
+          const res = await fetch('/api/karthikpurnima?' + lookup);
           if (res.status === 404) {
             show(['!', 'We could not find this seva', 'If you were charged, please call or WhatsApp the temple with your mobile number.']);
             return;
@@ -90,7 +96,7 @@
           $('receiptRow').hidden = !d.receipt_id;
           $('receipt').textContent = d.receipt_id || '';
           $('again').hidden = d.status !== 'failed' && d.status !== 'expired';
-          if (d.status !== 'created') return;
+          if (d.status !== 'created') { try { localStorage.removeItem('kpPending'); } catch {} return; }
         } catch {
           // Keep trying: a brief connection problem must not look like a failed payment
         }
