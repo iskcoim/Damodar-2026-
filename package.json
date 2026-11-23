@@ -8,6 +8,7 @@
     "dev": "node server.js"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
     "@supabase/supabase-js": "^2.118.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",

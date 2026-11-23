@@ -1,7 +1,7 @@
-// Sharad Purnima 2026 — seva donations via KCM payment gateway (same key as prabhupada).
+// Karthik Purnima 2026 — seva donations via KCM payment gateway.
 const crypto = require('crypto');
 const fs     = require('fs');
-const { createClient } = require('@supabase/supabase-js');
+const { neon } = require('@neondatabase/serverless');
 
 const FESTIVAL = 'Karthik Purnima Festival';
 const TABLE    = 'sharadpurnima_donations';
@@ -34,9 +34,7 @@ const MAX_ATTEMPTS_PER_HOUR = 10;
 const GATEWAY_URL = (process.env.KCM_PAYMENT_GATEWAY_URL || 'https://iskconcoimbatore.com/api/kcm-payment-gateway').replace(/\/$/, '');
 const siteUrl = () => (process.env.SITE_URL || 'https://events.iskconcoimbatore.com').replace(/\/$/, '');
 
-const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY
-  ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY)
-  : null;
+const sql = process.env.NEON_DATABASE_URL ? neon(process.env.NEON_DATABASE_URL) : null;
 const localFile = process.env.PRABHUPADA_LOCAL_FILE;
 
 function readLocal() {
@@ -45,11 +43,12 @@ function readLocal() {
 }
 
 async function insert(row) {
-  if (supabase) {
-    const { error } = await supabase.from(TABLE).insert([row]);
-    if (!error) return;
-    if (!localFile) throw new Error(error.message);
-    console.warn('Supabase insert failed, falling back to local file:', error.message);
+  if (sql) {
+    await sql`insert into sharadpurnima_donations
+      (festival, seva, scheme_id, name, phone, email, amount, reference, status)
+      values (${row.festival}, ${row.seva}, ${row.scheme_id}, ${row.name}, ${row.phone},
+              ${row.email ?? null}, ${row.amount}, ${row.reference}, ${row.status})`;
+    return;
   }
   if (!localFile) throw new Error('No database configured');
   const data = readLocal();
@@ -60,25 +59,27 @@ async function insert(row) {
 
 async function recentAttempts(phone) {
   const since = new Date(Date.now() - 3600000).toISOString();
-  if (supabase) {
-    const { count, error } = await supabase.from(TABLE).select('id', { count: 'exact', head: true }).eq('phone', phone).gte('created_at', since);
-    if (!error) return count || 0;
-    console.warn('Supabase recentAttempts failed, using local count:', error.message);
+  if (sql) {
+    const rows = await sql`select count(*) as cnt from sharadpurnima_donations
+      where phone = ${phone} and created_at >= ${since}`;
+    return Number(rows[0].cnt);
   }
   return ((readLocal()[TABLE]) || []).filter(d => d.phone === phone && d.created_at >= since).length;
 }
 
 async function updateDonation(reference, fields) {
-  if (supabase) {
-    const { error } = await supabase.from(TABLE).update(fields).eq('reference', reference);
-    if (!error) return;
-    if (!localFile) throw new Error(error.message);
-    console.warn('Supabase updateDonation failed, using local file:', error.message);
+  if (sql) {
+    if ('failure_reason' in fields) {
+      await sql`update sharadpurnima_donations set failure_reason = ${fields.failure_reason} where reference = ${reference}`;
+    } else {
+      await sql`update sharadpurnima_donations set session_id = ${fields.session_id ?? null}, contact_id = ${fields.contact_id ?? null} where reference = ${reference}`;
+    }
+    return;
   }
   const data = readLocal();
   const row = (data[TABLE] || []).find(d => d.reference === reference);
   if (row) Object.assign(row, fields);
-  fs.writeFileSync(localFile, JSON.stringify(data, null, 2));
+  if (localFile) fs.writeFileSync(localFile, JSON.stringify(data, null, 2));
 }
 
 async function gateway(method, route, body, idempotencyKey) {
@@ -196,7 +197,7 @@ module.exports = async function handler(req, res) {
     }
     return res.status(200).json({ ok: true, reference, amount, seva: seva.title, checkout });
   } catch (err) {
-    console.error('Sharadpurnima handler error:', err.message);
+    console.error('KarthikPurnima handler error:', err.message);
     return res.status(500).json({ error: SAVE_FAILED });
   }
 };
