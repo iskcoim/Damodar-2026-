@@ -7,15 +7,27 @@ const FESTIVAL = 'Karthik Purnima Festival';
 const TABLE    = 'sharadpurnima_donations';
 const SAVE_FAILED = 'Sorry, we could not save this. Please try again, or WhatsApp us on +91 97910 02556.';
 
-// All sevas use the open-amount scheme (2-52) so a single KCM catalog entry covers all.
-// Preset prices are enforced server-side; the browser cannot override them.
+// All sevas use the open-amount scheme (2-52). Prices enforced server-side.
 const SEVAS = {
-  'moonlit-kheer':      { scheme: '2-52', title: 'Moonlit Kheer Distribution', price: 1008  },
-  'flower-decoration':  { scheme: '2-52', title: 'White Flower Decoration',    price: 2108  },
-  'abhishek':           { scheme: '2-52', title: 'Special Abhishek Seva',       price: 5116  },
-  'prasadam-feast':     { scheme: '2-52', title: 'Grand Karthik Purnima Feast', price: 10116 },
-  'ghee-lamp':          { scheme: '2-52', title: 'Ghee Lamp Offering',          price: 501   },
-  'general':            { scheme: '2-52', title: 'Your Offering',               price: null  },
+  'vaishnava-bhojan-10':  { scheme: '2-52', title: 'Vaishnava Bhojan — 10 Vaishnavas',  price: 1501  },
+  'vaishnava-bhojan-20':  { scheme: '2-52', title: 'Vaishnava Bhojan — 20 Vaishnavas',  price: 3001  },
+  'vaishnava-bhojan-40':  { scheme: '2-52', title: 'Vaishnava Bhojan — 40 Vaishnavas',  price: 6001  },
+  'vaishnava-bhojan-60':  { scheme: '2-52', title: 'Vaishnava Bhojan — 60 Vaishnavas',  price: 9001  },
+  'vaishnava-bhojan-108': { scheme: '2-52', title: 'Vaishnava Bhojan — 108 Vaishnavas', price: 16108 },
+  'adopt-cow-1m':         { scheme: '2-52', title: 'Adopt a Cow — 1 Month',              price: 2501  },
+  'adopt-cow-3m':         { scheme: '2-52', title: 'Adopt a Cow — 3 Months',             price: 7501  },
+  'adopt-cow-5m':         { scheme: '2-52', title: 'Adopt a Cow — 5 Months',             price: 12501 },
+  'adopt-cow-1y':         { scheme: '2-52', title: 'Adopt a Cow — 1 Year',               price: 30001 },
+  'annadhan-10':          { scheme: '2-52', title: 'Annadhan — 10 People',               price: 501   },
+  'annadhan-20':          { scheme: '2-52', title: 'Annadhan — 20 People',               price: 1001  },
+  'annadhan-50':          { scheme: '2-52', title: 'Annadhan — 50 People',               price: 2501  },
+  'annadhan-100':         { scheme: '2-52', title: 'Annadhan — 100 People',              price: 5001  },
+  'annadhan-200':         { scheme: '2-52', title: 'Annadhan — 200 People',              price: 10001 },
+  'feed-cows-1d':         { scheme: '2-52', title: 'Feed Cows — 1 Day',                  price: 1101  },
+  'feed-cows-3d':         { scheme: '2-52', title: 'Feed Cows — 3 Days',                 price: 3301  },
+  'feed-cows-7d':         { scheme: '2-52', title: 'Feed Cows — 7 Days',                 price: 7701  },
+  'feed-cows-15d':        { scheme: '2-52', title: 'Feed Cows — 15 Days',                price: 15001 },
+  'feed-cows-30d':        { scheme: '2-52', title: 'Feed Cows — 30 Days',                price: 30001 },
 };
 
 const MAX_ATTEMPTS_PER_HOUR = 10;
