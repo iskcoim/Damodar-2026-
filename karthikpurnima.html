@@ -494,6 +494,126 @@
       .stat:last-child { border-bottom: none; }
       .seva-grid { grid-template-columns: 1fr 1fr; }
     }
+    /* ─── WIZARD (3-step checkout) ─── */
+    [hidden] { display: none !important; }
+    .wizard {
+      position: relative; overflow: clip; margin-top: 32px;
+      border-radius: 24px; background: rgba(8,14,46,0.85);
+      border: 1px solid rgba(245,216,126,0.2);
+      box-shadow: 0 4px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(245,216,126,0.08);
+      scroll-margin-top: 14px;
+    }
+    .stepper {
+      display: flex; list-style: none;
+      background: linear-gradient(135deg, rgba(3,6,26,0.98), rgba(8,14,46,0.98));
+      padding: 16px 12px;
+      border-bottom: 1px solid rgba(245,216,126,0.12);
+    }
+    .stepper li {
+      position: relative; flex: 1;
+      display: grid; justify-items: center; gap: 5px;
+      font-family: var(--fh); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.03em; color: rgba(200,216,248,0.4);
+    }
+    .stepper li + li::before {
+      content: ''; position: absolute;
+      top: 15px; right: calc(50% + 20px); left: calc(-50% + 20px);
+      height: 1px; background: rgba(255,255,255,0.15);
+    }
+    .stepper li.reached + li.reached::before { background: var(--gold); }
+    .step-dot {
+      display: grid; place-items: center;
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(200,216,248,0.3); font-size: 0.82rem; font-weight: 700;
+    }
+    .stepper li.reached { color: rgba(200,216,248,0.9); }
+    .stepper li.reached .step-dot { border-color: var(--gold); background: var(--gold); color: #1a0e00; }
+    .wizard-body { padding: 24px 20px 24px; }
+    @media (min-width: 640px) { .wizard-body { padding: 32px 36px 30px; } }
+    .form-step { display: grid; gap: 18px; animation: wiz-in 0.35s ease both; }
+    @keyframes wiz-in { from { opacity: 0; transform: translateY(8px); } }
+    @media (prefers-reduced-motion: reduce) { .form-step { animation: none; } }
+    .wiz-step-title { font-family: var(--fd); font-size: 1.3rem; font-weight: 800; color: #EDF3FF; line-height: 1.25; }
+    .wiz-step-title:focus { outline: none; }
+    .wiz-step-sub { margin-top: -8px; font-size: 0.95rem; color: var(--muted); }
+    .wiz-summary {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      border-radius: 12px; background: rgba(245,216,126,0.07);
+      border: 1px solid rgba(245,216,126,0.18); padding: 12px 14px;
+      font-size: 0.9rem; color: var(--muted);
+    }
+    .wiz-summary strong { display: block; font-family: var(--fh); font-weight: 700; color: var(--gold); font-size: 0.95rem; }
+    .wiz-chg {
+      flex: none; border: 0; background: none; padding: 4px 2px;
+      font: 700 0.85rem var(--fh); color: var(--gold2);
+      text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+    }
+    .wiz-phone-field { position: relative; display: block; }
+    .wiz-phone-field > span {
+      position: absolute; left: 16px; top: 50%; translate: 0 -50%;
+      font-family: var(--fh); font-weight: 700; font-size: 1.1rem;
+      color: var(--muted); pointer-events: none; z-index: 1;
+    }
+    .wiz-phone-field > span::after {
+      content: ''; position: absolute; right: -10px; top: 15%;
+      height: 70%; width: 1px; background: rgba(245,216,126,0.2);
+    }
+    .wiz-phone-field input {
+      padding-left: 60px !important; min-height: 56px !important;
+      font-family: var(--fh) !important; font-size: 1.25rem !important;
+      font-weight: 600 !important; letter-spacing: 0.06em !important;
+    }
+    .wiz-lookup-state { min-height: 1.4em; font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+    .wiz-lookup-state.busy::before {
+      content: ''; display: inline-block; width: 12px; height: 12px; margin-right: 8px;
+      border: 2px solid var(--gold2); border-right-color: transparent;
+      border-radius: 50%; vertical-align: -1px; animation: wiz-spin 0.8s linear infinite;
+    }
+    @keyframes wiz-spin { to { transform: rotate(360deg); } }
+    .wiz-lookup-state.found { color: #4ade80; }
+    .wiz-who { display: grid; gap: 8px; }
+    .wiz-who .wiz-lbl { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(200,216,248,0.5); }
+    .wiz-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .wiz-chip {
+      min-height: 40px; border: 1.5px solid rgba(245,216,126,0.25);
+      border-radius: 9999px; background: rgba(11,18,56,0.6);
+      padding: 7px 18px; font: 700 0.9rem var(--fh);
+      color: var(--silver); cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .wiz-chip:hover { border-color: rgba(245,216,126,0.5); background: rgba(20,32,80,0.9); }
+    .wiz-chip[aria-pressed="true"] { border-color: var(--gold); background: rgba(245,216,126,0.12); color: var(--gold); }
+    .wiz-name-box { display: grid; gap: 14px; }
+    .wiz-error {
+      border-radius: 10px; background: rgba(255,80,80,0.08);
+      border: 1px solid rgba(255,100,100,0.25);
+      padding: 10px 14px; color: #ff9090; font-size: 0.88rem;
+    }
+    .wiz-error:empty { display: none; }
+    .wizard-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+    #donationForm [data-step="1"] .wizard-actions {
+      position: sticky; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 5;
+    }
+    .wizard-actions .btn-gold { flex: 1; max-width: 300px; margin-left: auto; min-height: 52px; font-size: 1rem; }
+    #donationForm [data-step="1"] .wizard-actions .btn-gold { max-width: none; }
+    .wiz-back { border: 0; background: none; padding: 12px 4px; font: 700 0.95rem var(--fh); color: var(--muted); cursor: pointer; }
+    .wiz-secure-note { font-size: 0.8rem; color: rgba(200,216,248,0.3); text-align: center; }
+    .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .done-panel { display: grid; justify-items: center; gap: 12px; padding: 36px 20px 32px; text-align: center; }
+    .done-panel:focus { outline: none; }
+    .done-mark {
+      display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #1a0e00; font-size: 1.8rem;
+    }
+    .done-panel h3 { font-family: var(--fd); font-size: 1.45rem; color: #EDF3FF; }
+    .done-panel p { max-width: 28rem; color: var(--muted); }
+    .done-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
+    .btn-wa {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 48px; border-radius: 9999px; padding: 11px 24px;
+      font-family: var(--fh); font-size: 0.95rem; font-weight: 700;
+      background: #15803D; color: #fff; border: none; cursor: pointer; text-decoration: none;
+    }
+    .btn-wa:hover { opacity: 0.86; }
   </style>
 </head>
 <body>
@@ -673,117 +793,138 @@
         <p>Every offering — however small — becomes a part of this sacred celebration. Choose a seva, pick a tier, and your name will be remembered in our prayers.</p>
       </div>
 
-      <div class="seva-list" id="sevaGrid">
+      <div class="wizard" id="wizard">
+        <ol class="stepper" aria-label="Progress">
+          <li data-mark="1" class="reached"><span class="step-dot">1</span>Choose seva</li>
+          <li data-mark="2"><span class="step-dot">2</span>Your details</li>
+          <li data-mark="3"><span class="step-dot">3</span>Pay</li>
+        </ol>
+        <div class="wizard-body">
+          <form id="donationForm" novalidate>
 
-        <!-- Vaishnava Bhojan -->
-        <div class="seva-card">
-          <div class="seva-head">
-            <div class="seva-icon-bubble">🍽️</div>
-            <div>
-              <div class="seva-name">Vaishnava Bhojan</div>
-              <div class="seva-desc">A full prasadam meal for devotees of the Lord, for one day</div>
+            <!-- ── Step 1: Choose seva ── -->
+            <div class="form-step" data-step="1">
+              <h3 class="wiz-step-title" tabindex="-1">Choose a seva</h3>
+
+              <div class="seva-list" id="sevaGrid">
+
+                <!-- Vaishnava Bhojan -->
+                <div class="seva-card">
+                  <div class="seva-head">
+                    <div class="seva-icon-bubble">🍽️</div>
+                    <div>
+                      <div class="seva-name">Vaishnava Bhojan</div>
+                      <div class="seva-desc">A full prasadam meal for devotees of the Lord, for one day</div>
+                    </div>
+                  </div>
+                  <div class="tier-row">
+                    <button class="tier-btn" data-key="vaishnava-bhojan-10"  data-amount="1501"  data-name="Vaishnava Bhojan — 10 Vaishnavas"><span class="tier-label">10 Vaishnavas</span><span class="tier-amt">₹1,501</span></button>
+                    <button class="tier-btn" data-key="vaishnava-bhojan-20"  data-amount="3001"  data-name="Vaishnava Bhojan — 20 Vaishnavas"><span class="tier-label">20 Vaishnavas</span><span class="tier-amt">₹3,001</span></button>
+                    <button class="tier-btn" data-key="vaishnava-bhojan-40"  data-amount="6001"  data-name="Vaishnava Bhojan — 40 Vaishnavas"><span class="tier-label">40 Vaishnavas</span><span class="tier-amt">₹6,001</span></button>
+                    <button class="tier-btn" data-key="vaishnava-bhojan-60"  data-amount="9001"  data-name="Vaishnava Bhojan — 60 Vaishnavas"><span class="tier-label">60 Vaishnavas</span><span class="tier-amt">₹9,001</span></button>
+                    <button class="tier-btn" data-key="vaishnava-bhojan-108" data-amount="16108" data-name="Vaishnava Bhojan — 108 Vaishnavas"><span class="tier-label">108 Vaishnavas</span><span class="tier-amt">₹16,108</span></button>
+                  </div>
+                </div>
+
+                <!-- Adopt a Cow -->
+                <div class="seva-card">
+                  <div class="seva-head">
+                    <div class="seva-icon-bubble">🐄</div>
+                    <div>
+                      <div class="seva-name">Adopt a Cow</div>
+                      <div class="seva-desc">Care for a temple cow: her food, shelter and care</div>
+                    </div>
+                  </div>
+                  <div class="tier-row">
+                    <button class="tier-btn" data-key="adopt-cow-1m" data-amount="2501"  data-name="Adopt a Cow — 1 Month"><span class="tier-label">1 month</span><span class="tier-amt">₹2,501</span></button>
+                    <button class="tier-btn" data-key="adopt-cow-3m" data-amount="7501"  data-name="Adopt a Cow — 3 Months"><span class="tier-label">3 months</span><span class="tier-amt">₹7,501</span></button>
+                    <button class="tier-btn" data-key="adopt-cow-5m" data-amount="12501" data-name="Adopt a Cow — 5 Months"><span class="tier-label">5 months</span><span class="tier-amt">₹12,501</span></button>
+                    <button class="tier-btn" data-key="adopt-cow-1y" data-amount="30001" data-name="Adopt a Cow — 1 Year"><span class="tier-label">1 year</span><span class="tier-amt">₹30,001</span></button>
+                  </div>
+                </div>
+
+                <!-- Annadhan -->
+                <div class="seva-card">
+                  <div class="seva-head">
+                    <div class="seva-icon-bubble">🍱</div>
+                    <div>
+                      <div class="seva-name">Annadhan</div>
+                      <div class="seva-desc">Krishna prasadam for guests and those in need</div>
+                    </div>
+                  </div>
+                  <div class="tier-row">
+                    <button class="tier-btn" data-key="annadhan-10"  data-amount="501"   data-name="Annadhan — 10 People"><span class="tier-label">10 people</span><span class="tier-amt">₹501</span></button>
+                    <button class="tier-btn" data-key="annadhan-20"  data-amount="1001"  data-name="Annadhan — 20 People"><span class="tier-label">20 people</span><span class="tier-amt">₹1,001</span></button>
+                    <button class="tier-btn" data-key="annadhan-50"  data-amount="2501"  data-name="Annadhan — 50 People"><span class="tier-label">50 people</span><span class="tier-amt">₹2,501</span></button>
+                    <button class="tier-btn" data-key="annadhan-100" data-amount="5001"  data-name="Annadhan — 100 People"><span class="tier-label">100 people</span><span class="tier-amt">₹5,001</span></button>
+                    <button class="tier-btn" data-key="annadhan-200" data-amount="10001" data-name="Annadhan — 200 People"><span class="tier-label">200 people</span><span class="tier-amt">₹10,001</span></button>
+                  </div>
+                </div>
+
+                <!-- Feed Cows -->
+                <div class="seva-card">
+                  <div class="seva-head">
+                    <div class="seva-icon-bubble">🌿</div>
+                    <div>
+                      <div class="seva-name">Feed Cows</div>
+                      <div class="seva-desc">Fresh fodder for the temple's cows, for as many days as you wish</div>
+                    </div>
+                  </div>
+                  <div class="tier-row">
+                    <button class="tier-btn" data-key="feed-cows-1d"  data-amount="1101"  data-name="Feed Cows — 1 Day"><span class="tier-label">1 day</span><span class="tier-amt">₹1,101</span></button>
+                    <button class="tier-btn" data-key="feed-cows-3d"  data-amount="3301"  data-name="Feed Cows — 3 Days"><span class="tier-label">3 days</span><span class="tier-amt">₹3,301</span></button>
+                    <button class="tier-btn" data-key="feed-cows-7d"  data-amount="7701"  data-name="Feed Cows — 7 Days"><span class="tier-label">7 days</span><span class="tier-amt">₹7,701</span></button>
+                    <button class="tier-btn" data-key="feed-cows-15d" data-amount="15001" data-name="Feed Cows — 15 Days"><span class="tier-label">15 days</span><span class="tier-amt">₹15,001</span></button>
+                    <button class="tier-btn" data-key="feed-cows-30d" data-amount="30001" data-name="Feed Cows — 30 Days"><span class="tier-label">30 days</span><span class="tier-amt">₹30,001</span></button>
+                  </div>
+                </div>
+
+              </div>
+
+              <p class="wiz-error" id="step1Error" role="alert"></p>
+              <div class="wizard-actions">
+                <button class="btn btn-gold" type="button" id="toDetails">Continue →</button>
+              </div>
             </div>
-          </div>
-          <div class="tier-row">
-            <button class="tier-btn" data-key="vaishnava-bhojan-10"  data-amount="1501"  data-name="Vaishnava Bhojan — 10 Vaishnavas"><span class="tier-label">10 Vaishnavas</span><span class="tier-amt">₹1,501</span></button>
-            <button class="tier-btn" data-key="vaishnava-bhojan-20"  data-amount="3001"  data-name="Vaishnava Bhojan — 20 Vaishnavas"><span class="tier-label">20 Vaishnavas</span><span class="tier-amt">₹3,001</span></button>
-            <button class="tier-btn" data-key="vaishnava-bhojan-40"  data-amount="6001"  data-name="Vaishnava Bhojan — 40 Vaishnavas"><span class="tier-label">40 Vaishnavas</span><span class="tier-amt">₹6,001</span></button>
-            <button class="tier-btn" data-key="vaishnava-bhojan-60"  data-amount="9001"  data-name="Vaishnava Bhojan — 60 Vaishnavas"><span class="tier-label">60 Vaishnavas</span><span class="tier-amt">₹9,001</span></button>
-            <button class="tier-btn" data-key="vaishnava-bhojan-108" data-amount="16108" data-name="Vaishnava Bhojan — 108 Vaishnavas"><span class="tier-label">108 Vaishnavas</span><span class="tier-amt">₹16,108</span></button>
-          </div>
-        </div>
 
-        <!-- Adopt a Cow -->
-        <div class="seva-card">
-          <div class="seva-head">
-            <div class="seva-icon-bubble">🐄</div>
-            <div>
-              <div class="seva-name">Adopt a Cow</div>
-              <div class="seva-desc">Care for a temple cow: her food, shelter and care</div>
+            <!-- ── Step 2: Your details ── -->
+            <div class="form-step" data-step="2" hidden>
+              <div class="wiz-summary">
+                <span>Seva: <strong id="sevaName">—</strong> &nbsp;·&nbsp; <span id="sevaAmount">—</span></span>
+                <button class="wiz-chg" type="button" data-back>Change</button>
+              </div>
+              <h3 class="wiz-step-title" tabindex="-1">Your mobile number</h3>
+              <p class="wiz-step-sub">Your receipt is sent here on WhatsApp.</p>
+              <div class="wiz-phone-field">
+                <span>+91</span>
+                <div class="ff"><input id="dPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="98765 43210" aria-label="Mobile number"></div>
+              </div>
+              <div class="wiz-lookup-state" id="lookupState" role="status" aria-live="polite"></div>
+              <div class="wiz-who" id="who" hidden>
+                <span class="wiz-lbl">Who is offering this seva?</span>
+                <div class="wiz-chips" id="whoChips"></div>
+              </div>
+              <div class="wiz-name-box" id="nameBox" hidden>
+                <div class="ff">
+                  <label for="dName">Full name, as on your receipt</label>
+                  <input id="dName" name="name" type="text" maxlength="120" autocomplete="name">
+                </div>
+                <div class="ff">
+                  <label for="dEmail">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+                  <input id="dEmail" name="email" type="email" autocomplete="email">
+                </div>
+              </div>
+              <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+              <p class="wiz-error" id="step2Error" role="alert"></p>
+              <div class="wizard-actions">
+                <button class="wiz-back" type="button" data-back>← Back</button>
+                <button class="btn btn-gold" type="submit" id="payButton">Continue</button>
+              </div>
+              <p class="wiz-secure-note">Secure payment by Razorpay · receipt on WhatsApp and email</p>
             </div>
-          </div>
-          <div class="tier-row">
-            <button class="tier-btn" data-key="adopt-cow-1m" data-amount="2501"  data-name="Adopt a Cow — 1 Month"><span class="tier-label">1 month</span><span class="tier-amt">₹2,501</span></button>
-            <button class="tier-btn" data-key="adopt-cow-3m" data-amount="7501"  data-name="Adopt a Cow — 3 Months"><span class="tier-label">3 months</span><span class="tier-amt">₹7,501</span></button>
-            <button class="tier-btn" data-key="adopt-cow-5m" data-amount="12501" data-name="Adopt a Cow — 5 Months"><span class="tier-label">5 months</span><span class="tier-amt">₹12,501</span></button>
-            <button class="tier-btn" data-key="adopt-cow-1y" data-amount="30001" data-name="Adopt a Cow — 1 Year"><span class="tier-label">1 year</span><span class="tier-amt">₹30,001</span></button>
-          </div>
-        </div>
 
-        <!-- Annadhan -->
-        <div class="seva-card">
-          <div class="seva-head">
-            <div class="seva-icon-bubble">🍱</div>
-            <div>
-              <div class="seva-name">Annadhan</div>
-              <div class="seva-desc">Krishna prasadam for guests and those in need</div>
-            </div>
-          </div>
-          <div class="tier-row">
-            <button class="tier-btn" data-key="annadhan-10"  data-amount="501"   data-name="Annadhan — 10 People"><span class="tier-label">10 people</span><span class="tier-amt">₹501</span></button>
-            <button class="tier-btn" data-key="annadhan-20"  data-amount="1001"  data-name="Annadhan — 20 People"><span class="tier-label">20 people</span><span class="tier-amt">₹1,001</span></button>
-            <button class="tier-btn" data-key="annadhan-50"  data-amount="2501"  data-name="Annadhan — 50 People"><span class="tier-label">50 people</span><span class="tier-amt">₹2,501</span></button>
-            <button class="tier-btn" data-key="annadhan-100" data-amount="5001"  data-name="Annadhan — 100 People"><span class="tier-label">100 people</span><span class="tier-amt">₹5,001</span></button>
-            <button class="tier-btn" data-key="annadhan-200" data-amount="10001" data-name="Annadhan — 200 People"><span class="tier-label">200 people</span><span class="tier-amt">₹10,001</span></button>
-          </div>
-        </div>
-
-        <!-- Feed Cows -->
-        <div class="seva-card">
-          <div class="seva-head">
-            <div class="seva-icon-bubble">🌿</div>
-            <div>
-              <div class="seva-name">Feed Cows</div>
-              <div class="seva-desc">Fresh fodder for the temple's cows, for as many days as you wish</div>
-            </div>
-          </div>
-          <div class="tier-row">
-            <button class="tier-btn" data-key="feed-cows-1d"  data-amount="1101"  data-name="Feed Cows — 1 Day"><span class="tier-label">1 day</span><span class="tier-amt">₹1,101</span></button>
-            <button class="tier-btn" data-key="feed-cows-3d"  data-amount="3301"  data-name="Feed Cows — 3 Days"><span class="tier-label">3 days</span><span class="tier-amt">₹3,301</span></button>
-            <button class="tier-btn" data-key="feed-cows-7d"  data-amount="7701"  data-name="Feed Cows — 7 Days"><span class="tier-label">7 days</span><span class="tier-amt">₹7,701</span></button>
-            <button class="tier-btn" data-key="feed-cows-15d" data-amount="15001" data-name="Feed Cows — 15 Days"><span class="tier-label">15 days</span><span class="tier-amt">₹15,001</span></button>
-            <button class="tier-btn" data-key="feed-cows-30d" data-amount="30001" data-name="Feed Cows — 30 Days"><span class="tier-label">30 days</span><span class="tier-amt">₹30,001</span></button>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="donor-form">
-        <p class="form-h3">Your Details</p>
-        <div class="seva-preview" id="sevaPreview">
-          Seva: <strong id="prevName">—</strong> &nbsp;·&nbsp; Amount: <strong id="prevAmt">—</strong>
-        </div>
-        <div class="form-grid two">
-          <div class="ff">
-            <label for="dName">Full Name *</label>
-            <input id="dName" type="text" placeholder="Your name" autocomplete="name">
-          </div>
-          <div class="ff">
-            <label for="dPhone">Mobile *</label>
-            <input id="dPhone" type="tel" placeholder="10-digit number" autocomplete="tel" maxlength="13">
-          </div>
-        </div>
-        <div class="form-grid">
-          <div class="ff">
-            <label for="dEmail">Email (optional)</label>
-            <input id="dEmail" type="email" placeholder="For receipt" autocomplete="email">
-          </div>
-        </div>
-        <button class="btn btn-gold" id="donateBtn" disabled style="width:100%;justify-content:center;">Pay Securely →</button>
-        <p id="formError" class="form-note" style="color:#ff8080;min-height:1.2em;margin-top:8px"></p>
-        <div class="trust-row">
-          <span class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            100% Secure
-          </span>
-          <span class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            80G Tax Receipt
-          </span>
-          <span class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Instant Confirmation
-          </span>
+          </form>
+          <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
         </div>
       </div>
     </div>
@@ -793,15 +934,6 @@
     <p>Sri Jagannath Mandir, Coimbatore &nbsp;·&nbsp; <a href="https://iskconcoimbatore.com" target="_blank" rel="noopener">iskconcoimbatore.com</a></p>
     <p style="margin-top:5px">Hare Krishna Hare Krishna Krishna Krishna Hare Hare · Hare Rama Hare Rama Rama Rama Hare Hare</p>
   </footer>
-
-  <!-- Sticky pay bar — slides up when a tier is selected -->
-  <div id="stickyPay" class="sticky-pay-bar" aria-hidden="true">
-    <div class="sticky-pay-info">
-      <span class="sp-name" id="spName">—</span>
-      <span class="sp-amt" id="spAmt">—</span>
-    </div>
-    <button class="btn btn-gold sticky-pay-btn" id="stickyPayBtn" type="button">Pay Securely →</button>
-  </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script>
@@ -819,119 +951,191 @@
       upd(); setInterval(upd, 60000);
     })();
 
-    /* Seva selection + payment */
+    /* Seva wizard */
     (function(){
       'use strict';
-      const openedAt = performance.now();
-      const inr = n => '₹' + Number(n).toLocaleString('en-IN');
+      const WHATSAPP  = '919042216108';
+      const inr       = n => '₹' + Number(n).toLocaleString('en-IN');
+      const openedAt  = performance.now();
+      const $         = id => document.getElementById(id);
 
-      let sel = null;
-      const grid       = document.getElementById('sevaGrid');
-      const prev       = document.getElementById('sevaPreview');
-      const prevN      = document.getElementById('prevName');
-      const prevA      = document.getElementById('prevAmt');
-      const btn        = document.getElementById('donateBtn');
-      const dName      = document.getElementById('dName');
-      const dPhone     = document.getElementById('dPhone');
-      const errEl      = document.getElementById('formError');
-      const stickyBar  = document.getElementById('stickyPay');
-      const spName     = document.getElementById('spName');
-      const spAmt      = document.getElementById('spAmt');
-      const stickyPayBtn = document.getElementById('stickyPayBtn');
+      const form   = $('donationForm');
+      const wizard = $('wizard');
+      const steps  = [...form.querySelectorAll('[data-step]')];
+      const marks  = [...wizard.querySelectorAll('[data-mark]')];
 
-      function validate(){
-        const ok = dName.value.trim().length >= 2 &&
-                   /^\+?[0-9]{10,13}$/.test(dPhone.value.replace(/\s/g,'')) &&
-                   sel && sel.amount > 0;
-        btn.disabled = !ok;
+      let sel        = null;
+      let lookedUp   = '';
+      let lookupTimer = null;
+      let autofilled  = false;
+
+      const digits     = () => $('dPhone').value.replace(/\D/g,'').slice(-10);
+      const validPhone = () => /^[6-9]\d{9}$/.test(digits());
+
+      /* ── Step navigation ── */
+      function show(n){
+        steps.forEach(s => { s.hidden = Number(s.dataset.step) !== n; });
+        marks.forEach(m => m.classList.toggle('reached', Number(m.dataset.mark) <= n));
+        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+        steps[n - 1].querySelector('.wiz-step-title').focus({ preventScroll: true });
+        if(n === 2){
+          $('sevaName').textContent   = sel.name;
+          $('sevaAmount').textContent = inr(sel.amount);
+          refreshPay();
+          if(!validPhone()) setTimeout(() => $('dPhone').focus(), 60);
+        }
       }
 
-      grid.addEventListener('click', e => {
-        const tierBtn = e.target.closest('.tier-btn');
-        if(!tierBtn) return;
-        grid.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-        grid.querySelectorAll('.seva-card').forEach(c => c.classList.remove('active'));
-        tierBtn.classList.add('active');
-        tierBtn.closest('.seva-card').classList.add('active');
-        sel = { name: tierBtn.dataset.name, key: tierBtn.dataset.key, amount: parseInt(tierBtn.dataset.amount) };
-        prevN.textContent = sel.name;
-        prevA.textContent = inr(sel.amount);
-        prev.classList.add('show');
-        spName.textContent = sel.name;
-        spAmt.textContent  = inr(sel.amount);
-        stickyBar.classList.add('visible');
-        stickyBar.setAttribute('aria-hidden', 'false');
-        validate();
+      /* ── Seva tier selection ── */
+      const sevaGrid = $('sevaGrid');
+      sevaGrid.addEventListener('click', e => {
+        const tb = e.target.closest('.tier-btn');
+        if(!tb) return;
+        sevaGrid.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+        sevaGrid.querySelectorAll('.seva-card').forEach(c => c.classList.remove('active'));
+        tb.classList.add('active');
+        tb.closest('.seva-card').classList.add('active');
+        sel = { name: tb.dataset.name, key: tb.dataset.key, amount: parseInt(tb.dataset.amount, 10) };
+        $('step1Error').textContent = '';
       });
 
-      dName.addEventListener('input', validate);
-      dPhone.addEventListener('input', validate);
+      /* Continue from step 1 */
+      $('toDetails').addEventListener('click', () => {
+        if(!sel){ $('step1Error').textContent = 'Please choose a seva first.'; return; }
+        show(2);
+      });
 
-      /* Sticky bar: scroll to form if details not filled, else trigger payment */
-      stickyPayBtn.addEventListener('click', () => {
-        const name  = dName.value.trim();
-        const phone = dPhone.value.replace(/\D/g,'').slice(-10);
-        if (!name || phone.length < 10) {
-          document.querySelector('.donor-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          setTimeout(() => { (!dName.value.trim() ? dName : dPhone).focus(); }, 450);
+      /* Back buttons */
+      form.addEventListener('click', e => {
+        if(e.target.closest('[data-back]')) show(1);
+      });
+
+      /* ── Pay button label ── */
+      function refreshPay(){
+        const ready = validPhone() && !$('nameBox').hidden;
+        $('payButton').textContent = ready ? 'Pay ' + inr(sel ? sel.amount : 0) + ' securely' : 'Continue';
+      }
+
+      /* ── Phone-first lookup ── */
+      async function lookup(){
+        const mobile = digits();
+        if(!validPhone() || mobile === lookedUp) return;
+        lookedUp = mobile;
+        const state = $('lookupState');
+        state.className = 'wiz-lookup-state busy';
+        state.textContent = 'Checking our records…';
+        let names = [];
+        try {
+          const res = await fetch('/api/karthikpurnima', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kind: 'lookup', phone: mobile, elapsed: Math.round(performance.now() - openedAt) }),
+          });
+          names = (await res.json()).names || [];
+        } catch {}
+        if(digits() !== mobile) return;
+        $('nameBox').hidden = false;
+        const whoChips = $('whoChips');
+        whoChips.replaceChildren();
+        if(autofilled) $('dName').value = '';
+        autofilled = names.length > 0;
+        if(names.length === 1){
+          $('dName').value = names[0];
+          state.className = 'wiz-lookup-state found';
+          state.textContent = 'Hare Krishna, ' + names[0].split(' ')[0] + '! Welcome back.';
+          $('who').hidden = true;
+        } else if(names.length > 1){
+          state.className = 'wiz-lookup-state found';
+          state.textContent = 'Hare Krishna! We found your family on our records.';
+          names.concat(['Someone else']).forEach((n, i) => {
+            const b = document.createElement('button');
+            b.type = 'button'; b.className = 'wiz-chip'; b.textContent = n;
+            b.setAttribute('aria-pressed', String(i === 0));
+            b.addEventListener('click', () => {
+              whoChips.querySelectorAll('.wiz-chip').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
+              $('dName').value = i < names.length ? n : '';
+              if(i === names.length) $('dName').focus();
+            });
+            whoChips.append(b);
+          });
+          $('dName').value = names[0];
+          $('who').hidden = false;
         } else {
-          btn.click();
+          state.className = 'wiz-lookup-state';
+          state.textContent = '';
+          $('who').hidden = true;
+          if(!$('dName').value) setTimeout(() => $('dName').focus(), 60);
         }
+        refreshPay();
+      }
+
+      $('dName').addEventListener('input', () => { autofilled = false; });
+      $('dPhone').addEventListener('input', () => {
+        $('step2Error').textContent = '';
+        clearTimeout(lookupTimer);
+        if(validPhone()) lookupTimer = setTimeout(lookup, 250);
+        else { $('lookupState').className = 'wiz-lookup-state'; $('lookupState').textContent = ''; }
+        refreshPay();
       });
+      $('dPhone').addEventListener('blur', lookup);
 
-      /* Auto-hide sticky bar when the donor form is in view */
-      const formObserver = new IntersectionObserver(entries => {
-        if (!sel) return;
-        stickyBar.classList.toggle('visible', !entries[0].isIntersecting);
-      }, { threshold: 0.4 });
-      formObserver.observe(document.querySelector('.donor-form'));
-
+      /* ── DOM helpers ── */
       function el(tag, cls, text){
         const n = document.createElement(tag);
         if(cls) n.className = cls;
         if(text) n.textContent = text;
         return n;
       }
-
-      function showDone(mark, title, message, ...actions){
-        const donorForm = document.querySelector('.donor-form');
-        const done = el('div', 'done');
-        done.style.cssText = 'text-align:center;padding:32px 0';
+      function panel(mark, title, msg, ...actions){
         const row = el('div', 'done-actions');
         row.append(...actions);
-        done.append(el('span', 'done-mark', mark), el('h3', '', title), el('p', '', message), row);
-        donorForm.replaceWith(done);
-        done.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        $('done').replaceChildren(el('span','done-mark',mark), el('h3','',title), el('p','',msg), row);
+        form.hidden = true;
+        wizard.querySelector('.stepper').hidden = true;
+        $('done').hidden = false;
+        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+        $('done').focus({ preventScroll: true });
+      }
+      function waLink(amount, seva, reference, name){
+        const wa = el('a', 'btn btn-wa', 'Message us on WhatsApp');
+        wa.href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hare Krishna! I would like to offer ' + inr(amount) + ' for ' + seva + ' for Karthik Purnima. Reference: ' + reference + '. Name: ' + name + '.');
+        wa.target = '_blank'; wa.rel = 'noopener noreferrer';
+        return wa;
       }
 
+      /* ── Razorpay checkout ── */
       function openCheckout(data, name){
         const { key_id, ...rest } = data.checkout;
+        marks.forEach(m => m.classList.add('reached'));
         new window.Razorpay({
           ...rest,
           key: key_id,
           modal: {
             ondismiss(){
-              const again = el('button', 'btn btn-gold', inr(data.amount) + ' — Try again');
+              const again = el('button', 'btn btn-gold', 'Pay ' + inr(data.amount) + ' now');
               again.type = 'button';
+              again.style.cssText = 'border-radius:9999px;min-height:48px;padding:11px 24px';
               again.addEventListener('click', () => openCheckout(data, name));
-              showDone('!', 'Payment not completed',
-                'Your ' + data.seva + ' seva (ref: ' + data.reference + ') is saved. Click below to complete the payment.',
-                again);
+              panel('!', 'Payment not completed',
+                'Your ' + data.seva + ' seva (ref: ' + data.reference + ') is saved. Click below to complete.',
+                again, waLink(data.amount, data.seva, data.reference, name));
             },
           },
         }).open();
       }
 
-      btn.addEventListener('click', async () => {
-        if(!sel || sel.amount <= 0) return;
-        errEl.textContent = '';
-        const name  = dName.value.trim();
-        const phone = dPhone.value.replace(/\D/g,'').slice(-10);
-        const email = document.getElementById('dEmail').value.trim();
-
-        btn.disabled = true;
-        btn.textContent = 'Opening payment…';
-
+      /* ── Form submit ── */
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const error = $('step2Error');
+        error.textContent = '';
+        if(!validPhone()){ error.textContent = 'Please enter a valid 10-digit mobile number.'; $('dPhone').focus(); return; }
+        if($('nameBox').hidden){ await lookup(); return; }
+        const name = $('dName').value.trim();
+        if(name.length < 3){ error.textContent = 'Please enter your full name.'; $('dName').focus(); return; }
+        const payBtn = $('payButton');
+        payBtn.disabled = true;
+        payBtn.textContent = 'Opening secure payment…';
         try {
           const res = await fetch('/api/karthikpurnima', {
             method: 'POST',
@@ -941,9 +1145,9 @@
               seva: sel.key,
               amount: sel.amount,
               name,
-              phone,
-              email,
-              website: '',
+              phone: digits(),
+              email: $('dEmail').value.trim(),
+              website: form.elements.website.value,
               elapsed: Math.round(performance.now() - openedAt),
             }),
           });
@@ -952,16 +1156,15 @@
           if(data.checkout && window.Razorpay){
             openCheckout(data, name);
           } else {
-            errEl.textContent = 'Payment gateway is temporarily unavailable. Please try again in a few minutes.';
-            btn.disabled = false;
-            btn.textContent = 'Pay Securely';
-            validate();
+            panel('✓', 'Thank you, ' + name + '!',
+              'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now — our seva team will reach out with payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''),
+              waLink(data.amount || sel.amount, data.seva || sel.name, data.reference || '', name));
           }
         } catch(err){
-          errEl.textContent = err.message || 'Please check your connection and try again.';
-          btn.disabled = false;
-          btn.textContent = 'Pay Securely';
-          validate();
+          error.textContent = err.message || 'Please check your connection and try again.';
+        } finally {
+          payBtn.disabled = false;
+          refreshPay();
         }
       });
     })();
