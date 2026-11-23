@@ -3,6 +3,10 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/karthikpurnima/thank-you",
+      "destination": "/karthikpurnima-thank-you.html"
+    },
+    {
       "source": "/karthikpurnima",
       "destination": "/karthikpurnima.html"
     },

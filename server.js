@@ -192,6 +192,9 @@ app.get('/prabhupada-admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'prabhupada-admin.html'));
 });
 
+app.get('/karthikpurnima/thank-you', (req, res) => {
+  res.sendFile(path.join(__dirname, 'karthikpurnima-thank-you.html'));
+});
 app.get('/karthikpurnima', (req, res) => {
   res.sendFile(path.join(__dirname, 'karthikpurnima.html'));
 });

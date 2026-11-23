@@ -442,6 +442,92 @@
     .sticky-pay-info .sp-amt { font-size: 1.1rem; font-family: var(--fh); font-weight: 700; color: var(--gold); line-height: 1.2; display: block; }
     .sticky-pay-btn { margin: 0; padding: 10px 22px; min-height: 44px; white-space: nowrap; flex-shrink: 0; }
 
+    /* ─── SEVA PICKER (page) ─── */
+    .pick-grid { display: grid; gap: 14px; max-width: 980px; margin: 0 auto; }
+    @media (min-width: 640px) { .pick-grid { grid-template-columns: 1fr 1fr; } }
+    .pick {
+      display: flex; align-items: center; gap: 16px; width: 100%; text-align: left; cursor: pointer;
+      padding: 20px 18px; border-radius: 18px; border: 1px solid var(--border);
+      background: linear-gradient(160deg, rgba(20,32,80,0.75), rgba(11,18,56,0.9));
+      color: inherit; font: inherit; transition: border-color .2s, transform .2s;
+    }
+    .pick:hover { border-color: rgba(245,216,126,0.5); transform: translateY(-2px); }
+    .pick-icon { flex: none; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; font-size: 1.75rem; background: rgba(245,216,126,0.1); border: 1px solid rgba(245,216,126,0.25); }
+    .pick-text { flex: 1; min-width: 0; }
+    .pick-name { display: block; font-family: var(--fh); font-weight: 700; font-size: 1.08rem; color: #EDF3FF; }
+    .pick-desc { display: block; margin-top: 2px; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+    .pick-from { display: block; margin-top: 6px; font-family: var(--fh); font-weight: 700; font-size: 0.9rem; color: var(--gold); }
+    .pick-go { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #F5D87E, #E2A630); color: #1a0e00; font-weight: 800; font-size: 1.1rem; }
+    .trust-line { margin-top: 26px; text-align: center; font-size: 0.85rem; color: rgba(200,216,248,0.5); }
+
+    /* ─── STICKY CTA ─── */
+    .sticky-cta {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 300;
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: rgba(5,10,38,0.96); border-top: 1px solid rgba(245,216,126,0.3);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      transform: translateY(110%); transition: transform .35s ease;
+    }
+    .sticky-cta.show { transform: none; }
+    .sticky-cta-text { flex: 1; min-width: 0; line-height: 1.25; }
+    .sticky-cta-text span { display: block; font-size: 0.75rem; color: var(--muted); }
+    .sticky-cta-text strong { display: block; font-family: var(--fh); font-size: 1.05rem; color: var(--gold); }
+    .sticky-cta .btn { margin: 0; min-height: 46px; padding: 10px 26px; }
+    @media (min-width: 900px) { .sticky-cta { left: auto; right: 24px; bottom: 24px; border: 1px solid rgba(245,216,126,0.3); border-radius: 18px; padding: 12px 14px 12px 20px; } }
+
+    /* ─── CHECKOUT POP-UP ─── */
+    body.sheet-open { overflow: hidden; }
+    .sheet { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .sheet[hidden] { display: none; }
+    .sheet-backdrop { position: absolute; inset: 0; background: rgba(1,3,14,0.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    .sheet-panel {
+      position: relative; display: flex; flex-direction: column;
+      width: min(520px, 100% - 32px); max-height: min(86vh, 760px);
+      background: var(--panel); border: 1px solid rgba(245,216,126,0.22); border-radius: 22px;
+      box-shadow: 0 40px 80px -30px rgba(0,0,0,0.8); overflow: hidden;
+      animation: sheet-in .28s ease both;
+    }
+    @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @media (max-width: 600px) {
+      .sheet { align-items: stretch; }
+      .sheet-panel { width: 100%; max-height: none; height: 100%; height: 100dvh; border-radius: 0; border: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { .sheet-panel, .m-step { animation: none !important; } }
+    .sheet-top { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px; border-bottom: 1px solid var(--border); }
+    .sheet-icon { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--silver); font-size: 1.05rem; cursor: pointer; }
+    .sheet-icon:hover { border-color: rgba(245,216,126,0.5); color: var(--gold); }
+    .sheet-icon[hidden] { visibility: hidden; display: block; }
+    .sheet-prog { flex: 1; display: grid; gap: 6px; text-align: center; }
+    .sheet-step { font-family: var(--fh); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold2); }
+    .sheet-bar { display: block; height: 4px; border-radius: 4px; background: rgba(245,216,126,0.12); overflow: hidden; }
+    .sheet-bar span { display: block; height: 100%; width: 33%; border-radius: 4px; background: linear-gradient(90deg, #F5D87E, #E2A630); transition: width .3s ease; }
+    .sheet-body { flex: 1; overflow-y: auto; padding: 22px 18px calc(24px + env(safe-area-inset-bottom, 0px)); overscroll-behavior: contain; }
+    @media (min-width: 601px) { .sheet-body { padding: 26px 28px 28px; } }
+    .m-step { display: grid; gap: 16px; animation: wiz-in .3s ease both; }
+    .m-title { font-family: var(--fd); font-size: 1.35rem; font-weight: 800; color: #EDF3FF; line-height: 1.25; }
+    .m-title:focus { outline: none; }
+    .m-sub { margin-top: -8px; font-size: 0.95rem; color: var(--muted); }
+    .m-list { display: grid; gap: 10px; }
+    .m-row {
+      display: flex; align-items: center; gap: 14px; width: 100%; min-height: 64px; text-align: left; cursor: pointer;
+      padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border);
+      background: rgba(20,32,80,0.55); color: inherit; font: inherit; transition: border-color .15s, background .15s;
+    }
+    .m-row:hover, .m-row:focus-visible { border-color: var(--gold); background: rgba(245,216,126,0.08); outline: none; }
+    .m-row .pick-icon { width: 46px; height: 46px; font-size: 1.4rem; border-radius: 13px; }
+    .m-row-main { flex: 1; min-width: 0; }
+    .m-row-name { display: block; font-family: var(--fh); font-weight: 700; font-size: 1.02rem; color: #EDF3FF; }
+    .m-row-note { display: block; font-size: 0.8rem; color: var(--muted); }
+    .m-row-price { flex: none; font-family: var(--fh); font-weight: 800; font-size: 1.1rem; color: var(--gold); }
+    .m-row-arrow { flex: none; color: var(--gold2); font-weight: 800; font-size: 1.4rem; }
+    .m-row-from { display: block; margin-top: 3px; font-family: var(--fh); font-weight: 700; font-size: 0.88rem; color: var(--gold); }
+    .m-custom { display: grid; gap: 14px; }
+    .m-amount input { font-size: 1.2rem; font-weight: 700; }
+    .m-cta { width: 100%; min-height: 54px; font-size: 1.05rem; margin: 4px 0 0; }
+    .wiz-summary span strong + span { display: block; font-family: var(--fh); font-weight: 800; font-size: 1.1rem; color: #EDF3FF; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
     /* ─── FOOTER ─── */
     footer {
       padding: 28px 24px; text-align: center;
@@ -646,16 +732,15 @@
           <p class="hero-tagline">The night Krishna played His flute and<br>the gopis danced under the full Kārtik moon</p>
           <p class="hero-pill">
             <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-            Full Moon of Kārtik · October 2026
+            Full Moon of Kārtik · November 2026
           </p>
           <p class="hero-date">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
-            Wednesday, 21 October 2026
+            Tuesday, 24 November 2026
             <span id="countdown" hidden></span>
           </p>
           <div class="hero-btns">
-            <a class="btn btn-gold" href="#seva">Offer Seva</a>
-            <a class="btn btn-ghost" href="#significance">About this Night</a>
+            <a class="btn btn-gold" href="#seva" data-open>Offer Seva</a>
           </div>
         </div>
         <div class="hero-right" aria-hidden="true"></div>
@@ -664,271 +749,94 @@
 
   </section>
 
-  <!-- ═══════════════ SIGNIFICANCE ═══════════════ -->
-  <section class="s-significance" id="significance">
-    <div class="wrap">
-      <div class="s-two">
-        <div>
-          <p class="s-eye">The Night of All Nights</p>
-          <h2>The Full Moon of Kārtik</h2>
-          <p class="lead">Of all the full moons in the year, the full moon of Kārtik — Karthik Purnima, the full moon of Autumn — shines with a singular brilliance. The monsoons have cleared, and the sky is at its most transparent.</p>
-          <p class="lead">In the Vedic tradition, this is not simply an astronomical event. The Srimad Bhagavatam describes how Lord Krishna, hearing this moon rise over Vrindavan, lifted His flute and played a song that called only to the gopis — a call that drew them through forests to the Yamuna's banks.</p>
-          <div class="bq">
-            "On that autumn night, the moon rose, cooling the forest with its rays like the face of Lakshmidevi. The lotuses bloomed as if smiling. The Lord chose to perform His most intimate pastime — the Rāsa dance."
-            <cite>— Śrīmad Bhāgavatam 10.29.1–3</cite>
-          </div>
-        </div>
-        <div>
-          <div class="stat-strip">
-            <div class="stat">
-              <span class="stat-num">🌕</span>
-              <span class="stat-lbl">Brightest full moon of the year</span>
-            </div>
-            <div class="stat">
-              <span class="stat-num">16,108</span>
-              <span class="stat-lbl">Gopis who danced with Krishna</span>
-            </div>
-            <div class="stat">
-              <span class="stat-num">1 night</span>
-              <span class="stat-lbl">That Brahma stretched to a Brahma-kalpa</span>
-            </div>
-          </div>
-          <div style="margin-top:24px; padding:24px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px;">
-            <p style="font-family:var(--fq);font-size:1.3rem;font-style:italic;color:rgba(255,247,210,0.8);line-height:1.5;margin-bottom:12px;">"The gopis represent the soul in its most perfect state — longing only for God, with no other desire."</p>
-            <p style="font-size:0.8rem;color:rgba(245,216,126,0.5);font-family:var(--fh);">— Srila Prabhupada, Srimad Bhagavatam lecture</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ RASA LILA ═══════════════ -->
-  <section class="s-rasa">
-    <div class="wrap-sm">
-      <p class="s-eye" style="text-align:center">The Supreme Pastime</p>
-      <h2 style="text-align:center;margin-bottom:24px;">The Rāsa Līlā of Vrindavan</h2>
-      <p class="lead">When Krishna played His flute on the night of Karthik Purnima, the gopis felt a longing unlike any worldly desire. They left their homes, their families, their duties — and ran through the moonlit forest toward the Yamuna.</p>
-      <p class="lead">Krishna first sent them back, testing the purity of their love. He told them their duties lay at home. But the gopis replied with a wisdom born of pure devotion: <em style="color:rgba(255,247,210,0.8);font-family:var(--fq);font-size:1.08rem">"Our only duty is to You. All dharma finds its fulfillment at Your lotus feet."</em></p>
-      <div class="bq">
-        "The Supreme Lord, who removes the distress of those who surrender to Him, danced with the gopis in the same way a child plays with his reflection in a mirror."
-        <cite>— Śrīmad Bhāgavatam 10.33.3</cite>
-      </div>
-      <p class="lead">Then the dance began. Krishna expanded Himself so that each gopi danced with Him alone. The dance lasted through the entire night, yet when it ended, the gopis felt it had passed in a single breath. This is the Rāsa Līlā — the supreme teaching on selfless love.</p>
-    </div>
-    <div class="lotus-hr">
-      <svg viewBox="0 0 40 24"><path d="M20 2c-4 5-4 11 0 18 4-7 4-13 0-18zM11 6c-1 6 1 11 8 14-1-6-3-11-8-14zM29 6c1 6-1 11-8 14 1-6 3-11 8-14zM3 12c2 5 7 8 14 8-3-4-8-7-14-8zM37 12c-2 5-7 8-14 8 3-4 8-7 14-8z"/></svg>
-    </div>
-  </section>
-
-  <!-- ═══════════════ KHEER ═══════════════ -->
-  <section class="s-kheer">
-    <div class="wrap">
-      <div class="s-two flip">
-        <div>
-          <p class="s-eye">The Sacred Tradition</p>
-          <h2>Moonlit Kheer — Amrita from the Sky</h2>
-          <p class="lead">On the night of Karthik Purnima, the moon is said to pour amrita — divine nectar — along with its light. The ancient tradition is to prepare kheer (rice pudding in milk and sugar) and place it outdoors under the open sky for the entire night.</p>
-          <p class="lead">In the morning, this kheer is offered to Krishna and distributed as prasadam. Those who receive it with faith are said to be blessed with health and spiritual merit.</p>
-          <ul class="kheer-steps">
-            <li>Fresh kheer prepared on the day of Purnima — milk, rice, sugar, saffron</li>
-            <li>Offered to the Lord at sunset with prayers and kirtan</li>
-            <li>Kept under the open sky all night, bathed in moonlight</li>
-            <li>Distributed as prasadam to all in the morning</li>
-          </ul>
-        </div>
-        <div class="kheer-visual">
-          <div class="bowl">🍚</div>
-          <p>"He who eats the kheer kept in moonlight on this night is freed from ill health for the entire year."</p>
-          <cite>— Traditional Ayurvedic belief</cite>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ SCHEDULE ═══════════════ -->
-  <section class="s-schedule">
-    <div class="wrap">
-      <p class="s-eye">At ISKCON Coimbatore</p>
-      <h2 style="margin-bottom:4px">How We Celebrate</h2>
-      <p class="lead" style="max-width:600px">At Sri Jagannath Mandir, Coimbatore — from before dawn to after moonrise. Everyone welcome, entry free.</p>
-      <div class="schedule-grid">
-        <div class="sched-item">
-          <span class="sched-icon">🌅</span>
-          <div>
-            <p class="sched-title">Morning — Mangala Arati & Abhishek</p>
-            <p class="sched-desc">Special deity bath with panchamrita, milk and flowers. Programme begins before dawn.</p>
-          </div>
-        </div>
-        <div class="sched-item">
-          <span class="sched-icon">📖</span>
-          <div>
-            <p class="sched-title">Afternoon — Bhagavatam Class</p>
-            <p class="sched-desc">Deep class on the Rāsa Līlā chapters from the 10th Canto of Srimad Bhagavatam.</p>
-          </div>
-        </div>
-        <div class="sched-item">
-          <span class="sched-icon">🪔</span>
-          <div>
-            <p class="sched-title">Evening — Grand Moonrise Kirtan</p>
-            <p class="sched-desc">As the full moon rises, continuous kirtan through the night with lamps and white flowers.</p>
-          </div>
-        </div>
-        <div class="sched-item">
-          <span class="sched-icon">🍚</span>
-          <div>
-            <p class="sched-title">Night — Moonlit Kheer & Feast</p>
-            <p class="sched-desc">Kheer kept under the open sky. Full prasadam feast distributed to all present.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ SEVA ═══════════════ -->
+  <!-- ═══════════════ SEVAS: one goal, one tap into checkout ═══════════════ -->
   <section class="s-seva" id="seva">
     <div class="wrap">
       <div class="seva-intro">
-        <p class="seva-eyeline">Participate</p>
-        <h2>Offer Seva for Karthik Purnima</h2>
-        <p>Every offering — however small — becomes a part of this sacred celebration. Choose a seva, pick a tier, and your name will be remembered in our prayers.</p>
+        <p class="seva-eyeline">Offer seva</p>
+        <h2>Choose your Karthik Purnima seva</h2>
+        <p>Takes less than a minute · receipt on WhatsApp</p>
       </div>
-
-      <div class="wizard" id="wizard">
-        <ol class="stepper" aria-label="Progress">
-          <li data-mark="1" class="reached"><span class="step-dot">1</span>Choose seva</li>
-          <li data-mark="2"><span class="step-dot">2</span>Your details</li>
-          <li data-mark="3"><span class="step-dot">3</span>Pay</li>
-        </ol>
-        <div class="wizard-body">
-          <form id="donationForm" novalidate>
-
-            <!-- ── Step 1: Choose seva ── -->
-            <div class="form-step" data-step="1">
-              <h3 class="wiz-step-title" tabindex="-1">Choose a seva</h3>
-
-              <div class="seva-list" id="sevaGrid">
-
-                <!-- Vaishnava Bhojan -->
-                <div class="seva-card">
-                  <div class="seva-head">
-                    <div class="seva-icon-bubble">🍽️</div>
-                    <div>
-                      <div class="seva-name">Vaishnava Bhojan</div>
-                      <div class="seva-desc">A full prasadam meal for devotees of the Lord, for one day</div>
-                    </div>
-                  </div>
-                  <div class="tier-row">
-                    <button class="tier-btn" data-key="vaishnava-bhojan-10"  data-amount="1501"  data-name="Vaishnava Bhojan — 10 Vaishnavas"><span class="tier-label">10 Vaishnavas</span><span class="tier-amt">₹1,501</span></button>
-                    <button class="tier-btn" data-key="vaishnava-bhojan-20"  data-amount="3001"  data-name="Vaishnava Bhojan — 20 Vaishnavas"><span class="tier-label">20 Vaishnavas</span><span class="tier-amt">₹3,001</span></button>
-                    <button class="tier-btn" data-key="vaishnava-bhojan-40"  data-amount="6001"  data-name="Vaishnava Bhojan — 40 Vaishnavas"><span class="tier-label">40 Vaishnavas</span><span class="tier-amt">₹6,001</span></button>
-                    <button class="tier-btn" data-key="vaishnava-bhojan-60"  data-amount="9001"  data-name="Vaishnava Bhojan — 60 Vaishnavas"><span class="tier-label">60 Vaishnavas</span><span class="tier-amt">₹9,001</span></button>
-                    <button class="tier-btn" data-key="vaishnava-bhojan-108" data-amount="16108" data-name="Vaishnava Bhojan — 108 Vaishnavas"><span class="tier-label">108 Vaishnavas</span><span class="tier-amt">₹16,108</span></button>
-                  </div>
-                </div>
-
-                <!-- Adopt a Cow -->
-                <div class="seva-card">
-                  <div class="seva-head">
-                    <div class="seva-icon-bubble">🐄</div>
-                    <div>
-                      <div class="seva-name">Adopt a Cow</div>
-                      <div class="seva-desc">Care for a temple cow: her food, shelter and care</div>
-                    </div>
-                  </div>
-                  <div class="tier-row">
-                    <button class="tier-btn" data-key="adopt-cow-1m" data-amount="2501"  data-name="Adopt a Cow — 1 Month"><span class="tier-label">1 month</span><span class="tier-amt">₹2,501</span></button>
-                    <button class="tier-btn" data-key="adopt-cow-3m" data-amount="7501"  data-name="Adopt a Cow — 3 Months"><span class="tier-label">3 months</span><span class="tier-amt">₹7,501</span></button>
-                    <button class="tier-btn" data-key="adopt-cow-5m" data-amount="12501" data-name="Adopt a Cow — 5 Months"><span class="tier-label">5 months</span><span class="tier-amt">₹12,501</span></button>
-                    <button class="tier-btn" data-key="adopt-cow-1y" data-amount="30001" data-name="Adopt a Cow — 1 Year"><span class="tier-label">1 year</span><span class="tier-amt">₹30,001</span></button>
-                  </div>
-                </div>
-
-                <!-- Annadhan -->
-                <div class="seva-card">
-                  <div class="seva-head">
-                    <div class="seva-icon-bubble">🍱</div>
-                    <div>
-                      <div class="seva-name">Annadhan</div>
-                      <div class="seva-desc">Krishna prasadam for guests and those in need</div>
-                    </div>
-                  </div>
-                  <div class="tier-row">
-                    <button class="tier-btn" data-key="annadhan-10"  data-amount="501"   data-name="Annadhan — 10 People"><span class="tier-label">10 people</span><span class="tier-amt">₹501</span></button>
-                    <button class="tier-btn" data-key="annadhan-20"  data-amount="1001"  data-name="Annadhan — 20 People"><span class="tier-label">20 people</span><span class="tier-amt">₹1,001</span></button>
-                    <button class="tier-btn" data-key="annadhan-50"  data-amount="2501"  data-name="Annadhan — 50 People"><span class="tier-label">50 people</span><span class="tier-amt">₹2,501</span></button>
-                    <button class="tier-btn" data-key="annadhan-100" data-amount="5001"  data-name="Annadhan — 100 People"><span class="tier-label">100 people</span><span class="tier-amt">₹5,001</span></button>
-                    <button class="tier-btn" data-key="annadhan-200" data-amount="10001" data-name="Annadhan — 200 People"><span class="tier-label">200 people</span><span class="tier-amt">₹10,001</span></button>
-                  </div>
-                </div>
-
-                <!-- Feed Cows -->
-                <div class="seva-card">
-                  <div class="seva-head">
-                    <div class="seva-icon-bubble">🌿</div>
-                    <div>
-                      <div class="seva-name">Feed Cows</div>
-                      <div class="seva-desc">Fresh fodder for the temple's cows, for as many days as you wish</div>
-                    </div>
-                  </div>
-                  <div class="tier-row">
-                    <button class="tier-btn" data-key="feed-cows-1d"  data-amount="1101"  data-name="Feed Cows — 1 Day"><span class="tier-label">1 day</span><span class="tier-amt">₹1,101</span></button>
-                    <button class="tier-btn" data-key="feed-cows-3d"  data-amount="3301"  data-name="Feed Cows — 3 Days"><span class="tier-label">3 days</span><span class="tier-amt">₹3,301</span></button>
-                    <button class="tier-btn" data-key="feed-cows-7d"  data-amount="7701"  data-name="Feed Cows — 7 Days"><span class="tier-label">7 days</span><span class="tier-amt">₹7,701</span></button>
-                    <button class="tier-btn" data-key="feed-cows-15d" data-amount="15001" data-name="Feed Cows — 15 Days"><span class="tier-label">15 days</span><span class="tier-amt">₹15,001</span></button>
-                    <button class="tier-btn" data-key="feed-cows-30d" data-amount="30001" data-name="Feed Cows — 30 Days"><span class="tier-label">30 days</span><span class="tier-amt">₹30,001</span></button>
-                  </div>
-                </div>
-
-              </div>
-
-              <p class="wiz-error" id="step1Error" role="alert"></p>
-              <div class="wizard-actions">
-                <button class="btn btn-gold" type="button" id="toDetails">Continue →</button>
-              </div>
-            </div>
-
-            <!-- ── Step 2: Your details ── -->
-            <div class="form-step" data-step="2" hidden>
-              <div class="wiz-summary">
-                <span>Seva: <strong id="sevaName">—</strong> &nbsp;·&nbsp; <span id="sevaAmount">—</span></span>
-                <button class="wiz-chg" type="button" data-back>Change</button>
-              </div>
-              <h3 class="wiz-step-title" tabindex="-1">Your mobile number</h3>
-              <p class="wiz-step-sub">Your receipt is sent here on WhatsApp.</p>
-              <div class="wiz-phone-field">
-                <span>+91</span>
-                <div class="ff"><input id="dPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="98765 43210" aria-label="Mobile number"></div>
-              </div>
-              <div class="wiz-lookup-state" id="lookupState" role="status" aria-live="polite"></div>
-              <div class="wiz-who" id="who" hidden>
-                <span class="wiz-lbl">Who is offering this seva?</span>
-                <div class="wiz-chips" id="whoChips"></div>
-              </div>
-              <div class="wiz-name-box" id="nameBox" hidden>
-                <div class="ff">
-                  <label for="dName">Full name, as on your receipt</label>
-                  <input id="dName" name="name" type="text" maxlength="120" autocomplete="name">
-                </div>
-                <div class="ff">
-                  <label for="dEmail">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-                  <input id="dEmail" name="email" type="email" autocomplete="email">
-                </div>
-              </div>
-              <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-              <p class="wiz-error" id="step2Error" role="alert"></p>
-              <div class="wizard-actions">
-                <button class="wiz-back" type="button" data-back>← Back</button>
-                <button class="btn btn-gold" type="submit" id="payButton">Continue</button>
-              </div>
-              <p class="wiz-secure-note">Secure payment by Razorpay · receipt on WhatsApp and email</p>
-            </div>
-
-          </form>
-          <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
-        </div>
-      </div>
+      <div class="pick-grid" id="pickGrid"></div>
+      <p class="trust-line">🔒 Secure payment by Razorpay · UPI, cards &amp; net banking · receipt on WhatsApp and email</p>
     </div>
   </section>
+
+  <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+    <div class="sticky-cta-text"><span>Karthik Purnima · 24 Nov</span><strong>Seva from ₹501</strong></div>
+    <button class="btn btn-gold" type="button" data-open tabindex="-1">Offer Seva</button>
+  </div>
+
+  <!-- ═══════════════ CHECKOUT POP-UP ═══════════════ -->
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-top">
+        <button class="sheet-icon" type="button" id="sheetBack" aria-label="Back">←</button>
+        <div class="sheet-prog">
+          <span class="sheet-step" id="stepLabel">Step 1 of 3</span>
+          <span class="sheet-bar"><span id="progBar"></span></span>
+        </div>
+        <button class="sheet-icon" type="button" data-close aria-label="Close">✕</button>
+      </div>
+      <div class="sheet-body" id="sheetBody">
+        <form id="donationForm" novalidate>
+          <!-- Step 1: which seva -->
+          <div class="m-step" data-step="1">
+            <h3 class="m-title" tabindex="-1" id="sheetTitle">Choose a seva</h3>
+            <div class="m-list" id="catList"></div>
+          </div>
+
+          <!-- Step 2: which option -->
+          <div class="m-step" data-step="2" hidden>
+            <h3 class="m-title" tabindex="-1" id="optTitle">Choose an option</h3>
+            <p class="m-sub" id="optSub"></p>
+            <div class="m-list" id="optList"></div>
+            <div class="m-custom" id="customBox" hidden>
+              <div class="wiz-chips" id="amountChips"></div>
+              <div class="wiz-phone-field m-amount"><span>₹</span><div class="ff"><input id="customAmount" type="text" inputmode="numeric" maxlength="8" placeholder="Enter amount" aria-label="Amount in rupees"></div></div>
+              <p class="wiz-error" id="customError" role="alert"></p>
+              <button class="btn btn-gold m-cta" type="button" id="customGo">Continue</button>
+            </div>
+          </div>
+
+          <!-- Step 3: details and pay -->
+          <div class="m-step" data-step="3" hidden>
+            <div class="wiz-summary">
+              <span><strong id="sevaName">—</strong><span id="sevaAmount">—</span></span>
+              <button class="wiz-chg" type="button" data-change>Change</button>
+            </div>
+            <h3 class="m-title" tabindex="-1">Your mobile number</h3>
+            <p class="m-sub">Your receipt is sent here on WhatsApp.</p>
+            <div class="wiz-phone-field">
+              <span>+91</span>
+              <div class="ff"><input id="dPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="98765 43210" aria-label="Mobile number"></div>
+            </div>
+            <div class="wiz-lookup-state" id="lookupState" role="status" aria-live="polite"></div>
+            <div class="wiz-who" id="who" hidden>
+              <span class="wiz-lbl">Who is offering this seva?</span>
+              <div class="wiz-chips" id="whoChips"></div>
+            </div>
+            <div class="wiz-name-box" id="nameBox" hidden>
+              <div class="ff">
+                <label for="dName">Full name, as on your receipt</label>
+                <input id="dName" name="name" type="text" maxlength="120" autocomplete="name">
+              </div>
+              <div class="ff">
+                <label for="dEmail">Email <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+                <input id="dEmail" name="email" type="email" autocomplete="email">
+              </div>
+            </div>
+            <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <p class="wiz-error" id="step2Error" role="alert"></p>
+            <button class="btn btn-gold m-cta" type="submit" id="payButton">Continue</button>
+            <p class="wiz-secure-note">🔒 Secure payment by Razorpay · UPI, cards, net banking</p>
+          </div>
+        </form>
+        <div class="done-panel" id="done" role="status" tabindex="-1" hidden></div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <p>Sri Jagannath Mandir, Coimbatore &nbsp;·&nbsp; <a href="https://iskconcoimbatore.com" target="_blank" rel="noopener">iskconcoimbatore.com</a></p>
@@ -939,10 +847,11 @@
   <script>
     /* Countdown */
     (function(){
-      const t = new Date('2026-10-21T00:00:00+05:30');
+      const t = new Date('2026-11-24T00:00:00+05:30');
       const el = document.getElementById('countdown');
       function upd(){
         const d = Math.floor((t - Date.now()) / 86400000);
+        if(d < -1){ el.setAttribute('hidden',''); return; }
         if(d < 0){ el.textContent='Tonight!'; el.removeAttribute('hidden'); return; }
         if(d === 0){ el.textContent='Tomorrow!'; el.removeAttribute('hidden'); return; }
         el.textContent = d + (d===1?' day away':' days away');
@@ -951,72 +860,167 @@
       upd(); setInterval(upd, 60000);
     })();
 
-    /* Seva wizard */
+    /* Seva checkout pop-up: seva → option → details → pay */
     (function(){
       'use strict';
-      const WHATSAPP  = '919042216108';
-      const inr       = n => '₹' + Number(n).toLocaleString('en-IN');
-      const openedAt  = performance.now();
-      const $         = id => document.getElementById(id);
+      const WHATSAPP = '919042216108';
+      const inr      = n => '₹' + Number(n).toLocaleString('en-IN');
+      const openedAt = performance.now();
+      const $        = id => document.getElementById(id);
 
-      const form   = $('donationForm');
-      const wizard = $('wizard');
-      const steps  = [...form.querySelectorAll('[data-step]')];
-      const marks  = [...wizard.querySelectorAll('[data-mark]')];
+      // Keys and prices must match api/karthikpurnima.js (the server sets the real price)
+      const CATS = [
+        { id: 'vb', icon: '🍽️', name: 'Vaishnava Bhojan', desc: 'A full prasadam meal for devotees, for one day',
+          q: 'How many Vaishnavas will you feed?', per: 'a Vaishnava',
+          opts: [['vaishnava-bhojan-10', 10, 'Vaishnavas', 1501], ['vaishnava-bhojan-20', 20, 'Vaishnavas', 3001], ['vaishnava-bhojan-40', 40, 'Vaishnavas', 6001], ['vaishnava-bhojan-60', 60, 'Vaishnavas', 9001], ['vaishnava-bhojan-108', 108, 'Vaishnavas', 16108]] },
+        { id: 'cow', icon: '🐄', name: 'Adopt a Cow', desc: 'Her food, shelter and care at the temple goshala',
+          q: 'For how long will you care for her?',
+          opts: [['adopt-cow-1m', 1, 'month', 2501], ['adopt-cow-3m', 3, 'months', 7501], ['adopt-cow-5m', 5, 'months', 12501], ['adopt-cow-1y', 1, 'year', 30001]] },
+        { id: 'anna', icon: '🍱', name: 'Annadhan', desc: 'Krishna prasadam for guests and those in need',
+          q: 'How many people will you feed?', per: 'a plate',
+          opts: [['annadhan-10', 10, 'people', 501], ['annadhan-20', 20, 'people', 1001], ['annadhan-50', 50, 'people', 2501], ['annadhan-100', 100, 'people', 5001], ['annadhan-200', 200, 'people', 10001]] },
+        { id: 'feed', icon: '🌿', name: 'Feed Cows', desc: "Fresh fodder for the temple's cows",
+          q: 'For how many days?', per: 'a day',
+          opts: [['feed-cows-1d', 1, 'day', 1101], ['feed-cows-3d', 3, 'days', 3301], ['feed-cows-7d', 7, 'days', 7701], ['feed-cows-15d', 15, 'days', 15001], ['feed-cows-30d', 30, 'days', 30001]] },
+        { id: 'any', icon: '🪔', name: 'Any amount', desc: 'Offer whatever is in your heart', q: 'How much would you like to offer?', custom: true },
+      ];
+      const fromPrice = c => c.custom ? null : Math.min(...c.opts.map(o => o[3]));
 
-      let sel        = null;
-      let lookedUp   = '';
-      let lookupTimer = null;
-      let autofilled  = false;
-
-      const digits     = () => $('dPhone').value.replace(/\D/g,'').slice(-10);
+      const sheet = $('sheet'), form = $('donationForm'), body = $('sheetBody');
+      const steps = [...form.querySelectorAll('[data-step]')];
+      let step = 1, cat = null, sel = null, lastFocus = null, pushed = false;
+      let lookedUp = '', lookupTimer = null, autofilled = false;
+      const digits     = () => $('dPhone').value.replace(/\D/g, '').slice(-10);
       const validPhone = () => /^[6-9]\d{9}$/.test(digits());
 
-      /* ── Step navigation ── */
-      function show(n){
-        steps.forEach(s => { s.hidden = Number(s.dataset.step) !== n; });
-        marks.forEach(m => m.classList.toggle('reached', Number(m.dataset.mark) <= n));
-        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
-        steps[n - 1].querySelector('.wiz-step-title').focus({ preventScroll: true });
-        if(n === 2){
-          $('sevaName').textContent   = sel.name;
-          $('sevaAmount').textContent = inr(sel.amount);
-          refreshPay();
-          if(!validPhone()) setTimeout(() => $('dPhone').focus(), 60);
-        }
+      function el(tag, cls, text){
+        const n = document.createElement(tag);
+        if(cls) n.className = cls;
+        if(text != null) n.textContent = text;
+        return n;
+      }
+      function row(icon, name, note, right){
+        const b = el('button', 'm-row'); b.type = 'button';
+        if(icon) b.append(el('span', 'pick-icon', icon));
+        const main = el('span', 'm-row-main');
+        main.append(el('span', 'm-row-name', name));
+        if(note) main.append(el('span', 'm-row-note', note));
+        b.append(main, right);
+        return b;
       }
 
-      /* ── Seva tier selection ── */
-      const sevaGrid = $('sevaGrid');
-      sevaGrid.addEventListener('click', e => {
-        const tb = e.target.closest('.tier-btn');
-        if(!tb) return;
-        sevaGrid.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-        sevaGrid.querySelectorAll('.seva-card').forEach(c => c.classList.remove('active'));
-        tb.classList.add('active');
-        tb.closest('.seva-card').classList.add('active');
-        sel = { name: tb.dataset.name, key: tb.dataset.key, amount: parseInt(tb.dataset.amount, 10) };
-        $('step1Error').textContent = '';
+      /* Cards on the page: each opens the pop-up on that seva */
+      CATS.forEach(c => {
+        const b = el('button', 'pick'); b.type = 'button'; b.dataset.open = c.id;
+        const t = el('span', 'pick-text');
+        t.append(el('span', 'pick-name', c.name), el('span', 'pick-desc', c.desc),
+          el('span', 'pick-from', c.custom ? 'Your choice of amount' : 'From ' + inr(fromPrice(c))));
+        b.append(el('span', 'pick-icon', c.icon), t, el('span', 'pick-go', '→'));
+        $('pickGrid').append(b);
       });
 
-      /* Continue from step 1 */
-      $('toDetails').addEventListener('click', () => {
-        if(!sel){ $('step1Error').textContent = 'Please choose a seva first.'; return; }
-        show(2);
+      /* Step 1 list */
+      CATS.forEach(c => {
+        const b = row(c.icon, c.name, c.desc, el('span', 'm-row-arrow', '›'));
+        b.querySelector('.m-row-main').append(el('span', 'm-row-from', c.custom ? 'Your choice of amount' : 'From ' + inr(fromPrice(c))));
+        b.addEventListener('click', () => chooseCat(c));
+        $('catList').append(b);
       });
 
-      /* Back buttons */
-      form.addEventListener('click', e => {
-        if(e.target.closest('[data-back]')) show(1);
+      function chooseCat(c){
+        cat = c;
+        $('optTitle').textContent = c.q;
+        $('optSub').textContent = c.name;
+        const list = $('optList');
+        list.replaceChildren();
+        list.hidden = !!c.custom;
+        $('customBox').hidden = !c.custom;
+        if(!c.custom){
+          c.opts.forEach(([key, n, unit, price]) => {
+            const label = n + ' ' + unit;
+            const note = c.per && n > 1 ? '≈ ' + inr(Math.round(price / n)) + ' ' + c.per : '';
+            const b = row('', label, note, el('span', 'm-row-price', inr(price)));
+            b.addEventListener('click', () => { sel = { key, amount: price, name: c.name + ' · ' + label }; go(3); });
+            list.append(b);
+          });
+        }
+        go(2);
+      }
+
+      /* Any amount */
+      [501, 1001, 2501, 5001].forEach(a => {
+        const b = el('button', 'wiz-chip', inr(a)); b.type = 'button';
+        b.addEventListener('click', () => { $('customAmount').value = a; $('customError').textContent = ''; });
+        $('amountChips').append(b);
+      });
+      $('customAmount').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g, ''); $('customError').textContent = ''; });
+      $('customGo').addEventListener('click', () => {
+        const a = parseInt($('customAmount').value, 10);
+        if(!a || a < 1){ $('customError').textContent = 'Please enter an amount.'; $('customAmount').focus(); return; }
+        sel = { key: 'general', amount: a, name: 'Karthik Purnima seva' };
+        go(3);
       });
 
-      /* ── Pay button label ── */
+      /* Navigation */
+      function go(n){
+        step = n;
+        steps.forEach(s => { s.hidden = Number(s.dataset.step) !== n; });
+        $('stepLabel').textContent = 'Step ' + n + ' of 3';
+        $('progBar').style.width = (n / 3 * 100) + '%';
+        $('sheetBack').hidden = n === 1;
+        body.scrollTop = 0;
+        steps[n - 1].querySelector('.m-title').focus({ preventScroll: true });
+        if(n === 3){
+          $('sevaName').textContent = sel.name;
+          $('sevaAmount').textContent = inr(sel.amount);
+          refreshPay();
+          if(!validPhone()) setTimeout(() => $('dPhone').focus(), 80);
+        }
+      }
+      $('sheetBack').addEventListener('click', () => go(step === 3 && cat ? 2 : 1));
+      form.addEventListener('click', e => { if(e.target.closest('[data-change]')) go(1); });
+
+      /* Open / close; the phone's back button closes it too */
+      function open(catId){
+        lastFocus = document.activeElement;
+        form.hidden = false; $('done').hidden = true;
+        sheet.hidden = false;
+        document.body.classList.add('sheet-open');
+        $('stickyCta').classList.remove('show');
+        if(!pushed){ history.pushState({ kpSheet: 1 }, ''); pushed = true; }
+        const c = CATS.find(x => x.id === catId);
+        if(c) chooseCat(c); else go(1);
+      }
+      function hide(){
+        sheet.hidden = true;
+        document.body.classList.remove('sheet-open');
+        onScroll();
+        if(lastFocus) lastFocus.focus({ preventScroll: true });
+      }
+      function close(){ if(pushed){ history.back(); } else hide(); }
+      window.addEventListener('popstate', () => { if(pushed){ pushed = false; hide(); } });
+      document.addEventListener('click', e => {
+        const o = e.target.closest('[data-open]');
+        if(o){ e.preventDefault(); open(o.dataset.open); return; }
+        if(e.target.closest('[data-close]')) close();
+      });
+      document.addEventListener('keydown', e => { if(e.key === 'Escape' && !sheet.hidden) close(); });
+
+      /* Sticky button once the banner button scrolls away */
+      const heroBtn = document.querySelector('.hero-btns');
+      function onScroll(){
+        const past = heroBtn.getBoundingClientRect().bottom < 0;
+        $('stickyCta').classList.toggle('show', past && sheet.hidden);
+      }
+      addEventListener('scroll', onScroll, { passive: true });
+
+      /* Pay button label */
       function refreshPay(){
         const ready = validPhone() && !$('nameBox').hidden;
         $('payButton').textContent = ready ? 'Pay ' + inr(sel ? sel.amount : 0) + ' securely' : 'Continue';
       }
 
-      /* ── Phone-first lookup ── */
+      /* Mobile first: names already on the temple's records fill in */
       async function lookup(){
         const mobile = digits();
         if(!validPhone() || mobile === lookedUp) return;
@@ -1027,8 +1031,7 @@
         let names = [];
         try {
           const res = await fetch('/api/karthikpurnima', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ kind: 'lookup', phone: mobile, elapsed: Math.round(performance.now() - openedAt) }),
           });
           names = (await res.json()).names || [];
@@ -1048,8 +1051,7 @@
           state.className = 'wiz-lookup-state found';
           state.textContent = 'Hare Krishna! We found your family on our records.';
           names.concat(['Someone else']).forEach((n, i) => {
-            const b = document.createElement('button');
-            b.type = 'button'; b.className = 'wiz-chip'; b.textContent = n;
+            const b = el('button', 'wiz-chip', n); b.type = 'button';
             b.setAttribute('aria-pressed', String(i === 0));
             b.addEventListener('click', () => {
               whoChips.querySelectorAll('.wiz-chip').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
@@ -1068,7 +1070,6 @@
         }
         refreshPay();
       }
-
       $('dName').addEventListener('input', () => { autofilled = false; });
       $('dPhone').addEventListener('input', () => {
         $('step2Error').textContent = '';
@@ -1079,21 +1080,14 @@
       });
       $('dPhone').addEventListener('blur', lookup);
 
-      /* ── DOM helpers ── */
-      function el(tag, cls, text){
-        const n = document.createElement(tag);
-        if(cls) n.className = cls;
-        if(text) n.textContent = text;
-        return n;
-      }
       function panel(mark, title, msg, ...actions){
-        const row = el('div', 'done-actions');
-        row.append(...actions);
-        $('done').replaceChildren(el('span','done-mark',mark), el('h3','',title), el('p','',msg), row);
+        const r = el('div', 'done-actions');
+        r.append(...actions);
+        $('done').replaceChildren(el('span', 'done-mark', mark), el('h3', '', title), el('p', '', msg), r);
         form.hidden = true;
-        wizard.querySelector('.stepper').hidden = true;
         $('done').hidden = false;
-        wizard.scrollIntoView({ block: 'start', behavior: 'instant' });
+        $('sheetBack').hidden = true;
+        body.scrollTop = 0;
         $('done').focus({ preventScroll: true });
       }
       function waLink(amount, seva, reference, name){
@@ -1103,10 +1097,9 @@
         return wa;
       }
 
-      /* ── Razorpay checkout ── */
+      /* Exactly the gateway's checkout object, as it asks; after paying it returns to the thank-you page */
       function openCheckout(data, name){
         const { key_id, ...rest } = data.checkout;
-        marks.forEach(m => m.classList.add('reached'));
         new window.Razorpay({
           ...rest,
           key: key_id,
@@ -1114,17 +1107,15 @@
             ondismiss(){
               const again = el('button', 'btn btn-gold', 'Pay ' + inr(data.amount) + ' now');
               again.type = 'button';
-              again.style.cssText = 'border-radius:9999px;min-height:48px;padding:11px 24px';
               again.addEventListener('click', () => openCheckout(data, name));
               panel('!', 'Payment not completed',
-                'Your ' + data.seva + ' seva (ref: ' + data.reference + ') is saved. Click below to complete.',
+                'Your ' + data.seva + ' seva is saved (reference ' + data.reference + '). Tap below to complete it.',
                 again, waLink(data.amount, data.seva, data.reference, name));
             },
           },
         }).open();
       }
 
-      /* ── Form submit ── */
       form.addEventListener('submit', async e => {
         e.preventDefault();
         const error = $('step2Error');
@@ -1138,16 +1129,10 @@
         payBtn.textContent = 'Opening secure payment…';
         try {
           const res = await fetch('/api/karthikpurnima', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              kind: 'donation',
-              seva: sel.key,
-              amount: sel.amount,
-              name,
-              phone: digits(),
-              email: $('dEmail').value.trim(),
-              website: form.elements.website.value,
+              kind: 'donation', seva: sel.key, amount: sel.amount, name, phone: digits(),
+              email: $('dEmail').value.trim(), website: form.elements.website.value,
               elapsed: Math.round(performance.now() - openedAt),
             }),
           });
@@ -1157,7 +1142,7 @@
             openCheckout(data, name);
           } else {
             panel('✓', 'Thank you, ' + name + '!',
-              'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now — our seva team will reach out with payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''),
+              'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now, so our seva team will call you with the payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''),
               waLink(data.amount || sel.amount, data.seva || sel.name, data.reference || '', name));
           }
         } catch(err){
