@@ -1,12 +1,14 @@
 // Karthik Purnima 2026 seva donations, through the KCM payment gateway.
-// Works exactly like the Srila Prabhupada donations (api/prabhupada.js): the same Supabase table
-// (prabhupada_donations, told apart by the festival column), the same gateway calls, name lookup
-// and thank-you page with ?ref= status. Every seva uses scheme 2-52, which takes an amount.
+// Same checkout as the Srila Prabhupada donations (api/prabhupada.js): the same gateway calls, name
+// lookup and thank-you page with ?ref= status. Every seva uses scheme 2-52, which takes an amount.
+// Saved in Neon (table sharadpurnima_donations) when NEON_DATABASE_URL is set, which is the live
+// setup; otherwise in Supabase (prabhupada_donations); locally in the JSON file.
 // POST kind 'lookup' finds names for a mobile; POST kind 'donation' saves the pledge and opens checkout.
 // GET ?ref=KP-XXXXXXXXXX is the public payment status for the thank-you page.
 const crypto = require('crypto');
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const { neon } = require('@neondatabase/serverless');
 
 const FESTIVAL = 'Karthik Purnima 2026';
 const TABLE = 'prabhupada_donations';
@@ -42,7 +44,18 @@ const GATEWAY_URL = (process.env.KCM_PAYMENT_GATEWAY_URL || 'https://iskconcoimb
 const siteUrl = () => (process.env.SITE_URL || 'https://events.iskconcoimbatore.com').replace(/\/$/, '');
 const REF = /^KP-[A-F0-9]{10}$/;
 
-const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY
+const sql = process.env.NEON_DATABASE_URL ? neon(process.env.NEON_DATABASE_URL) : null;
+const NEON_TABLE = 'sharadpurnima_donations';
+const UPDATABLE = ['status', 'receipt_id', 'payment_id', 'paid_at', 'failure_reason', 'session_id', 'contact_id'];
+// The payment-status columns, added once if the table does not have them yet
+let neonReady = null;
+const ensureNeon = () => neonReady || (neonReady = sql.query(
+  `alter table ${NEON_TABLE} add column if not exists session_id text, add column if not exists contact_id text,
+   add column if not exists receipt_id text, add column if not exists payment_id text,
+   add column if not exists paid_at timestamptz, add column if not exists failure_reason text`,
+).catch((err) => { neonReady = null; console.error('Neon columns:', err.message); }));
+
+const supabase = !sql && process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY
   ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY)
   : null;
 // Only server.js (local testing) sets this; a live site with no database reports an error instead.
@@ -58,6 +71,15 @@ function readLocal() {
 const writeLocal = (data) => fs.writeFileSync(localFile, JSON.stringify(data, null, 2));
 
 async function insert(row) {
+  if (sql) {
+    await ensureNeon();
+    await sql.query(
+      `insert into ${NEON_TABLE} (festival, seva, scheme_id, name, phone, email, amount, reference, status)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [row.festival, row.seva, row.scheme_id, row.name, row.phone, row.email, row.amount, row.reference, row.status],
+    );
+    return;
+  }
   if (supabase) {
     const { error } = await supabase.from(TABLE).insert([row]);
     if (error) throw new Error(error.message);
@@ -70,6 +92,15 @@ async function insert(row) {
 }
 
 async function updateDonation(reference, fields) {
+  if (sql) {
+    const keys = Object.keys(fields).filter((k) => UPDATABLE.includes(k));
+    if (!keys.length) return;
+    await sql.query(
+      `update ${NEON_TABLE} set ${keys.map((k, i) => `${k} = $${i + 1}`).join(', ')} where reference = $${keys.length + 1}`,
+      [...keys.map((k) => fields[k] ?? null), reference],
+    );
+    return;
+  }
   if (supabase) {
     const { error } = await supabase.from(TABLE).update(fields).eq('reference', reference);
     if (error) throw new Error(error.message);
@@ -82,6 +113,10 @@ async function updateDonation(reference, fields) {
 }
 
 async function findDonation(reference) {
+  if (sql) {
+    const rows = await sql.query(`select * from ${NEON_TABLE} where reference = $1 limit 1`, [reference]);
+    return rows[0] || null;
+  }
   if (supabase) {
     const { data, error } = await supabase.from(TABLE).select('*').eq('reference', reference).eq('festival', FESTIVAL).limit(1);
     if (error) throw new Error(error.message);
@@ -92,6 +127,10 @@ async function findDonation(reference) {
 
 async function recentAttempts(phone) {
   const since = new Date(Date.now() - 3600000).toISOString();
+  if (sql) {
+    const rows = await sql.query(`select count(*)::int as n from ${NEON_TABLE} where phone = $1 and created_at >= $2`, [phone, since]);
+    return rows[0].n;
+  }
   if (supabase) {
     const { count, error } = await supabase.from(TABLE).select('id', { count: 'exact', head: true }).eq('phone', phone).gte('created_at', since);
     if (error) throw new Error(error.message);
@@ -138,6 +177,7 @@ const visitorId = (req) => crypto.createHash('sha256')
 
 /** Counts a lookup and says whether it is allowed (shared counter with the Prabhupada page). */
 async function allowLookup(req) {
+  if (sql) return true; // the lookup counter lives in Supabase only
   const ip = visitorId(req);
   const since = new Date(Date.now() - 3600000).toISOString();
   try {
