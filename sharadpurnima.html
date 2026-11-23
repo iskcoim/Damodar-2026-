@@ -646,7 +646,7 @@
         </div>
         <button class="btn btn-gold" id="donateBtn" disabled style="width:100%;justify-content:center;min-height:48px;font-size:1rem">Pay Securely</button>
         <p id="formError" class="form-note" style="color:#ff8080;min-height:1.2em;margin-top:6px"></p>
-        <p class="form-note">Secure payment via Razorpay · Receipt sent to your mobile</p>
+        <p class="form-note">Secure payment · Receipt sent to your mobile &amp; email</p>
       </div>
     </div>
   </section>
@@ -676,7 +676,6 @@
     (function(){
       'use strict';
       const openedAt = performance.now();
-      const WHATSAPP = '919791002556';
       const inr = n => '₹' + Number(n).toLocaleString('en-IN');
 
       let sel = null;
@@ -733,20 +732,6 @@
         return n;
       }
 
-      function waLink(amount, sevaName, reference, name){
-        const a = el('a', 'btn btn-wa', 'Message us on WhatsApp');
-        a.href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(
-          '🌕 *Sharad Purnima Seva*\n\n*Name:* ' + name +
-          '\n*Seva:* ' + sevaName +
-          '\n*Amount:* ' + inr(amount) +
-          (reference ? '\n*Reference:* ' + reference : '') +
-          '\n\nHare Krishna!'
-        );
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        return a;
-      }
-
       function showDone(mark, title, message, ...actions){
         const donorForm = document.querySelector('.donor-form');
         const done = el('div', 'done');
@@ -769,8 +754,8 @@
               again.type = 'button';
               again.addEventListener('click', () => openCheckout(data, name));
               showDone('!', 'Payment not completed',
-                'Your ' + data.seva + ' seva (ref: ' + data.reference + ') is saved. Complete the payment when ready.',
-                again, waLink(data.amount, data.seva, data.reference, name));
+                'Your ' + data.seva + ' seva (ref: ' + data.reference + ') is saved. Click below to complete the payment.',
+                again);
             },
           },
         }).open();
@@ -806,10 +791,10 @@
           if(data.checkout && window.Razorpay){
             openCheckout(data, name);
           } else {
-            showDone('✓', 'Seva received, Hare Krishna!',
-              'Your ' + data.seva + ' seva is noted. Our team will reach out with payment details.' +
-              (data.reference ? ' Reference: ' + data.reference + '.' : ''),
-              waLink(data.amount, data.seva, data.reference || '', name));
+            errEl.textContent = 'Payment gateway is temporarily unavailable. Please try again in a few minutes.';
+            btn.disabled = false;
+            btn.textContent = 'Pay Securely';
+            validate();
           }
         } catch(err){
           errEl.textContent = err.message || 'Please check your connection and try again.';
