@@ -132,7 +132,7 @@ async function startPayment(row, seva) {
     mobileNo,
     first_Name: row.name,
     email: row.email || '',
-    return_url: `${siteUrl()}/karthikpurnima?ref=${row.reference}`,
+    return_url: `${siteUrl()}/karthikpurnima`,
     items: [{ scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount }],
     remarks: `${row.reference} | ${FESTIVAL} | ${seva.title}`,
   }, `sp-checkout-${row.reference}`);
