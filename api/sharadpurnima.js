@@ -7,15 +7,15 @@ const FESTIVAL = 'Sharad Purnima 2026';
 const TABLE    = 'sharadpurnima_donations';
 const SAVE_FAILED = 'Sorry, we could not save this. Please try again, or WhatsApp us on +91 97910 02556.';
 
-// All sevas use the open-amount scheme (3-76) so a single KCM catalog entry covers all.
+// All sevas use the open-amount scheme (2-52) so a single KCM catalog entry covers all.
 // Preset prices are enforced server-side; the browser cannot override them.
 const SEVAS = {
-  'moonlit-kheer':      { scheme: '3-76', title: 'Moonlit Kheer Distribution', price: 1008  },
-  'flower-decoration':  { scheme: '3-76', title: 'White Flower Decoration',    price: 2108  },
-  'abhishek':           { scheme: '3-76', title: 'Special Abhishek Seva',       price: 5116  },
-  'prasadam-feast':     { scheme: '3-76', title: 'Grand Prasadam Feast',        price: 10116 },
-  'ghee-lamp':          { scheme: '3-76', title: 'Ghee Lamp Offering',          price: 501   },
-  'general':            { scheme: '3-76', title: 'Your Offering',               price: null  },
+  'moonlit-kheer':      { scheme: '2-52', title: 'Moonlit Kheer Distribution', price: 1008  },
+  'flower-decoration':  { scheme: '2-52', title: 'White Flower Decoration',    price: 2108  },
+  'abhishek':           { scheme: '2-52', title: 'Special Abhishek Seva',       price: 5116  },
+  'prasadam-feast':     { scheme: '2-52', title: 'Grand Prasadam Feast',        price: 10116 },
+  'ghee-lamp':          { scheme: '2-52', title: 'Ghee Lamp Offering',          price: 501   },
+  'general':            { scheme: '2-52', title: 'Your Offering',               price: null  },
 };
 
 const MAX_ATTEMPTS_PER_HOUR = 10;
