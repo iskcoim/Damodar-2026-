@@ -3,8 +3,12 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/karthikpurnima",
+      "destination": "/karthikpurnima.html"
+    },
+    {
       "source": "/sharadpurnima",
-      "destination": "/sharadpurnima.html"
+      "destination": "/karthikpurnima.html"
     },
     {
       "source": "/admin",
@@ -46,7 +50,7 @@
     "api/prabhupada.js": {
       "maxDuration": 30
     },
-    "api/sharadpurnima.js": {
+    "api/karthikpurnima.js": {
       "maxDuration": 30
     }
   }

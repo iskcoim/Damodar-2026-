@@ -277,35 +277,74 @@
     .sched-desc  { font-size: 0.84rem; color: var(--muted); line-height: 1.5; }
 
     /* ─── SEVA / DONATION ─── */
-    .s-seva { background: var(--deep); }
-    .seva-intro { text-align: center; margin-bottom: 36px; }
+    .s-seva {
+      background: var(--deep);
+      background-image:
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(245,216,126,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 0%,   rgba(245,216,126,0.04) 0%, transparent 60%);
+    }
+    .seva-intro { text-align: center; margin-bottom: 40px; }
     .seva-intro h2 { margin-bottom: 10px; }
     .seva-intro p { max-width: 560px; margin: 0 auto; font-size: 1rem; color: var(--muted); }
+    .seva-eyeline {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--fh); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold2);
+      margin-bottom: 10px;
+    }
+    .seva-eyeline::before, .seva-eyeline::after {
+      content: ''; display: inline-block; width: 32px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold2));
+    }
+    .seva-eyeline::after { background: linear-gradient(90deg, var(--gold2), transparent); }
 
-    .seva-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .seva-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
     .seva-card {
       position: relative; cursor: default;
-      border: 1.5px solid var(--border); border-radius: 14px;
-      padding: 20px 16px; background: rgba(11,18,56,0.6);
-      transition: border-color .18s, background .18s;
+      border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 22px 20px; background: rgba(11,18,56,0.65);
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.3);
     }
-    .seva-card.active  { border-color: var(--gold); background: rgba(28,42,90,0.95); }
-    .seva-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
-    .seva-head .seva-icon { font-size: 1.9rem; flex-shrink: 0; margin-top: 2px; }
-    .seva-icon   { font-size: 1.9rem; }
-    .seva-name   { font-family: var(--fh); font-weight: 700; font-size: 0.95rem; color: #EDF3FF; margin-bottom: 4px; }
-    .seva-desc   { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
-    .tier-row  { display: flex; flex-wrap: wrap; gap: 8px; }
+    .seva-card:hover { border-color: rgba(245,216,126,0.22); }
+    .seva-card.active {
+      border-color: var(--gold);
+      background: rgba(22,34,80,0.98);
+      box-shadow: 0 0 0 1px rgba(245,216,126,0.25), 0 6px 32px rgba(245,216,126,0.1);
+    }
+    .seva-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .seva-icon-bubble {
+      width: 50px; height: 50px; flex-shrink: 0; border-radius: 14px;
+      background: rgba(245,216,126,0.1); border: 1px solid rgba(245,216,126,0.22);
+      display: flex; align-items: center; justify-content: center; font-size: 1.55rem;
+      transition: background .2s;
+    }
+    .seva-card.active .seva-icon-bubble {
+      background: rgba(245,216,126,0.17); border-color: rgba(245,216,126,0.4);
+    }
+    .seva-name   { font-family: var(--fh); font-weight: 700; font-size: 1.02rem; color: #EDF3FF; margin-bottom: 4px; }
+    .seva-desc   { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .tier-row  { display: flex; flex-wrap: wrap; gap: 9px; }
     .tier-btn  {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      border: 1.5px solid var(--border); border-radius: 10px;
-      padding: 7px 14px; background: rgba(11,18,56,0.6);
-      cursor: pointer; transition: border-color .18s, background .18s;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 10px 16px; background: rgba(11,18,56,0.6);
+      cursor: pointer; transition: border-color .18s, background .18s, box-shadow .18s;
+      position: relative;
     }
-    .tier-btn:hover  { border-color: rgba(245,216,126,0.42); background: rgba(20,32,80,0.8); }
-    .tier-btn.active { border-color: var(--gold); background: rgba(28,42,90,0.95); }
+    .tier-btn:hover  { border-color: rgba(245,216,126,0.4); background: rgba(20,32,80,0.8); }
+    .tier-btn.active {
+      border-color: var(--gold);
+      background: rgba(245,216,126,0.1);
+      box-shadow: 0 0 0 1px rgba(245,216,126,0.3), inset 0 1px 8px rgba(245,216,126,0.06);
+    }
+    .tier-btn.active::after {
+      content: '✓';
+      position: absolute; top: 5px; right: 7px;
+      font-size: 0.6rem; color: var(--gold); font-weight: 700;
+    }
     .tier-label { font-size: 0.72rem; color: var(--muted); font-family: var(--fb); white-space: nowrap; }
-    .tier-amt   { font-size: 0.95rem; font-weight: 700; color: var(--gold); font-family: var(--fd); }
+    .tier-amt   { font-size: 1rem; font-weight: 700; color: var(--gold); font-family: var(--fd); }
 
     /* Custom amount row */
     .custom-row { display: none; align-items: center; gap: 10px; margin-bottom: 24px; }
@@ -321,10 +360,16 @@
 
     /* Donor form */
     .donor-form {
-      background: rgba(11,18,56,0.5); border: 1px solid var(--border);
-      border-radius: 16px; padding: 28px 24px;
+      background: rgba(8,14,46,0.75); border: 1px solid rgba(245,216,126,0.2);
+      border-radius: 20px; padding: 32px 28px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(245,216,126,0.08);
+      margin-top: 24px;
     }
-    .form-h3 { font-family: var(--fd); font-size: 1.15rem; color: #EDF3FF; margin-bottom: 20px; }
+    .form-h3 {
+      font-family: var(--fd); font-size: 1.15rem; color: #EDF3FF; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .form-h3::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(245,216,126,0.2), transparent); }
     .seva-preview {
       display: none; margin-bottom: 18px; padding: 12px 16px;
       background: rgba(245,216,126,0.07); border: 1px solid rgba(245,216,126,0.2);
@@ -356,6 +401,47 @@
     .btn-wa:not(:disabled):hover { opacity: 0.86; }
     .form-note { margin-top: 11px; text-align: center; font-size: 0.77rem; color: rgba(200,216,248,0.35); }
 
+    /* Pay button shimmer */
+    #donateBtn { position: relative; overflow: hidden; min-height: 54px; font-size: 1.05rem; border-radius: 14px; letter-spacing: 0.03em; }
+    #donateBtn:not(:disabled)::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%);
+      transform: translateX(-100%);
+      animation: shimmer 2.4s ease-in-out infinite 1s;
+    }
+    @keyframes shimmer { to { transform: translateX(200%); } }
+
+    /* Trust badges */
+    .trust-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 18px; flex-wrap: wrap; margin-top: 14px;
+    }
+    .trust-badge {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; color: rgba(200,216,248,0.38);
+      font-family: var(--fh);
+    }
+    .trust-badge svg { width: 13px; height: 13px; opacity: 0.5; }
+
+    /* ─── STICKY PAY BAR ─── */
+    .sticky-pay-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      padding: 12px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+      background: rgba(5,10,38,0.97);
+      border-top: 1px solid rgba(245,216,126,0.3);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex; align-items: center; gap: 14px;
+      transform: translateY(110%);
+      transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
+    }
+    .sticky-pay-bar.visible { transform: translateY(0); }
+    .sticky-pay-info { flex: 1; min-width: 0; }
+    .sticky-pay-info .sp-name { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .sticky-pay-info .sp-amt { font-size: 1.1rem; font-family: var(--fh); font-weight: 700; color: var(--gold); line-height: 1.2; display: block; }
+    .sticky-pay-btn { margin: 0; padding: 10px 22px; min-height: 44px; white-space: nowrap; flex-shrink: 0; }
+
     /* ─── FOOTER ─── */
     footer {
       padding: 28px 24px; text-align: center;
@@ -370,13 +456,12 @@
       .hero { align-items: flex-start; min-height: auto; }
       .hero-inner { padding: 32px 0 48px; }
 
-      /* Moon is at x≈720/1672 of original. object-position: 30% shifts image right so moon lands ~78% from left */
-      .hero-photo img { object-position: 30% 18%; }
-      /* Keep left dark for text; clear at 72% so moon at ~78% is fully visible; bottom hides lit entrance */
+      /* Shift image left so moon (x≈43% in original) lands at ~65% from left; clear overlay from 36% → 65% */
+      .hero-photo img { object-position: 22% 15%; }
       .hero-photo::after {
         background:
-          linear-gradient(to right, rgba(3,6,26,0.97) 0%, rgba(3,6,26,0.95) 46%, rgba(3,6,26,0.3) 65%, rgba(3,6,26,0.04) 72%, rgba(3,6,26,0) 100%),
-          linear-gradient(to bottom, rgba(3,6,26,0) 0%, transparent 28%, rgba(3,6,26,0.25) 58%, rgba(3,6,26,0.97) 80%, rgba(3,6,26,1) 100%);
+          linear-gradient(to right, rgba(3,6,26,0.97) 0%, rgba(3,6,26,0.95) 36%, rgba(3,6,26,0.45) 50%, rgba(3,6,26,0.08) 58%, rgba(3,6,26,0) 65%, rgba(3,6,26,0) 100%),
+          linear-gradient(to bottom, rgba(3,6,26,0) 0%, transparent 25%, rgba(3,6,26,0.2) 55%, rgba(3,6,26,0.97) 83%, rgba(3,6,26,1) 100%);
       }
 
       /* Logo */
@@ -583,9 +668,9 @@
   <section class="s-seva" id="seva">
     <div class="wrap">
       <div class="seva-intro">
-        <p class="s-eye">Participate</p>
+        <p class="seva-eyeline">Participate</p>
         <h2>Offer Seva for Karthik Purnima</h2>
-        <p>Your offering makes this festival beautiful for every devotee who attends. Choose a seva and become part of this sacred night.</p>
+        <p>Every offering — however small — becomes a part of this sacred celebration. Choose a seva, pick a tier, and your name will be remembered in our prayers.</p>
       </div>
 
       <div class="seva-list" id="sevaGrid">
@@ -593,7 +678,7 @@
         <!-- Vaishnava Bhojan -->
         <div class="seva-card">
           <div class="seva-head">
-            <div class="seva-icon">🍽️</div>
+            <div class="seva-icon-bubble">🍽️</div>
             <div>
               <div class="seva-name">Vaishnava Bhojan</div>
               <div class="seva-desc">A full prasadam meal for devotees of the Lord, for one day</div>
@@ -611,7 +696,7 @@
         <!-- Adopt a Cow -->
         <div class="seva-card">
           <div class="seva-head">
-            <div class="seva-icon">🐄</div>
+            <div class="seva-icon-bubble">🐄</div>
             <div>
               <div class="seva-name">Adopt a Cow</div>
               <div class="seva-desc">Care for a temple cow: her food, shelter and care</div>
@@ -628,7 +713,7 @@
         <!-- Annadhan -->
         <div class="seva-card">
           <div class="seva-head">
-            <div class="seva-icon">🍱</div>
+            <div class="seva-icon-bubble">🍱</div>
             <div>
               <div class="seva-name">Annadhan</div>
               <div class="seva-desc">Krishna prasadam for guests and those in need</div>
@@ -646,7 +731,7 @@
         <!-- Feed Cows -->
         <div class="seva-card">
           <div class="seva-head">
-            <div class="seva-icon">🌿</div>
+            <div class="seva-icon-bubble">🌿</div>
             <div>
               <div class="seva-name">Feed Cows</div>
               <div class="seva-desc">Fresh fodder for the temple's cows, for as many days as you wish</div>
@@ -684,9 +769,22 @@
             <input id="dEmail" type="email" placeholder="For receipt" autocomplete="email">
           </div>
         </div>
-        <button class="btn btn-gold" id="donateBtn" disabled style="width:100%;justify-content:center;min-height:48px;font-size:1rem">Pay Securely</button>
-        <p id="formError" class="form-note" style="color:#ff8080;min-height:1.2em;margin-top:6px"></p>
-        <p class="form-note">Secure payment · Receipt sent to your mobile &amp; email</p>
+        <button class="btn btn-gold" id="donateBtn" disabled style="width:100%;justify-content:center;">Pay Securely →</button>
+        <p id="formError" class="form-note" style="color:#ff8080;min-height:1.2em;margin-top:8px"></p>
+        <div class="trust-row">
+          <span class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            100% Secure
+          </span>
+          <span class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            80G Tax Receipt
+          </span>
+          <span class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Instant Confirmation
+          </span>
+        </div>
       </div>
     </div>
   </section>
@@ -695,6 +793,15 @@
     <p>Sri Jagannath Mandir, Coimbatore &nbsp;·&nbsp; <a href="https://iskconcoimbatore.com" target="_blank" rel="noopener">iskconcoimbatore.com</a></p>
     <p style="margin-top:5px">Hare Krishna Hare Krishna Krishna Krishna Hare Hare · Hare Rama Hare Rama Rama Rama Hare Hare</p>
   </footer>
+
+  <!-- Sticky pay bar — slides up when a tier is selected -->
+  <div id="stickyPay" class="sticky-pay-bar" aria-hidden="true">
+    <div class="sticky-pay-info">
+      <span class="sp-name" id="spName">—</span>
+      <span class="sp-amt" id="spAmt">—</span>
+    </div>
+    <button class="btn btn-gold sticky-pay-btn" id="stickyPayBtn" type="button">Pay Securely →</button>
+  </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script>
@@ -719,14 +826,18 @@
       const inr = n => '₹' + Number(n).toLocaleString('en-IN');
 
       let sel = null;
-      const grid   = document.getElementById('sevaGrid');
-      const prev   = document.getElementById('sevaPreview');
-      const prevN  = document.getElementById('prevName');
-      const prevA  = document.getElementById('prevAmt');
-      const btn    = document.getElementById('donateBtn');
-      const dName  = document.getElementById('dName');
-      const dPhone = document.getElementById('dPhone');
-      const errEl  = document.getElementById('formError');
+      const grid       = document.getElementById('sevaGrid');
+      const prev       = document.getElementById('sevaPreview');
+      const prevN      = document.getElementById('prevName');
+      const prevA      = document.getElementById('prevAmt');
+      const btn        = document.getElementById('donateBtn');
+      const dName      = document.getElementById('dName');
+      const dPhone     = document.getElementById('dPhone');
+      const errEl      = document.getElementById('formError');
+      const stickyBar  = document.getElementById('stickyPay');
+      const spName     = document.getElementById('spName');
+      const spAmt      = document.getElementById('spAmt');
+      const stickyPayBtn = document.getElementById('stickyPayBtn');
 
       function validate(){
         const ok = dName.value.trim().length >= 2 &&
@@ -746,11 +857,34 @@
         prevN.textContent = sel.name;
         prevA.textContent = inr(sel.amount);
         prev.classList.add('show');
+        spName.textContent = sel.name;
+        spAmt.textContent  = inr(sel.amount);
+        stickyBar.classList.add('visible');
+        stickyBar.setAttribute('aria-hidden', 'false');
         validate();
       });
 
       dName.addEventListener('input', validate);
       dPhone.addEventListener('input', validate);
+
+      /* Sticky bar: scroll to form if details not filled, else trigger payment */
+      stickyPayBtn.addEventListener('click', () => {
+        const name  = dName.value.trim();
+        const phone = dPhone.value.replace(/\D/g,'').slice(-10);
+        if (!name || phone.length < 10) {
+          document.querySelector('.donor-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          setTimeout(() => { (!dName.value.trim() ? dName : dPhone).focus(); }, 450);
+        } else {
+          btn.click();
+        }
+      });
+
+      /* Auto-hide sticky bar when the donor form is in view */
+      const formObserver = new IntersectionObserver(entries => {
+        if (!sel) return;
+        stickyBar.classList.toggle('visible', !entries[0].isIntersecting);
+      }, { threshold: 0.4 });
+      formObserver.observe(document.querySelector('.donor-form'));
 
       function el(tag, cls, text){
         const n = document.createElement(tag);
@@ -799,7 +933,7 @@
         btn.textContent = 'Opening payment…';
 
         try {
-          const res = await fetch('/api/sharadpurnima', {
+          const res = await fetch('/api/karthikpurnima', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

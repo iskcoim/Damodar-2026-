@@ -47,8 +47,9 @@ function readLocal() {
 async function insert(row) {
   if (supabase) {
     const { error } = await supabase.from(TABLE).insert([row]);
-    if (error) throw new Error(error.message);
-    return;
+    if (!error) return;
+    if (!localFile) throw new Error(error.message);
+    console.warn('Supabase insert failed, falling back to local file:', error.message);
   }
   if (!localFile) throw new Error('No database configured');
   const data = readLocal();
@@ -61,8 +62,8 @@ async function recentAttempts(phone) {
   const since = new Date(Date.now() - 3600000).toISOString();
   if (supabase) {
     const { count, error } = await supabase.from(TABLE).select('id', { count: 'exact', head: true }).eq('phone', phone).gte('created_at', since);
-    if (error) throw new Error(error.message);
-    return count || 0;
+    if (!error) return count || 0;
+    console.warn('Supabase recentAttempts failed, using local count:', error.message);
   }
   return ((readLocal()[TABLE]) || []).filter(d => d.phone === phone && d.created_at >= since).length;
 }
@@ -70,8 +71,9 @@ async function recentAttempts(phone) {
 async function updateDonation(reference, fields) {
   if (supabase) {
     const { error } = await supabase.from(TABLE).update(fields).eq('reference', reference);
-    if (error) throw new Error(error.message);
-    return;
+    if (!error) return;
+    if (!localFile) throw new Error(error.message);
+    console.warn('Supabase updateDonation failed, using local file:', error.message);
   }
   const data = readLocal();
   const row = (data[TABLE] || []).find(d => d.reference === reference);
@@ -129,7 +131,7 @@ async function startPayment(row, seva) {
     mobileNo,
     first_Name: row.name,
     email: row.email || '',
-    return_url: `${siteUrl()}/sharadpurnima?ref=${row.reference}`,
+    return_url: `${siteUrl()}/karthikpurnima?ref=${row.reference}`,
     items: [{ scheme_id: seva.scheme, quantity: 1, amount_rupees: row.amount }],
     remarks: `${row.reference} | ${FESTIVAL} | ${seva.title}`,
   }, `sp-checkout-${row.reference}`);
