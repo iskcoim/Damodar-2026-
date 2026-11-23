@@ -13,7 +13,7 @@ const SEVAS = {
   'moonlit-kheer':      { scheme: '2-52', title: 'Moonlit Kheer Distribution', price: 1008  },
   'flower-decoration':  { scheme: '2-52', title: 'White Flower Decoration',    price: 2108  },
   'abhishek':           { scheme: '2-52', title: 'Special Abhishek Seva',       price: 5116  },
-  'prasadam-feast':     { scheme: '2-52', title: 'Grand Prasadam Feast',        price: 10116 },
+  'prasadam-feast':     { scheme: '2-52', title: 'Grand Karthik Purnima Feast', price: 10116 },
   'ghee-lamp':          { scheme: '2-52', title: 'Ghee Lamp Offering',          price: 501   },
   'general':            { scheme: '2-52', title: 'Your Offering',               price: null  },
 };
