@@ -1156,9 +1156,8 @@
           if(data.checkout && window.Razorpay){
             openCheckout(data, name);
           } else {
-            const errDetail = data.gatewayError ? ' [Debug: ' + data.gatewayError + ']' : '';
             panel('✓', 'Thank you, ' + name + '!',
-              'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now — our seva team will reach out with payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : '') + errDetail,
+              'Your seva' + (data.amount ? ' of ' + inr(data.amount) : '') + ' is noted. Online payment is not available just now — our seva team will reach out with payment details.' + (data.reference ? ' Reference: ' + data.reference + '.' : ''),
               waLink(data.amount || sel.amount, data.seva || sel.name, data.reference || '', name));
           }
         } catch(err){
