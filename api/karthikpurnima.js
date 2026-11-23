@@ -188,14 +188,16 @@ module.exports = async function handler(req, res) {
     await insert(row);
 
     let checkout = null;
+    let gatewayError = null;
     if (process.env.KCM_PAYMENT_GATEWAY_SECRET) {
       try { checkout = await startPayment(row, seva); }
       catch (err) {
-        console.error(`SP gateway ${reference}:`, err.message);
-        await updateDonation(reference, { failure_reason: String(err.message).slice(0, 300) }).catch(() => {});
+        gatewayError = String(err.message).slice(0, 300);
+        console.error(`SP gateway ${reference}:`, gatewayError);
+        await updateDonation(reference, { failure_reason: gatewayError }).catch(() => {});
       }
     }
-    return res.status(200).json({ ok: true, reference, amount, seva: seva.title, checkout });
+    return res.status(200).json({ ok: true, reference, amount, seva: seva.title, checkout, gatewayError });
   } catch (err) {
     console.error('KarthikPurnima handler error:', err.message);
     return res.status(500).json({ error: SAVE_FAILED });
